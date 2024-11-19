@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.tinga</groupId>
+    <artifactId>belt</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+    <name>Belt</name>
+    <description>Library for microservices systems written in Java</description>
+	<url>https://github.com/iotinga/belt</url>
+    <organization>
+        <name>IOTINGA</name>
+        <url>https://iotinga.it</url>
+    </organization>
+
+    <scm>
+	    <url>git@github.com:iotinga/belt.git</url>
+		<developerConnection>@iotinga</developerConnection>
+    </scm>
+
+    <licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	
+    <developers>
+		<developer>
+			<id>matteo_bissoli</id>
+			<name>Matteo Bissoli</name>
+			<email>matteo.bissoli@iotinga.it</email>
+			<organization>IOTINGA</organization>
+			<organizationUrl>https://www.iotinga.it</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>Italy/Rome</timezone>
+		</developer>
+		<developer>
+			<id>matteo_cavaliere</id>
+			<name>Matteo Cavaliere</name>
+			<email>matteo.cavaliere@iotinga.it</email>
+			<organization>IOTINGA</organization>
+			<organizationUrl>https://www.iotinga.it</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Italy/Rome</timezone>
+		</developer>
+	</developers>
+    
+    <modules>
+        <module>belt-core</module>
+        <module>belt-api</module>
+        <module>belt-cli</module>
+        <module>belt-headless</module>
+        <module>belt-testgadget</module>
+        <module>belt-slf4j-endpoint</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>${version.java}</maven.compiler.source>
+        <maven.compiler.target>${version.java}</maven.compiler.target>
+        <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version.common-collection>4.5.0-M2</version.common-collection>
+        <version.javafx>24-ea+5</version.javafx>
+        <version.common-cli>1.8.0</version.common-cli>
+        <version.mockito>5.14.2</version.mockito>
+        <version.java>21</version.java>
+        <version.slf4j>2.0.9</version.slf4j>
+        <version.guice>7.0.0</version.guice>
+        <version.junit>5.9.2</version.junit>
+        <version.javafaker>1.0.2</version.javafaker>
+        <version.jackson>2.17.1</version.jackson>
+        <version.mvn-compiler>3.11.0</version.mvn-compiler>
+        <version.guice-bridge>3.0.5</version.guice-bridge>
+        <version.mvn-jar>3.3.0</version.mvn-jar>
+        <version.mvn-assembly>3.6.0</version.mvn-assembly>
+        <version.dotenv-java>3.0.0</version.dotenv-java>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                    <autoPublish>true</autoPublish>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <source>${version.java}</source>
+                    <target>${version.java}</target>
+
+                    <!-- IMPORTANT -->
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Manifest-version>1.0</Manifest-version>
+                            <Main-Class>${main.path}</Main-Class>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>install</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>resolve-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
