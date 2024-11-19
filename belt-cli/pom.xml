@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-          <groupId>io.tinga</groupId>
+          <groupId>io.tinga.belt</groupId>
           <artifactId>belt</artifactId>
-          <version>0.0.4</version>
+          <version>0.0.5</version>
     </parent>
 
     <artifactId>belt-cli</artifactId>
@@ -20,7 +20,7 @@
    <dependencies>
 
         <dependency>
-            <groupId>io.tinga</groupId>
+            <groupId>io.tinga.belt</groupId>
             <artifactId>belt-core</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -35,7 +35,7 @@
         <!-- Test -->
 
         <dependency>
-            <groupId>io.tinga</groupId>
+            <groupId>io.tinga.belt</groupId>
             <artifactId>belt-testgadget</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
