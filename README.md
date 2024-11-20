@@ -43,7 +43,7 @@ The Cli Belt loads Properties from a belt.properties file. Passing the -p option
 
 # The Runtime Belt
 
-The Runtime Belt is intended to run multiple Gadgets from the same process. It is useful for Docker microservices use-cases, allowing to decide what gadgets as to run into the docker even after the docker image creation.
+The Runtime Belt is intended to run multiple Gadgets from the same process. It is useful for Docker microservices use-cases, allowing to decide what gadgets has to run into the docker even after the docker image creation.
 
 > As for bauer and slf4j limitations, all the Gadgets will use the same bauer and slf4j endpoints
 

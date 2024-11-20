@@ -59,7 +59,6 @@ public abstract class AbstractCli<E extends GadgetCommandExecutor<C>, C> impleme
         cliInjector = Guice.createInjector(rootModules);
         commandFactory = cliInjector.getInstance(Key.get(GadgetCommandFactory.class));
         contextFactory = cliInjector.getInstance(Key.get(GadgetContextFactory.class));
-        ;
     }
 
     public void run() {
@@ -73,15 +72,15 @@ public abstract class AbstractCli<E extends GadgetCommandExecutor<C>, C> impleme
             CompletableFuture<Status> commandRun = context.executor().submit(command);
             status = commandRun.get();
         } catch (GadgetFatalException e) {
-            log.debug(String.format("Exit(%d)", e.exitCode));
+            log.debug(String.format("Exit({})", e.exitCode));
             System.exit(e.exitCode);
         } catch (GadgetLifecycleException e) {
-            log.error(String.format("Exit(%d)", e.reason.getMessage()));
+            log.error(String.format("Exit({})", e.reason.getMessage()));
             System.exit(1);
         } catch (InterruptedException | ExecutionException e) {
-            log.info(String.format("Exit(%d)", status.getCode()));
+            log.info(String.format("Exit({}): {}", status.getCode(), e.getMessage()));
         } finally {
-            if(context != null) {
+            if (context != null) {
                 context.output().close();
             }
             this.displayExecutor.shutdown();
