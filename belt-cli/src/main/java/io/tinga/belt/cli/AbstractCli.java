@@ -72,13 +72,13 @@ public abstract class AbstractCli<E extends GadgetCommandExecutor<C>, C> impleme
             CompletableFuture<Status> commandRun = context.executor().submit(command);
             status = commandRun.get();
         } catch (GadgetFatalException e) {
-            log.debug(String.format("Exit({})", e.exitCode));
+            log.debug("Exit({})", e.exitCode);
             System.exit(e.exitCode);
         } catch (GadgetLifecycleException e) {
-            log.error(String.format("Exit({})", e.reason.getMessage()));
+            log.error("Exit({})", e.reason.getMessage());
             System.exit(1);
         } catch (InterruptedException | ExecutionException e) {
-            log.info(String.format("Exit({}): {}", status.getCode(), e.getMessage()));
+            log.info("Exit({}): {}", status.getCode(), e.getMessage());
         } finally {
             if (context != null) {
                 context.output().close();
