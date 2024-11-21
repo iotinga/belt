@@ -13,10 +13,17 @@ import io.tinga.belt.input.GadgetCommandFactory;
 import io.tinga.belt.output.GadgetDisplayFactory;
 
 public class CliRootModule extends AbstractModule {
-    
+
     @Override
     protected void configure() {
-        bind(GadgetContextFactory.class).to(GadgetContextFactoryImpl.class).in(Singleton.class);
+        /**
+         * GadgetContextFactory implementation shall not be a singleton.
+         * This is because it gets injected an Inject class object and therefore
+         * there could be clashes of dependencies when calling buildCallableFrom.
+         * An example of that happening is with BAUER MQTT topic factory module.
+         */
+        bind(GadgetContextFactory.class).to(GadgetContextFactoryImpl.class);
+
         bind(GadgetCommandFactory.class).to(CliCommandFactory.class).in(Singleton.class);
         bind(PropertiesProvider.class).to(StaticPropertiesProvider.class).in(Singleton.class);
         bind(ConfigurationProvider.class).to(ConfigurationProviderImpl.class).in(Singleton.class);

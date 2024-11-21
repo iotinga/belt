@@ -60,6 +60,12 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
                         break;
                     }
                     try {
+                        /**
+                         * Creating a new injector for each gadget so clashes of
+                         * dependencies do not happen.
+                         * Strangely enough, the method createChildInjector propagates
+                         * dependencies to ancestor injectors and we don't want that.
+                         */
                         Injector gadgetInjector = Guice.createInjector(new CliCustomRootModule());
                         GadgetContextFactory gadgetContextFactory = gadgetInjector
                                 .getInstance(GadgetContextFactory.class);
