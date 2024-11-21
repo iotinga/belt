@@ -31,8 +31,6 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
 
     private final ExecutorService executor;
     private final CompletionService<Status> completionService;
-    private final GadgetContextFactory factory;
-    private final Injector isolatedInjector;
     private final GadgetSink out;
 
     private final List<Future<Status>> pluginsResults;
@@ -40,8 +38,6 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
     @Inject
     public HeadlessCommandExecutor(ExecutorService executor, GadgetSink output) {
         this.out = output;
-        this.isolatedInjector = Guice.createInjector(new CliCustomRootModule());
-        this.factory = this.isolatedInjector.getInstance(GadgetContextFactory.class);
         this.executor = executor;
         this.completionService = new ExecutorCompletionService<>(executor);
         this.pluginsResults = new ArrayList<>();
@@ -54,7 +50,7 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
         retval.completeAsync(new Supplier<Status>() {
             @Override
             public Status get() {
-                if(command.gadgets() == null || command.gadgets().size() < 1) {
+                if (command.gadgets() == null || command.gadgets().size() < 1) {
                     out.put("gadgets list is empty");
                     return Status.BAD_REQUEST;
                 }
@@ -64,7 +60,10 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
                         break;
                     }
                     try {
-                        Callable<Status> plugin = factory.buildCallableFrom(className);
+                        Injector gadgetInjector = Guice.createInjector(new CliCustomRootModule());
+                        GadgetContextFactory gadgetContextFactory = gadgetInjector
+                                .getInstance(GadgetContextFactory.class);
+                        Callable<Status> plugin = gadgetContextFactory.buildCallableFrom(className);
                         pluginsResults.add(completionService.submit(plugin));
                     } catch (GadgetLifecycleException e) {
                         if (command.ignore()) {
