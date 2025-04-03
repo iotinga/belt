@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/belt-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-cli/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-cli/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-headless/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-headless/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-slf4j-endpoint/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-slf4j-endpoint/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-testgadget/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/belt-testgadget/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

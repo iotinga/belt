@@ -6,7 +6,7 @@
 
     <groupId>io.tinga.belt</groupId>
     <artifactId>belt</artifactId>
-    <version>0.0.10</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
     <name>Belt</name>
     <description>Library for microservices systems written in Java</description>
@@ -55,6 +55,17 @@
 			</roles>
 			<timezone>Italy/Rome</timezone>
 		</developer>
+        <developer>
+            <id>alessandro_righi</id>
+            <name>Alessandro Righi</name>
+            <email>alessandro.righi@iotinga.it</email>
+            <organization>IOTINGA</organization>
+            <organizationUrl>https://www.iotinga.it</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Italy/Rome</timezone>
+        </developer>
 	</developers>
     
     <modules>

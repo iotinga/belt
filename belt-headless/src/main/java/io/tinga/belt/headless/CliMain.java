@@ -5,7 +5,6 @@ import com.google.inject.Module;
 import io.tinga.belt.cli.AbstractCli;
 
 public class CliMain extends AbstractCli<HeadlessCommandExecutor, HeadlessCommand> {
-
     public CliMain(String[] args) {
         super(args, new HeadlessGadget());
     }

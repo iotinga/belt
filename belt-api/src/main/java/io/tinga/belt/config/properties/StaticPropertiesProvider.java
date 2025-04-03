@@ -22,6 +22,10 @@ public class StaticPropertiesProvider implements PropertiesProvider {
         this.props = PropertiesUtils.loadProperties();
     }
 
+    public StaticPropertiesProvider(String propertiesPath) {
+        this.props = PropertiesUtils.loadProperties(propertiesPath);
+    }
+
     public StaticPropertiesProvider(Properties properties) {
         this.props = properties;
     }

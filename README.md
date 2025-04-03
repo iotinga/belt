@@ -47,7 +47,17 @@ The Runtime Belt is intended to run multiple Gadgets from the same process. It i
 
 > As for bauer and slf4j limitations, all the Gadgets will use the same bauer and slf4j endpoints
 
-The Runtime Belt loads properties from the runtime environment variables using the Dotenv library. It isn't possible to pass any other property or command to the Gadget. It passes a `null` command to the submit method.
+The Runtime Belt by default loads properties from the runtime environment variables using the Dotenv library.
+
+It's possible to override the configuration load behavior with these two system properties
+(that can be defined with `-Dbelt.x.y=value` Java option):
+
+- `belt.config.loader`: configuration loader, currently supported are `dotenv` (default) and `properties`
+- `belt.config.path`: override the configuration file (default: `belt.properties` in the current directory). Only relevant for the `properties` configuration loader.
+
+Example: `java -Dbelt.config.loader=properties -Dbelt.config.path=/etc/mysoftware.properties belt.jar [...]`
+
+It isn't possible to pass any other property or command to the Gadget. It passes a `null` command to the submit method.
 
 ## Lifecycle
 

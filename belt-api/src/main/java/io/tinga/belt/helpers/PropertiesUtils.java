@@ -15,11 +15,11 @@ public class PropertiesUtils {
     public static final String DEFAULT_CONFIG_PROPERTIES_NAME = "belt.properties";
     public static String propertiesPath = null;
     
-    public final static void setPropertiesPath(String path) {
+    public static void setPropertiesPath(String path) {
         propertiesPath = path;
     }
 
-    public final static String getPropertiesPath() {
+    public static String getPropertiesPath() {
         if (propertiesPath == null) {
             return DEFAULT_CONFIG_PROPERTIES_NAME;
         }
@@ -27,16 +27,20 @@ public class PropertiesUtils {
         return propertiesPath;
     }
 
-    public static Properties loadProperties() {
-        Properties properties = null;
-        if ((properties = loadPropertiesFromFile(getPropertiesPath())) != null)
+    public static Properties loadProperties(String path) {
+        Properties properties;
+        if (path != null && (properties = loadPropertiesFromFile(path)) != null)
             return properties;
 
         if ((properties = loadPropertiesAsResource(DEFAULT_CONFIG_PROPERTIES_NAME)) != null)
             return properties;
 
-        log.info(String.format("No %s properties found. Run with defaults.", DEFAULT_CONFIG_PROPERTIES_NAME));
+        log.info("No {} properties found. Run with defaults.", DEFAULT_CONFIG_PROPERTIES_NAME);
         return new Properties();
+    }
+
+    public static Properties loadProperties() {
+        return loadProperties(getPropertiesPath());
     }
 
     public static Properties loadPropertiesAsResource(String propertiesResourceName) {

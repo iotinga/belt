@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="belt-headless" />
+        <module name="belt-cli" />
+        <module name="belt-testgadget" />
+        <module name="belt-api" />
+        <module name="belt-core" />
+        <module name="belt-slf4j-endpoint" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>
