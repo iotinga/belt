@@ -84,6 +84,11 @@ public abstract class AbstractCli<E extends GadgetCommandExecutor<C>, C> impleme
                 context.output().close();
             }
             this.displayExecutor.shutdown();
+
+            int exitCode = status.getCategory() == Status.Category.SUCCESS ? 0 : 1;
+
+            log.info("Exiting with status {}", exitCode);
+            System.exit(exitCode);
         }
     }
 
