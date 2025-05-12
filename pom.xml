@@ -6,7 +6,7 @@
 
     <groupId>io.tinga.belt</groupId>
     <artifactId>belt</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.1</version>
     <packaging>pom</packaging>
     <name>Belt</name>
     <description>Library for microservices systems written in Java</description>
@@ -109,16 +109,6 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <tokenAuth>true</tokenAuth>
-                    <autoPublish>true</autoPublish>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.4.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>iotinga-maven-releases</publishingServerId>
                     <autoPublish>true</autoPublish>
                 </configuration>
             </plugin>
