@@ -6,7 +6,6 @@ import com.google.inject.Singleton;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import io.tinga.belt.GadgetContextFactory;
-import io.tinga.belt.GadgetContextFactoryImpl;
 import io.tinga.belt.cli.CliCommandFactory;
 import io.tinga.belt.config.ConfigurationProvider;
 import io.tinga.belt.config.ConfigurationProviderImpl;
@@ -26,7 +25,7 @@ public class CliCustomRootModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(GadgetContextFactory.class).to(GadgetContextFactoryImpl.class).in(Singleton.class);
+        bind(GadgetContextFactory.class).to(HeadelessGadgetContextFactory.class).in(Singleton.class);
         bind(GadgetCommandFactory.class).to(CliCommandFactory.class).in(Singleton.class);
         bind(ConfigurationProvider.class).to(ConfigurationProviderImpl.class).in(Singleton.class);
         bind(GadgetDisplayFactory.class).to(HeadlessDisplayFactory.class).in(Singleton.class);

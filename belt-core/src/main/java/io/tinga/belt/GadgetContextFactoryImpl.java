@@ -23,9 +23,9 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
 
     private static final Logger log = LoggerFactory.getLogger(GadgetContextFactoryImpl.class);
 
-    private final Injector injector;
-    private final PropertiesProvider pp;
-    private final GadgetDisplayFactory displayFactory;
+    protected final Injector injector;
+    protected final PropertiesProvider pp;
+    protected final GadgetDisplayFactory displayFactory;
 
     @Inject
     public GadgetContextFactoryImpl(Injector executorInjector, PropertiesProvider propertiesProvider,
@@ -36,17 +36,9 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <C> GadgetContext<C> buildContextFrom(String gadgetClassName, C command) throws GadgetLifecycleException {
-        try {
-            Class<Gadget<?, C>> gadgetModuleClazz = (Class<Gadget<?, C>>) Class.forName(gadgetClassName);
-            Gadget<?, C> gadget = (Gadget<?, C>) gadgetModuleClazz.getDeclaredConstructor().newInstance();
-            return this.buildContextFrom(gadget, command);
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-            log.debug(String.format("Cannot instantiate plugin %s: %s", gadgetClassName, e));
-            throw new GadgetLifecycleException(new DummyGadgetCommandExecutor(), e);
-        }
+        Gadget<?, C> gadget = this.buildGadget(gadgetClassName);
+        return this.buildContextFrom(gadget, command);
     }
 
     @Override
@@ -67,7 +59,8 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
 
     @Override
     public Callable<Status> buildCallableFrom(String gadgetClassName) throws GadgetLifecycleException {
-        GadgetContext<?> context = this.buildContextFrom(gadgetClassName, null);
+        Gadget<?, ?> gadget = this.buildGadget(gadgetClassName);
+        GadgetContext<?> context = this.buildContextFrom(gadget, null);
         return this.buildCallableFrom(context);
     }
 
@@ -77,7 +70,19 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
         return this.buildCallableFrom(context);
     }
 
-    private <C> Callable<Status> buildCallableFrom(GadgetContext<?> context) throws GadgetLifecycleException {
+    @SuppressWarnings("unchecked")
+    protected final <C> Gadget<?, C> buildGadget(String gadgetClassName) throws GadgetLifecycleException {
+        try {
+            Class<Gadget<?, C>> gadgetModuleClazz = (Class<Gadget<?, C>>) Class.forName(gadgetClassName);
+            return (Gadget<?, C>) gadgetModuleClazz.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+            log.debug(String.format("Cannot instantiate plugin %s: %s", gadgetClassName, e));
+            throw new GadgetLifecycleException(new DummyGadgetCommandExecutor(), e);
+        }
+    }
+
+    protected final <C> Callable<Status> buildCallableFrom(GadgetContext<?> context) throws GadgetLifecycleException {
         return () -> {
             try {
                 Future<?> displayRun = displayFactory.buildDisplay(context);

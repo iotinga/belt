@@ -33,14 +33,14 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
     private final CompletionService<Status> completionService;
     private final GadgetSink out;
 
-    private final List<Future<Status>> pluginsResults;
+    private final List<Future<Status>> gadgetsResults;
 
     @Inject
     public HeadlessCommandExecutor(ExecutorService executor, GadgetSink output) {
         this.out = output;
         this.executor = executor;
         this.completionService = new ExecutorCompletionService<>(executor);
-        this.pluginsResults = new ArrayList<>();
+        this.gadgetsResults = new ArrayList<>();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
                         GadgetContextFactory gadgetContextFactory = gadgetInjector
                                 .getInstance(GadgetContextFactory.class);
                         Callable<Status> plugin = gadgetContextFactory.buildCallableFrom(className);
-                        pluginsResults.add(completionService.submit(plugin));
+                        gadgetsResults.add(completionService.submit(plugin));
                     } catch (GadgetLifecycleException e) {
                         if (command.ignore()) {
                             out.put(String.format("Unable to submit %s: %s", className, e.getMessage()));
@@ -86,9 +86,9 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
 
                 // wait for execution to end
                 try {
-                    while (!executor.isShutdown() && pluginsResults.size() > 0) {
+                    while (!executor.isShutdown() && gadgetsResults.size() > 0) {
                         Future<Status> result = completionService.take();
-                        pluginsResults.remove(result);
+                        gadgetsResults.remove(result);
                         try {
                             Status status = result.resultNow();
                             if (command.threading() == HeadlessGadgetComposition.SEQUENTIAL) {

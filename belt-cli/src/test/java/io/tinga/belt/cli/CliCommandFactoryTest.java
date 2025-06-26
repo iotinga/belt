@@ -3,9 +3,11 @@ package io.tinga.belt.cli;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.apache.commons.cli.DefaultParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 
 import io.tinga.belt.GadgetFatalException;
@@ -24,7 +26,7 @@ class CliCommandFactoryTest {
     @BeforeEach
     public void setUp() {
         this.faker = new Faker();
-        this.instance = new CliCommandFactory();
+        this.instance = new CliCommandFactory(new ObjectMapper(), new DefaultParser(), new CliCustomHelpFormatter());
         this.testee = this.instance;
     }
 

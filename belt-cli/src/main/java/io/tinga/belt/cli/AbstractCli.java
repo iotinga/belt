@@ -73,6 +73,7 @@ public abstract class AbstractCli<E extends GadgetCommandExecutor<C>, C> impleme
             status = commandRun.get();
         } catch (GadgetFatalException e) {
             log.debug("Exit({})", e.exitCode);
+            System.out.println(e.getMessage());
             System.exit(e.exitCode);
         } catch (GadgetLifecycleException e) {
             log.error("Exit({})", e.reason.getMessage());
