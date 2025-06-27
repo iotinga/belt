@@ -1,0 +1,130 @@
+package io.tinga.b3.core.impl;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Function;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.tinga.b3.core.EdgeDriver;
+import io.tinga.b3.core.connection.ConnectionState;
+import io.tinga.b3.protocol.RawMessage;
+import io.tinga.b3.protocol.topic.AgentTopic;
+import it.netgrid.bauer.EventHandler;
+
+public abstract class AbstractFsmEdgeDriver<E, S, M extends RawMessage<S>>
+        implements EdgeDriver<S, M> {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractFsmEdgeDriver.class);
+
+    public record Context<M>(M incomingDesired, Function<M, Void> reportedEmitter) {
+    };
+    public interface State<E, S, M extends RawMessage<S>> {
+
+        void enter(Context<M> context);
+
+        E current();
+
+        E onConnectDelta(Context<M> context);
+
+        E onDisconnectDelta(Context<M> context);
+
+        E onWriteDelta(Context<M> context);
+
+        E onEmitDelta(Context<M> context);
+
+        ConnectionState getConnectionState();
+
+        void exit(Context<M> context);
+
+    }
+
+    private final List<EventHandler<M>> subscribers;
+    private final AgentTopic agentTopic;
+    private final String shadowReportedTopic;
+
+    private Context<M> currentContext;
+    private State<E, S, M> state;
+
+    public AbstractFsmEdgeDriver(AgentTopic agentTopic) {
+        this.subscribers = new CopyOnWriteArrayList<>();
+        this.agentTopic = agentTopic;
+        this.shadowReportedTopic = this.agentTopic.shadow().reported().build();
+    }
+
+    protected abstract State<E, S, M> buildInitialState();
+    protected abstract State<E, S, M> get(E state);
+
+    /**
+     * Field Driver Interface ------------------------------------
+     */
+    @Override
+    public void connect() {
+        this.onEvent(this.state::onConnectDelta, null, null);
+    }
+
+    @Override
+    public void disconnect() {
+        this.onEvent(this.state::onDisconnectDelta, null, null);
+    }
+
+    @Override
+    public void write(M desiredMessage) {
+        if (desiredMessage == null) {
+            log.error("Invalid shadow desired message: desiredMessage is null");
+            return;
+        }
+
+        this.onEvent(this.state::onWriteDelta, desiredMessage, null);
+    }
+
+    @Override
+    public void subscribe(EventHandler<M> observer) {
+        subscribers.add(observer);
+    }
+
+    @Override
+    public void unsubscribe(EventHandler<M> observer) {
+        subscribers.remove(observer);
+    }
+
+    @Override
+    public ConnectionState getConnectionState() {
+        return this.state.getConnectionState();
+    }
+
+    private Void emit(M reportedMessage) {
+        this.onEvent(this.state::onEmitDelta, null, reportedMessage);
+        return null;
+    }
+
+    private synchronized void onEvent(Function<Context<M>, E> delta, M desired, M reported) {
+
+        if (this.state == null) {
+            this.state = this.buildInitialState();
+        }
+
+        if(reported != null) {
+            for (EventHandler<M> subscriber : this.subscribers) {
+                try {
+                    subscriber.handle(this.shadowReportedTopic, reported);
+                } catch (Exception e) {
+                    log.error(String.format("Unexpected error occurred sending message to %s: %s", subscriber.getName(),
+                            e.getMessage()), e);
+                }
+            }
+        }
+
+        this.currentContext = new Context<M>(desired, this::emit);
+        E next = delta == null ? this.state.current() : delta.apply(this.currentContext);
+        
+        if (this.state.current() != next) {
+            this.currentContext = new Context<M>(null, this::emit);
+            this.state.exit(this.currentContext);
+            this.state = this.get(next);
+            this.state.enter(this.currentContext);
+        }
+    }
+
+}

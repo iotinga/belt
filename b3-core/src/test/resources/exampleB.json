@@ -1,0 +1,11 @@
+{
+    "A": 1,
+    "B": {
+        "EE": [1,2,3,4,5],
+        "FF": "",
+        "GG": [{"HH":"BB"}, 1, 2, null, false]
+    },
+    "C":[{"AA": 1, "BB": "aebrnaer"},{"AA": 2, "BB": "aebrnaer"},{"CC": 1, "DD": "aebrnaer"}],
+    "D": null,
+    "E": "lorem ipsum dolor sit amet"
+}

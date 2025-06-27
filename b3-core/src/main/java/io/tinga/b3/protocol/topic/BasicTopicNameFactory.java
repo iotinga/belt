@@ -1,0 +1,45 @@
+package io.tinga.b3.protocol.topic;
+
+import static io.tinga.b3.protocol.topic.TopicName.DEFAULT_ROOT;
+import static io.tinga.b3.protocol.topic.TopicName.GLUE;
+
+import com.google.inject.Inject;
+
+import io.tinga.b3.protocol.TopicNameValidationException;
+
+public class BasicTopicNameFactory implements TopicNameFactory, RootTopic {
+
+    private final String root;
+
+    @Inject
+    public BasicTopicNameFactory() {
+        this.root = DEFAULT_ROOT;
+    }
+
+    public BasicTopicNameFactory(String root) {
+        String secureRoot = root == null ? DEFAULT_ROOT : root;
+        this.root = secureRoot.endsWith(GLUE) ? secureRoot.substring(0,secureRoot.length()-1) : secureRoot;
+    }
+
+    @Override
+    public RootTopic root() {
+        return this;
+    }
+
+    @Override
+    public EntityTopic entity(String id) {
+        if (id.contains(GLUE)) {
+            throw new TopicNameValidationException("invalid char");
+        }
+
+        return new EntityTopicNameElement(this.root, id);
+    }
+
+    @Override
+    public AgentTopic agent(String id) {
+        if (id.contains(GLUE)) {
+            throw new TopicNameValidationException("invalid char");
+        }
+        return new AgentTopicNameElement(this.root, id);
+    }
+}

@@ -75,6 +75,8 @@
         <module>belt-headless</module>
         <module>belt-testgadget</module>
         <module>belt-slf4j-endpoint</module>
+        <module>b3-core</module>
+        <module>b3-groupagent</module>
     </modules>
 
     <properties>
@@ -97,6 +99,8 @@
         <version.mvn-jar>3.3.0</version.mvn-jar>
         <version.mvn-assembly>3.6.0</version.mvn-assembly>
         <version.dotenv-java>3.0.0</version.dotenv-java>
+        <version.bauer>1.1.6</version.bauer>
+        <version.milo>0.6.12</version.milo>
     </properties>
 
     <build>
