@@ -13,7 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import io.tinga.belt.config.PropertiesProvider;
-import io.tinga.belt.helpers.DummyGadgetCommandExecutor;
+import io.tinga.belt.dummy.DummyGadgetCommandExecutor;
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.output.Status;
 import io.tinga.belt.output.GadgetDisplayFactory;

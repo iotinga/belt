@@ -1,15 +1,11 @@
 package io.tinga.belt.headless;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,19 +13,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
 import com.github.javafaker.Faker;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import io.tinga.belt.GadgetContextFactory;
-import io.tinga.belt.GadgetLifecycleException;
-import io.tinga.belt.helpers.DummyGadgetCommandExecutor;
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
 import io.tinga.belt.output.GadgetSink;
-import io.tinga.belt.output.Status;
 
 @ExtendWith(MockitoExtension.class)
 class RuntimeCommandExecutorTest {

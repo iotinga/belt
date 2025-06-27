@@ -1,4 +1,4 @@
-package io.tinga.belt.helpers;
+package io.tinga.belt.dummy;
 
 public record DummyGadgetCommand() {
 
