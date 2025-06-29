@@ -21,7 +21,7 @@ import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.protocol.Action;
-import io.tinga.b3.protocol.GenericMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import io.tinga.b3.protocol.topic.RootTopic;
 import io.tinga.belt.output.Status;
@@ -29,28 +29,28 @@ import it.netgrid.bauer.EventHandler;
 
 @Singleton
 public class EdgeDriverFsmConnected
-        implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, ObjectNode, GenericMessage> {
+        implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, GenericB3Message> {
 
     private static final Logger log = LoggerFactory.getLogger(GroupAgentEdgeDriver.class);
 
-    private final ShadowDesiredPreProcessor<GenericMessage> desiredPreProcessor;
-    private final ShadowReportedPostProcessor<GenericMessage> reportedPostProcessor;
+    private final ShadowDesiredPreProcessor<GenericB3Message> desiredPreProcessor;
+    private final ShadowReportedPostProcessor<GenericB3Message> reportedPostProcessor;
     private final GroupAgentConfig config;
     private final AgentProxy.Factory factory;
     private final RootTopic topicsRoot;
     private final ObjectNode currentShadowReported;
 
-    private final Map<AgentTopic, AgentProxy<ObjectNode, GenericMessage>> membersProxies = new HashMap<>();
+    private final Map<AgentTopic, AgentProxy<GenericB3Message>> membersProxies = new HashMap<>();
     private final Map<String, AgentTopic> fragNameMember = new HashMap<>();
 
     private ConnectionState connectionState;
-    private Context<GenericMessage> contextOnEnterState;
+    private Context<GenericB3Message> contextOnEnterState;
 
     @Inject
     public EdgeDriverFsmConnected(GroupAgentConfig config,
             AgentProxy.Factory factory, RootTopic topicsRoot, ObjectMapper om,
-            ShadowDesiredPreProcessor<GenericMessage> desiredPreProc,
-            ShadowReportedPostProcessor<GenericMessage> reportedPostProc) {
+            ShadowDesiredPreProcessor<GenericB3Message> desiredPreProc,
+            ShadowReportedPostProcessor<GenericB3Message> reportedPostProc) {
         this.connectionState = ConnectionState.CONNECTING;
         this.config = config;
         this.factory = factory;
@@ -66,19 +66,19 @@ public class EdgeDriverFsmConnected
     }
 
     @Override
-    public EdgeDriverFsmState onConnectDelta(Context<GenericMessage> context) {
+    public EdgeDriverFsmState onConnectDelta(Context<GenericB3Message> context) {
         return this.current();
     }
 
     @Override
     public EdgeDriverFsmState onDisconnectDelta(
-            Context<GenericMessage> context) {
+            Context<GenericB3Message> context) {
         return EdgeDriverFsmState.DISCONNECTED;
     }
 
     @Override
     public EdgeDriverFsmState onWriteDelta(
-            Context<GenericMessage> context) {
+            Context<GenericB3Message> context) {
         if (this.getConnectionState() != ConnectionState.CONNECTED)
             return this.current();
 
@@ -90,12 +90,12 @@ public class EdgeDriverFsmConnected
     }
 
     @Override
-    public EdgeDriverFsmState onEmitDelta(Context<GenericMessage> context) {
+    public EdgeDriverFsmState onEmitDelta(Context<GenericB3Message> context) {
         return this.current();
     }
 
     @Override
-    public synchronized void enter(Context<GenericMessage> context) {
+    public synchronized void enter(Context<GenericB3Message> context) {
         this.connectionState = ConnectionState.CONNECTING;
         this.contextOnEnterState = context;
 
@@ -106,9 +106,9 @@ public class EdgeDriverFsmConnected
             for (String memberAgentId : config.members()) {
                 final EdgeDriverFsmConnected fsmState = this;
                 final AgentTopic member = topicsRoot.agent(memberAgentId);
-                AgentProxy<ObjectNode, GenericMessage> memberProxy = factory.getProxy(member,
+                AgentProxy<GenericB3Message> memberProxy = factory.getProxy(member,
                         config.roleInMembers());
-                memberProxy.subscribe(new EventHandler<GenericMessage>() {
+                memberProxy.subscribe(new EventHandler<GenericB3Message>() {
 
                     @Override
                     public String getName() {
@@ -116,12 +116,12 @@ public class EdgeDriverFsmConnected
                     }
 
                     @Override
-                    public Class<GenericMessage> getEventClass() {
-                        return GenericMessage.class;
+                    public Class<GenericB3Message> getEventClass() {
+                        return GenericB3Message.class;
                     }
 
                     @Override
-                    public boolean handle(String topic, GenericMessage event) throws Exception {
+                    public boolean handle(String topic, GenericB3Message event) throws Exception {
                         fsmState.updateShadowReported(member, event);
                         return true;
                     }
@@ -135,26 +135,26 @@ public class EdgeDriverFsmConnected
     }
 
     @Override
-    public synchronized void exit(Context<GenericMessage> context) {
+    public synchronized void exit(Context<GenericB3Message> context) {
         this.connectionState = ConnectionState.DISCONNECTING;
         this.contextOnEnterState = null;
         this.connectionState = ConnectionState.DISCONNECTED;
     }
 
-    private synchronized void updateShadowReported(AgentTopic agent, GenericMessage message) {
-        Context<GenericMessage> context = this.contextOnEnterState;
+    private synchronized void updateShadowReported(AgentTopic agent, GenericB3Message message) {
+        Context<GenericB3Message> context = this.contextOnEnterState;
         if (context != null) {
             String shadowSectionName = this.getFragmentNameFor(agent);
             this.currentShadowReported.set(shadowSectionName, message.getBody());
             ObjectNode shadowReportedCopy = this.currentShadowReported.deepCopy();
-            GenericMessage newShadowMessage = new GenericMessage(null, 0, 0, Action.PUT, Status.ACCEPTED,
+            GenericB3Message newShadowMessage = new GenericB3Message(null, 0, 0, Action.PUT, Status.ACCEPTED,
                     shadowReportedCopy);
             this.reportedPostProcessor.inPlaceProcess(newShadowMessage);
             context.reportedEmitter().apply(newShadowMessage);
         }
     }
 
-    private void write(GenericMessage desiredMessage) {
+    private void write(GenericB3Message desiredMessage) {
         if (desiredMessage == null || !(desiredMessage.getBody() instanceof ObjectNode)) {
             log.error(String.format("Invalid shadow desired message: %s",
                     desiredMessage == null ? "desiredMessage is null"
@@ -170,7 +170,7 @@ public class EdgeDriverFsmConnected
             AgentTopic member = this.fragNameMember.get(key);
             if (member != null) {
                 ObjectNode memberFragment = newShadowDesired.get(key).deepCopy();
-                GenericMessage memberDesiredMessage = new GenericMessage(desiredMessage.getTimestamp(),
+                GenericB3Message memberDesiredMessage = new GenericB3Message(desiredMessage.getTimestamp(),
                         desiredMessage.getVersion(), desiredMessage.getProtocolVersion(), desiredMessage.getAction(),
                         desiredMessage.getStatus(),
                         memberFragment);

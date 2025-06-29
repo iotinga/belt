@@ -9,9 +9,9 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
-import io.tinga.b3.protocol.GenericMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 
-public class EdgeGroupReportedPostProcessor implements ShadowReportedPostProcessor<GenericMessage> {
+public class EdgeGroupReportedPostProcessor implements ShadowReportedPostProcessor<GenericB3Message> {
 
     public static final String FRAGS_PROPERTY_NAME = "frags";
     public static final String FRAGS_COUNT_PROPERTY_NAME = "fragsCount";
@@ -31,7 +31,7 @@ public class EdgeGroupReportedPostProcessor implements ShadowReportedPostProcess
     }
 
     @Override
-    public void inPlaceProcess(GenericMessage outcomingReported) {
+    public void inPlaceProcess(GenericB3Message outcomingReported) {
         if (outcomingReported == null)
             return;
 

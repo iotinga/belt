@@ -1,6 +1,5 @@
 package io.tinga.b3.groupagent;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provides;
@@ -17,7 +16,7 @@ import io.tinga.b3.core.impl.InitFromReportedTopicVersionSafeExecutor;
 import io.tinga.b3.core.impl.SingletonsITopicFactoryProxy;
 import io.tinga.b3.core.shadowing.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.core.shadowing.EdgeFirstShadowReportedPolicy;
-import io.tinga.b3.protocol.GenericMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import io.tinga.b3.protocol.topic.BasicTopicNameFactory;
 import io.tinga.b3.protocol.topic.RootTopic;
@@ -49,15 +48,15 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
 
         // FIELD PROXIES
         bind(ITopicFactoryProxy.class).to(SingletonsITopicFactoryProxy.class).in(Singleton.class);
-        bind(Key.get(new TypeLiteral<AgentProxy<ObjectNode, GenericMessage>>() {
+        bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
         })).to(GenericAgentProxy.class);
         bind(Key.get(new TypeLiteral<AgentProxy.Factory>() {
         })).to(AgentProxyFactoryImpl.class);
         bind(TopicNameFactory.class).to(BasicTopicNameFactory.class);
 
-        bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<ObjectNode, GenericMessage>>() {
+        bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {
         })).to(EdgeFirstShadowDesiredPolicy.class);
-        bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<ObjectNode, GenericMessage>>() {
+        bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
         })).to(EdgeFirstShadowReportedPolicy.class);
     }
 

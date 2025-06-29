@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.tinga.belt.output.Status;
 
-public class GenericMessage extends RawMessage<ObjectNode> {
-    public GenericMessage(Long timestamp, Integer version, Integer protocolVersion, Action action, Status status,
+public class GenericB3Message extends B3Message<ObjectNode> {
+    public GenericB3Message(Long timestamp, Integer version, Integer protocolVersion, Action action, Status status,
                         ObjectNode body) {
         super(timestamp, version, protocolVersion, action, status, body);
     }
@@ -16,11 +16,11 @@ public class GenericMessage extends RawMessage<ObjectNode> {
             return false;
         }
 
-        if (!(other instanceof GenericMessage)) {
+        if (!(other instanceof GenericB3Message)) {
             return false;
         }
 
-        GenericMessage otherMessage = (GenericMessage) other;
+        GenericB3Message otherMessage = (GenericB3Message) other;
 
         if (this == otherMessage) {
             return true;

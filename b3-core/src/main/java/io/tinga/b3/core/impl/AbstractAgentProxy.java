@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.AgentProxy;
 import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.protocol.RawMessage;
+import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public abstract class AbstractAgentProxy<S, M extends RawMessage<S>> implements AgentProxy<S, M> {
+public abstract class AbstractAgentProxy<M extends B3Message<?>> implements AgentProxy<M> {
     private static final Logger log = LoggerFactory.getLogger(AbstractAgentProxy.class);
 
     private AgentTopic agentTopic;

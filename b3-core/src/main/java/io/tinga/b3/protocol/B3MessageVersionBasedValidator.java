@@ -5,17 +5,17 @@ import java.util.List;
 
 import io.tinga.belt.output.Status;
 
-public class RawMessageVersionBasedValidator implements RawMessageValidator {
+public class B3MessageVersionBasedValidator implements B3MessageValidator {
 
-    public void validate(RawMessage<?> message) throws RawMessageValidationException {
+    public void validate(B3Message<?> message) throws B3MessageValidationException {
         List<String> errors = this.detectErrors(message, new ArrayList<>());
         if (errors.size() > 0) {
-            throw new RawMessageValidationException(errors, Status.BAD_REQUEST);
+            throw new B3MessageValidationException(errors, Status.BAD_REQUEST);
         }
     }
 
     @Override
-    public void validateUpdate(RawMessage<?> current, RawMessage<?> incoming) throws RawMessageValidationException {
+    public void validateUpdate(B3Message<?> current, B3Message<?> incoming) throws B3MessageValidationException {
 
         this.validate(incoming);
 
@@ -23,18 +23,18 @@ public class RawMessageVersionBasedValidator implements RawMessageValidator {
             // the from != null && to == null condition is considered as conflict
             // because it is not possible to verify the version owned from the requester
             // and this is a version based conflicts detector.
-            throw new RawMessageValidationException("null on existing item", Status.CONFLICT);
+            throw new B3MessageValidationException("null on existing item", Status.CONFLICT);
         }
 
         if (current != null && incoming != null && incoming.getVersion() != 0
                 && current.getVersion() != incoming.getVersion()) {
-            throw new RawMessageValidationException(
+            throw new B3MessageValidationException(
                     String.format("Version missmatch %d %d", current.getVersion(), incoming.getVersion()),
                     Status.CONFLICT);
         }
     }
 
-    public List<String> detectErrors(RawMessage<?> message, List<String> errors) {
+    public List<String> detectErrors(B3Message<?> message, List<String> errors) {
         if (message != null && message.getVersion() == null) {
             errors.add("version is null");
         }

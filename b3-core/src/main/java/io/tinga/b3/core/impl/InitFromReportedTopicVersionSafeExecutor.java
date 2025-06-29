@@ -3,7 +3,7 @@ package io.tinga.b3.core.impl;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.AgentInitException;
-import io.tinga.b3.protocol.GenericMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import it.netgrid.bauer.EventHandler;
 import it.netgrid.bauer.ITopicFactory;
@@ -13,11 +13,11 @@ import it.netgrid.bauer.Topic;
  * This VersionSafeExecutor requires always a fresh topic creation from the ITopicFactory without the retain
  * flag, as it doesn't need to write to the topic reported.
  */
-public class InitFromReportedTopicVersionSafeExecutor extends AbstracVersionSafeExecutor implements EventHandler<GenericMessage> {
+public class InitFromReportedTopicVersionSafeExecutor extends AbstracVersionSafeExecutor implements EventHandler<GenericB3Message> {
 
     private final ITopicFactory topicFactory;
     private AgentTopic agentTopic;
-    private Topic<GenericMessage> reportedTopic;
+    private Topic<GenericB3Message> reportedTopic;
 
     @Inject
     public InitFromReportedTopicVersionSafeExecutor(ITopicFactory topicFactory) {
@@ -41,12 +41,12 @@ public class InitFromReportedTopicVersionSafeExecutor extends AbstracVersionSafe
     }
 
     @Override
-    public Class<GenericMessage> getEventClass() {
-        return GenericMessage.class;
+    public Class<GenericB3Message> getEventClass() {
+        return GenericB3Message.class;
     }
 
     @Override
-    public boolean handle(String topicName, GenericMessage event) throws Exception {
+    public boolean handle(String topicName, GenericB3Message event) throws Exception {
         if (!this.isInitialized()) {
             this.initCurrentReportedVersion(event.getVersion());
         }

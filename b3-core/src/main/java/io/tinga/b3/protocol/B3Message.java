@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.tinga.belt.output.Status;
 
-public class RawMessage<B> {
+public class B3Message<B> {
     @JsonProperty("TS")
     private Long timestamp;
 
@@ -23,10 +23,10 @@ public class RawMessage<B> {
     @JsonProperty("BODY")
     private B body;
 
-    public RawMessage() {
+    public B3Message() {
     }
 
-    public RawMessage(Long timestamp, Integer version, Integer protocolVersion, Action action, Status status,
+    public B3Message(Long timestamp, Integer version, Integer protocolVersion, Action action, Status status,
             B body) {
         this.timestamp = timestamp;
         this.version = version;
@@ -36,8 +36,8 @@ public class RawMessage<B> {
         this.body = body;
     }
 
-    public RawMessage<B> response(Long timestamp, Status status, Integer version, B body) {
-        return new RawMessage<B>(timestamp, version, protocolVersion, action, status, body);
+    public B3Message<B> response(Long timestamp, Status status, Integer version, B body) {
+        return new B3Message<B>(timestamp, version, protocolVersion, action, status, body);
     }
 
     public Long getTimestamp() {
@@ -94,11 +94,11 @@ public class RawMessage<B> {
             return false;
         }
 
-        if (!(other instanceof RawMessage)) {
+        if (!(other instanceof B3Message)) {
             return false;
         }
 
-        RawMessage<?> otherMessage = (RawMessage<?>) other;
+        B3Message<?> otherMessage = (B3Message<?>) other;
 
         if (this == otherMessage) {
             return true;

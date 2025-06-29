@@ -5,23 +5,23 @@ import java.util.List;
 
 import io.tinga.belt.output.Status;
 
-public class RawMessageValidationException extends Exception {
+public class B3MessageValidationException extends Exception {
 
     public final Status status;
     public final List<String> reasons;
 
-    public RawMessageValidationException(List<String> reasons, Status status) {
+    public B3MessageValidationException(List<String> reasons, Status status) {
         this.reasons = reasons;
         this.status = status;
     }
 
-    public RawMessageValidationException(String reason, Status status) {
+    public B3MessageValidationException(String reason, Status status) {
         this.reasons = new ArrayList<>();
         this.reasons.add(reason);
         this.status = status;
     }
 
-    public RawMessageValidationException(String reason) {
+    public B3MessageValidationException(String reason) {
         this.reasons = new ArrayList<>();
         this.reasons.add(reason);
         this.status = Status.INTERNAL_SERVER_ERROR;

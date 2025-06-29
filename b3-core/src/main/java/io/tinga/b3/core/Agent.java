@@ -1,17 +1,17 @@
 package io.tinga.b3.core;
 
-import io.tinga.b3.protocol.RawMessage;
+import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import it.netgrid.bauer.EventHandler;
 
-public interface Agent<S> {
+public interface Agent<M extends B3Message<?>> {
     int VERSION_WILDCARD = 0;
 
-    interface ShadowDesiredPolicy<S, M extends RawMessage<S>> extends EventHandler<M> {
+    interface ShadowDesiredPolicy<M> extends EventHandler<M> {
         void bindTo(AgentTopic agent, String roleName);
     }
 
-    interface ShadowReportedPolicy<S, M extends RawMessage<S>> extends EventHandler<M> {
+    interface ShadowReportedPolicy<M> extends EventHandler<M> {
         void bindTo(AgentTopic agent, String roleName);
     }
 

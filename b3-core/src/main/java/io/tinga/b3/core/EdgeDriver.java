@@ -1,10 +1,10 @@
 package io.tinga.b3.core;
 
 import io.tinga.b3.core.connection.Connection;
-import io.tinga.b3.protocol.RawMessage;
+import io.tinga.b3.protocol.B3Message;
 import it.netgrid.bauer.EventHandler;
 
-public interface EdgeDriver<S, M extends RawMessage<S>> extends Connection {
+public interface EdgeDriver<M extends B3Message<?>> extends Connection {
 
     void write(M desiredMessage);
 

@@ -1,38 +1,37 @@
 package io.tinga.b3.groupagent.driver.states;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 
 import io.tinga.b3.core.connection.ConnectionState;
 import io.tinga.b3.core.impl.AbstractFsmEdgeDriver;
 import io.tinga.b3.core.impl.AbstractFsmEdgeDriver.Context;
-import io.tinga.b3.protocol.GenericMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 
 @Singleton
-public class EdgeDriverFsmDisconnected implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, ObjectNode, GenericMessage> {
+public class EdgeDriverFsmDisconnected implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, GenericB3Message> {
 
     private ConnectionState connectionState;
 
     @Override
-    public void enter(Context<GenericMessage> context) {
+    public void enter(Context<GenericB3Message> context) {
         this.connectionState = ConnectionState.DISCONNECTED;
     }
 
     @Override
-    public EdgeDriverFsmState onConnectDelta(Context<GenericMessage> context) {
+    public EdgeDriverFsmState onConnectDelta(Context<GenericB3Message> context) {
         this.connectionState = ConnectionState.CONNECTING;
         return EdgeDriverFsmState.CONNECTED;
     }
 
     @Override
     public EdgeDriverFsmState onDisconnectDelta(
-            Context<GenericMessage> context) {
+            Context<GenericB3Message> context) {
         this.connectionState = ConnectionState.DISCONNECTED;
         return this.current();
     }
 
     @Override
-    public EdgeDriverFsmState onWriteDelta(Context<GenericMessage> context) {
+    public EdgeDriverFsmState onWriteDelta(Context<GenericB3Message> context) {
         return this.current();
     }
 
@@ -42,11 +41,11 @@ public class EdgeDriverFsmDisconnected implements AbstractFsmEdgeDriver.State<Ed
     }
 
     @Override
-    public void exit(Context<GenericMessage> context) {
+    public void exit(Context<GenericB3Message> context) {
     }
 
     @Override
-    public EdgeDriverFsmState onEmitDelta(Context<GenericMessage> context) {
+    public EdgeDriverFsmState onEmitDelta(Context<GenericB3Message> context) {
         return this.current();
     }
 

@@ -9,18 +9,18 @@ import org.slf4j.LoggerFactory;
 
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.connection.ConnectionState;
-import io.tinga.b3.protocol.RawMessage;
+import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import it.netgrid.bauer.EventHandler;
 
-public abstract class AbstractFsmEdgeDriver<E, S, M extends RawMessage<S>>
-        implements EdgeDriver<S, M> {
+public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
+        implements EdgeDriver<M> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractFsmEdgeDriver.class);
 
     public record Context<M>(M incomingDesired, Function<M, Void> reportedEmitter) {
     };
-    public interface State<E, S, M extends RawMessage<S>> {
+    public interface State<E, M extends B3Message<?>> {
 
         void enter(Context<M> context);
 
@@ -45,7 +45,7 @@ public abstract class AbstractFsmEdgeDriver<E, S, M extends RawMessage<S>>
     private final String shadowReportedTopic;
 
     private Context<M> currentContext;
-    private State<E, S, M> state;
+    private State<E, M> state;
 
     public AbstractFsmEdgeDriver(AgentTopic agentTopic) {
         this.subscribers = new CopyOnWriteArrayList<>();
@@ -53,8 +53,8 @@ public abstract class AbstractFsmEdgeDriver<E, S, M extends RawMessage<S>>
         this.shadowReportedTopic = this.agentTopic.shadow().reported().build();
     }
 
-    protected abstract State<E, S, M> buildInitialState();
-    protected abstract State<E, S, M> get(E state);
+    protected abstract State<E, M> buildInitialState();
+    protected abstract State<E, M> get(E state);
 
     /**
      * Field Driver Interface ------------------------------------

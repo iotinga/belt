@@ -1,14 +1,12 @@
 package io.tinga.b3.core.impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.AgentInitException;
 import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.protocol.GenericMessage;
+import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.output.Status;
@@ -19,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public abstract class AbstractAgentCommandExecutor<C> implements Agent<JsonNode>, GadgetCommandExecutor<C> {
+public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> implements Agent<M>, GadgetCommandExecutor<C> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractAgentCommandExecutor.class);
 
@@ -28,9 +26,9 @@ public abstract class AbstractAgentCommandExecutor<C> implements Agent<JsonNode>
     protected static final int DEFAULT_INIT_SLEEP_MAX = 5000;
     protected static final int DEFAULT_INIT_SLEEP_STEP = 500;
 
-    private final Agent.ShadowReportedPolicy<ObjectNode, GenericMessage> reportedPolicy;
-    private final Agent.ShadowDesiredPolicy<ObjectNode, GenericMessage> desiredPolicy;
-    private final EdgeDriver<ObjectNode, GenericMessage> driver;
+    private final Agent.ShadowReportedPolicy<M> reportedPolicy;
+    private final Agent.ShadowDesiredPolicy<M> desiredPolicy;
+    private final EdgeDriver<M> driver;
 
     private final VersionSafeExecutor executor;
 
@@ -39,9 +37,9 @@ public abstract class AbstractAgentCommandExecutor<C> implements Agent<JsonNode>
 
     @Inject
     public AbstractAgentCommandExecutor(AgentTopic agentTopic,
-            Agent.ShadowReportedPolicy<ObjectNode, GenericMessage> reportedPolicy,
-            Agent.ShadowDesiredPolicy<ObjectNode, GenericMessage> desiredPolicy, VersionSafeExecutor executor,
-            EdgeDriver<ObjectNode, GenericMessage> driver) {
+            Agent.ShadowReportedPolicy<M> reportedPolicy,
+            Agent.ShadowDesiredPolicy<M> desiredPolicy, VersionSafeExecutor executor,
+            EdgeDriver<M> driver) {
         this.executor = executor;
         this.reportedPolicy = reportedPolicy;
         this.desiredPolicy = desiredPolicy;

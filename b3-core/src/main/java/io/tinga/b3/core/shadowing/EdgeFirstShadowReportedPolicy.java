@@ -3,30 +3,29 @@ package io.tinga.b3.core.shadowing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.protocol.GenericMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import it.netgrid.bauer.Topic;
 
-public class EdgeFirstShadowReportedPolicy implements Agent.ShadowReportedPolicy<ObjectNode, GenericMessage> {
+public class EdgeFirstShadowReportedPolicy implements Agent.ShadowReportedPolicy<GenericB3Message> {
 
     private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowReportedPolicy.class);
 
     private final VersionSafeExecutor executor;
-    private final EdgeDriver<ObjectNode, GenericMessage> fieldDriver;
+    private final EdgeDriver<GenericB3Message> fieldDriver;
     private final ITopicFactoryProxy topicFactory;
 
-    private Topic<GenericMessage> topic;
-    private GenericMessage lastSentMessage;
+    private Topic<GenericB3Message> topic;
+    private GenericB3Message lastSentMessage;
 
     @Inject
-    public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<ObjectNode, GenericMessage> fieldDriver,
+    public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<GenericB3Message> fieldDriver,
             ITopicFactoryProxy topicFactory) {
         this.executor = executor;
         this.fieldDriver = fieldDriver;
@@ -45,12 +44,12 @@ public class EdgeFirstShadowReportedPolicy implements Agent.ShadowReportedPolicy
     }
 
     @Override
-    public Class<GenericMessage> getEventClass() {
-        return GenericMessage.class;
+    public Class<GenericB3Message> getEventClass() {
+        return GenericB3Message.class;
     }
 
     @Override
-    public boolean handle(String topicName, GenericMessage event) throws Exception {
+    public boolean handle(String topicName, GenericB3Message event) throws Exception {
         this.executor.safeExecute(version -> {
             if (lastSentMessage == null || !lastSentMessage.equals(event)) {
                 int messageVersion = event.getVersion();

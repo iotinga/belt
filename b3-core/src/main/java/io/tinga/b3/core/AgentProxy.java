@@ -1,15 +1,15 @@
 package io.tinga.b3.core;
 
-import io.tinga.b3.protocol.RawMessage;
+import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import it.netgrid.bauer.EventHandler;
 
 /**
  * An Agent Proxy is
  */
-public interface AgentProxy<S, M extends RawMessage<S>> extends EventHandler<M>, Agent<S> {
+public interface AgentProxy<M extends B3Message<?>> extends EventHandler<M>, Agent<M> {
     interface Factory {
-        <S, M extends RawMessage<S>> AgentProxy<S, M> getProxy(AgentTopic agent, String roleName);
+        <M extends B3Message<?>> AgentProxy<M> getProxy(AgentTopic agent, String roleName);
     }
 
     void write(M desiredMessage);

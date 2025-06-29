@@ -5,9 +5,9 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.shadowing.ShadowDesiredPreProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
-import io.tinga.b3.protocol.GenericMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 
-public class EdgeGroupDesiredPreProcessor implements ShadowDesiredPreProcessor<GenericMessage> {
+public class EdgeGroupDesiredPreProcessor implements ShadowDesiredPreProcessor<GenericB3Message> {
 
     private final GroupAgentConfig config;
 
@@ -17,7 +17,7 @@ public class EdgeGroupDesiredPreProcessor implements ShadowDesiredPreProcessor<G
     }
 
     @Override
-    public void inPlaceProcess(GenericMessage incomingDesired) {
+    public void inPlaceProcess(GenericB3Message incomingDesired) {
         if (incomingDesired == null)
             return;
 
