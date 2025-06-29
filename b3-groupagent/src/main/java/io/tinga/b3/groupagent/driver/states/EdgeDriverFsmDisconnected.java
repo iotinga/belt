@@ -1,4 +1,4 @@
-package io.tinga.b3.groupagent.states;
+package io.tinga.b3.groupagent.driver.states;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Singleton;

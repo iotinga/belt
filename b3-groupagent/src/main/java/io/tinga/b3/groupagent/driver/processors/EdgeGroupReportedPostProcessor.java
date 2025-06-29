@@ -1,4 +1,4 @@
-package io.tinga.b3.groupagent.processors;
+package io.tinga.b3.groupagent.driver.processors;
 
 import java.util.Iterator;
 

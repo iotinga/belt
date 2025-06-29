@@ -1,4 +1,4 @@
-package io.tinga.b3.groupagent.processors;
+package io.tinga.b3.groupagent.driver.processors;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;

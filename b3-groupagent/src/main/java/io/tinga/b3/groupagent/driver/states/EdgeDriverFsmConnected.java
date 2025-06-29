@@ -1,4 +1,4 @@
-package io.tinga.b3.groupagent.states;
+package io.tinga.b3.groupagent.driver.states;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,7 +20,7 @@ import io.tinga.b3.core.impl.AbstractFsmEdgeDriver.Context;
 import io.tinga.b3.core.shadowing.ShadowDesiredPreProcessor;
 import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
-import io.tinga.b3.groupagent.GroupAgentEdgeDriver;
+import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.protocol.Action;
 import io.tinga.b3.protocol.GenericMessage;
 import io.tinga.b3.protocol.topic.AgentTopic;
