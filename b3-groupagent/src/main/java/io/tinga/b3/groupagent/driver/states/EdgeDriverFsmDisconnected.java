@@ -1,6 +1,6 @@
 package io.tinga.b3.groupagent.driver.states;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Singleton;
 
 import io.tinga.b3.core.connection.ConnectionState;
@@ -9,7 +9,7 @@ import io.tinga.b3.core.impl.AbstractFsmEdgeDriver.Context;
 import io.tinga.b3.protocol.GenericMessage;
 
 @Singleton
-public class EdgeDriverFsmDisconnected implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, JsonNode, GenericMessage> {
+public class EdgeDriverFsmDisconnected implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, ObjectNode, GenericMessage> {
 
     private ConnectionState connectionState;
 

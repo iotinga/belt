@@ -6,7 +6,7 @@ Reuse is not intented only at software-level between projects, but at use-case l
 
 # Basic Concepts
 
-Belt's architecture is based on a few concepts: decoupling, composability, distribution. All of them are part of the basic Belt building-brick, the Gadget. Writing software in Gadgets allows the developer to inherit Belt's features and properties.
+Belt's architecture is based on a few concepts: decoupling, composability, distribution. All of them are part of the basic Belt building-brick, the Gadget. Writing software in Gadgets allows the developer to inherit Belt's features and properties. A `Gadget` executes a single or a sequence of `Command`(s). Each one is evaluated an its corresponding `Action` will be performed in a dedicated environment. Before the first `Command` execution, the `Gadget` loads its `Properties`.
 
 > Belt is not a framework. This means that creating a good architecture is still a Developer's duty.
 

@@ -1,6 +1,6 @@
 package io.tinga.b3.groupagent;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provides;
@@ -49,15 +49,15 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
 
         // FIELD PROXIES
         bind(ITopicFactoryProxy.class).to(SingletonsITopicFactoryProxy.class).in(Singleton.class);
-        bind(Key.get(new TypeLiteral<AgentProxy<JsonNode, GenericMessage>>() {
+        bind(Key.get(new TypeLiteral<AgentProxy<ObjectNode, GenericMessage>>() {
         })).to(GenericAgentProxy.class);
         bind(Key.get(new TypeLiteral<AgentProxy.Factory>() {
         })).to(AgentProxyFactoryImpl.class);
         bind(TopicNameFactory.class).to(BasicTopicNameFactory.class);
 
-        bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<JsonNode, GenericMessage>>() {
+        bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<ObjectNode, GenericMessage>>() {
         })).to(EdgeFirstShadowDesiredPolicy.class);
-        bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<JsonNode, GenericMessage>>() {
+        bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<ObjectNode, GenericMessage>>() {
         })).to(EdgeFirstShadowReportedPolicy.class);
     }
 

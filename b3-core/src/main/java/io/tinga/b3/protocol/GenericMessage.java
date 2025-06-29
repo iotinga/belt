@@ -1,11 +1,12 @@
 package io.tinga.b3.protocol;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.tinga.belt.output.Status;
 
-public class GenericMessage extends RawMessage<JsonNode> {
+public class GenericMessage extends RawMessage<ObjectNode> {
     public GenericMessage(Long timestamp, Integer version, Integer protocolVersion, Action action, Status status,
-                        JsonNode body) {
+                        ObjectNode body) {
         super(timestamp, version, protocolVersion, action, status, body);
     }
 

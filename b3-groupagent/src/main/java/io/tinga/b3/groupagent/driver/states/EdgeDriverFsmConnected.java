@@ -7,7 +7,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
@@ -30,7 +29,7 @@ import it.netgrid.bauer.EventHandler;
 
 @Singleton
 public class EdgeDriverFsmConnected
-        implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, JsonNode, GenericMessage> {
+        implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, ObjectNode, GenericMessage> {
 
     private static final Logger log = LoggerFactory.getLogger(GroupAgentEdgeDriver.class);
 
@@ -41,7 +40,7 @@ public class EdgeDriverFsmConnected
     private final RootTopic topicsRoot;
     private final ObjectNode currentShadowReported;
 
-    private final Map<AgentTopic, AgentProxy<JsonNode, GenericMessage>> membersProxies = new HashMap<>();
+    private final Map<AgentTopic, AgentProxy<ObjectNode, GenericMessage>> membersProxies = new HashMap<>();
     private final Map<String, AgentTopic> fragNameMember = new HashMap<>();
 
     private ConnectionState connectionState;
@@ -107,7 +106,7 @@ public class EdgeDriverFsmConnected
             for (String memberAgentId : config.members()) {
                 final EdgeDriverFsmConnected fsmState = this;
                 final AgentTopic member = topicsRoot.agent(memberAgentId);
-                AgentProxy<JsonNode, GenericMessage> memberProxy = factory.getProxy(member,
+                AgentProxy<ObjectNode, GenericMessage> memberProxy = factory.getProxy(member,
                         config.roleInMembers());
                 memberProxy.subscribe(new EventHandler<GenericMessage>() {
 
@@ -147,7 +146,7 @@ public class EdgeDriverFsmConnected
         if (context != null) {
             String shadowSectionName = this.getFragmentNameFor(agent);
             this.currentShadowReported.set(shadowSectionName, message.getBody());
-            JsonNode shadowReportedCopy = this.currentShadowReported.deepCopy();
+            ObjectNode shadowReportedCopy = this.currentShadowReported.deepCopy();
             GenericMessage newShadowMessage = new GenericMessage(null, 0, 0, Action.PUT, Status.ACCEPTED,
                     shadowReportedCopy);
             this.reportedPostProcessor.inPlaceProcess(newShadowMessage);
@@ -170,7 +169,7 @@ public class EdgeDriverFsmConnected
 
             AgentTopic member = this.fragNameMember.get(key);
             if (member != null) {
-                JsonNode memberFragment = newShadowDesired.get(key).deepCopy();
+                ObjectNode memberFragment = newShadowDesired.get(key).deepCopy();
                 GenericMessage memberDesiredMessage = new GenericMessage(desiredMessage.getTimestamp(),
                         desiredMessage.getVersion(), desiredMessage.getProtocolVersion(), desiredMessage.getAction(),
                         desiredMessage.getStatus(),

@@ -1,6 +1,7 @@
 package io.tinga.b3.core.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
@@ -27,9 +28,9 @@ public abstract class AbstractAgentCommandExecutor<C> implements Agent<JsonNode>
     protected static final int DEFAULT_INIT_SLEEP_MAX = 5000;
     protected static final int DEFAULT_INIT_SLEEP_STEP = 500;
 
-    private final Agent.ShadowReportedPolicy<JsonNode, GenericMessage> reportedPolicy;
-    private final Agent.ShadowDesiredPolicy<JsonNode, GenericMessage> desiredPolicy;
-    private final EdgeDriver<JsonNode, GenericMessage> driver;
+    private final Agent.ShadowReportedPolicy<ObjectNode, GenericMessage> reportedPolicy;
+    private final Agent.ShadowDesiredPolicy<ObjectNode, GenericMessage> desiredPolicy;
+    private final EdgeDriver<ObjectNode, GenericMessage> driver;
 
     private final VersionSafeExecutor executor;
 
@@ -38,9 +39,9 @@ public abstract class AbstractAgentCommandExecutor<C> implements Agent<JsonNode>
 
     @Inject
     public AbstractAgentCommandExecutor(AgentTopic agentTopic,
-            Agent.ShadowReportedPolicy<JsonNode, GenericMessage> reportedPolicy,
-            Agent.ShadowDesiredPolicy<JsonNode, GenericMessage> desiredPolicy, VersionSafeExecutor executor,
-            EdgeDriver<JsonNode, GenericMessage> driver) {
+            Agent.ShadowReportedPolicy<ObjectNode, GenericMessage> reportedPolicy,
+            Agent.ShadowDesiredPolicy<ObjectNode, GenericMessage> desiredPolicy, VersionSafeExecutor executor,
+            EdgeDriver<ObjectNode, GenericMessage> driver) {
         this.executor = executor;
         this.reportedPolicy = reportedPolicy;
         this.desiredPolicy = desiredPolicy;

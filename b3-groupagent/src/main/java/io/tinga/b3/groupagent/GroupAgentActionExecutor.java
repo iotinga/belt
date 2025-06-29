@@ -1,6 +1,6 @@
 package io.tinga.b3.groupagent;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.EdgeDriver;
@@ -14,9 +14,9 @@ public class GroupAgentActionExecutor extends AbstractAgentCommandExecutor<Group
 
     @Inject
     public GroupAgentActionExecutor(AgentTopic agentTopic,
-            ShadowReportedPolicy<JsonNode, GenericMessage> reportedPolicy,
-            ShadowDesiredPolicy<JsonNode, GenericMessage> desiredPolicy, VersionSafeExecutor executor,
-            EdgeDriver<JsonNode, GenericMessage> driver) {
+            ShadowReportedPolicy<ObjectNode, GenericMessage> reportedPolicy,
+            ShadowDesiredPolicy<ObjectNode, GenericMessage> desiredPolicy, VersionSafeExecutor executor,
+            EdgeDriver<ObjectNode, GenericMessage> driver) {
         super(agentTopic, reportedPolicy, desiredPolicy, executor, driver);
     }
 

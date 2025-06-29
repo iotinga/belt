@@ -1,6 +1,6 @@
 package io.tinga.b3.groupagent;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Singleton;
@@ -30,7 +30,7 @@ public class GroupAgentActionExecutorModule extends AbstractModule {
         })).to(EdgeGroupDesiredPreProcessor.class);
         bind(Key.get(new TypeLiteral<ShadowReportedPostProcessor<GenericMessage>>() {
         })).to(EdgeGroupReportedPostProcessor.class);
-        bind(Key.get(new TypeLiteral<EdgeDriver<JsonNode, GenericMessage>>() {
+        bind(Key.get(new TypeLiteral<EdgeDriver<ObjectNode, GenericMessage>>() {
         })).to(GroupAgentEdgeDriver.class).in(Singleton.class);
     }
 

@@ -2,7 +2,7 @@ package io.tinga.b3.groupagent.driver;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.impl.AbstractFsmEdgeDriver;
@@ -14,9 +14,9 @@ import io.tinga.b3.protocol.GenericMessage;
 import io.tinga.b3.protocol.topic.RootTopic;
 
 public class GroupAgentEdgeDriver
-        extends AbstractFsmEdgeDriver<EdgeDriverFsmState, JsonNode, GenericMessage> {
+        extends AbstractFsmEdgeDriver<EdgeDriverFsmState, ObjectNode, GenericMessage> {
 
-    private final Map<EdgeDriverFsmState, State<EdgeDriverFsmState, JsonNode, GenericMessage>> stateMap;
+    private final Map<EdgeDriverFsmState, State<EdgeDriverFsmState, ObjectNode, GenericMessage>> stateMap;
 
     @Inject
     public GroupAgentEdgeDriver(GroupAgentConfig config, RootTopic rootTopic, EdgeDriverFsmConnected connected,
@@ -29,12 +29,12 @@ public class GroupAgentEdgeDriver
     }
 
     @Override
-    public State<EdgeDriverFsmState, JsonNode, GenericMessage> buildInitialState() {
+    public State<EdgeDriverFsmState, ObjectNode, GenericMessage> buildInitialState() {
         return this.stateMap.get(EdgeDriverFsmState.DISCONNECTED);
     }
 
     @Override
-    protected State<EdgeDriverFsmState, JsonNode, GenericMessage> get(EdgeDriverFsmState state) {
+    protected State<EdgeDriverFsmState, ObjectNode, GenericMessage> get(EdgeDriverFsmState state) {
         return this.stateMap.get(state);
     }
 
