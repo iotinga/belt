@@ -2,7 +2,7 @@ package io.tinga.b3.core.impl;
 
 import com.google.inject.Inject;
 
-import io.tinga.b3.core.InitializationException;
+import io.tinga.b3.core.AgentInitException;
 import io.tinga.b3.protocol.GenericMessage;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import it.netgrid.bauer.EventHandler;
@@ -25,13 +25,13 @@ public class InitFromReportedTopicVersionSafeExecutor extends AbstracVersionSafe
     }
 
     @Override
-    public void initVersion(AgentTopic agentTopic) throws InitializationException {
+    public void initVersion(AgentTopic agentTopic) throws AgentInitException {
         try{
             this.agentTopic = agentTopic;
             this.reportedTopic = this.topicFactory.getTopic(this.agentTopic.shadow().reported().build());
             this.reportedTopic.addHandler(this);
         } catch(Exception e) {
-            throw new InitializationException(e.getMessage());
+            throw new AgentInitException(e.getMessage());
         }
     }
 

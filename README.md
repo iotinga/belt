@@ -12,7 +12,7 @@ Belt's architecture is based on a few concepts: decoupling, composability, distr
 
 ## What is a Gadget
 
-A Belt's Gadget is, like a Batman's belt gadget, a specific-purpose tool that can be used into multiple belts, even combined with other gadgets. De-facto, a Gadget is a Dependency Injection `Module` (we use Google's Guice as framework) with some additional attributes, like a name, which provides an implementation for the `GadgetCommandExecutor` interface. The `GadgetCommandExecutor`'s `public CompletableFuture<Integer> submit(C command)` method has to be considered as the `public static void main(String[] args);` method in a classic Java software.
+A Belt's Gadget is, like a Batman's belt gadget, a specific-purpose tool that can be used into multiple belts, even combined with other gadgets. De-facto, a Gadget is a Dependency Injection `Module` (we use Google's Guice as framework) with some additional attributes, like a name, which provides an implementation for the `GadgetCommandExecutor` interface. The `GadgetCommandExecutor`'s `public CompletableFuture<Integer> submit(C command)` method has to be considered as the `public static void main(String[] args);` method in a classic Java software. As the logging features is handled through a specific slf4j belt endpoint, the use of a `GadgetSink` endpoint instead of `System.out` is on 
 
 ## What is a Belt
 

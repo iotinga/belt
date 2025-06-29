@@ -11,6 +11,6 @@ public interface VersionSafeExecutor {
     public interface CriticalSection extends Function<Function<Boolean, Integer>, Void> {
     }
 
-    void initVersion(AgentTopic agentTopic) throws InitializationException;
-    void safeExecute(CriticalSection versionCriticalSection) throws InitializationException;
+    void initVersion(AgentTopic agentTopic) throws AgentInitException;
+    void safeExecute(CriticalSection versionCriticalSection) throws AgentInitException;
 }

@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
-import io.tinga.b3.core.InitializationException;
+import io.tinga.b3.core.AgentInitException;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.GenericMessage;
 import io.tinga.b3.protocol.topic.AgentTopic;
@@ -67,7 +67,7 @@ public class AgentCommandExecutor<C extends Agent.Command> implements Agent<Json
                     log.info("Waiting for version initialization: " + sleepMillis + "ms");
                     Thread.sleep(sleepMillis);
                     currentVersion = version.apply(false);
-                } catch (InitializationException exception) {
+                } catch (AgentInitException exception) {
                     sleepMillis += this.getInitSleepStep();
                     sleepMillis = sleepMillis > this.getInitSleepMax() ? this.getInitSleepMax() : sleepMillis;
                     log.warn(exception.getMessage());

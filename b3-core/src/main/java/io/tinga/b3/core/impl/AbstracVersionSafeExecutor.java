@@ -1,6 +1,6 @@
 package io.tinga.b3.core.impl;
 
-import io.tinga.b3.core.InitializationException;
+import io.tinga.b3.core.AgentInitException;
 import io.tinga.b3.core.VersionSafeExecutor;
 
 public abstract class AbstracVersionSafeExecutor implements VersionSafeExecutor {
@@ -26,9 +26,9 @@ public abstract class AbstracVersionSafeExecutor implements VersionSafeExecutor 
         versionCriticalSection.apply(this::getVersion);
     }
 
-    private final Integer getVersion(boolean next) throws InitializationException {
+    private final Integer getVersion(boolean next) throws AgentInitException {
         if (this.currentReportedVersion == null) {
-            throw new InitializationException(
+            throw new AgentInitException(
                     "Trying to execute critical version before version initialization: currentReportedVersion is null");
         }
         return next ? ++this.currentReportedVersion : this.currentReportedVersion;
