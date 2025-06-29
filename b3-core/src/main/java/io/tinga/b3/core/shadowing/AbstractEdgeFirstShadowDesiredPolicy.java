@@ -9,22 +9,22 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import it.netgrid.bauer.Topic;
 
-public class EdgeFirstShadowDesiredPolicy implements Agent.ShadowDesiredPolicy<GenericB3Message> {
+public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?>> implements Agent.ShadowDesiredPolicy<M> {
 
-    private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowDesiredPolicy.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractEdgeFirstShadowDesiredPolicy.class);
 
     private final VersionSafeExecutor executor;
-    private final EdgeDriver<GenericB3Message> fieldDriver;
+    private final EdgeDriver<M> fieldDriver;
     private final ITopicFactoryProxy topicFactory;
 
-    private Topic<GenericB3Message> topic;
+    private Topic<M> topic;
 
     @Inject
-    public EdgeFirstShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<GenericB3Message> fieldDriver,
+    public AbstractEdgeFirstShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<M> fieldDriver,
             ITopicFactoryProxy topicFactory) {
         this.executor = executor;
         this.fieldDriver = fieldDriver;
@@ -37,12 +37,7 @@ public class EdgeFirstShadowDesiredPolicy implements Agent.ShadowDesiredPolicy<G
     }
 
     @Override
-    public Class<GenericB3Message> getEventClass() {
-        return GenericB3Message.class;
-    }
-
-    @Override
-    public boolean handle(String topicName, GenericB3Message event) throws Exception {
+    public boolean handle(String topicName, M event) throws Exception {
         this.executor.safeExecute(version -> {
             if (event.getVersion() != Agent.VERSION_WILDCARD && version.apply(false) != event.getVersion()) {
                 log.info(String.format("Refusing desired update: wildcard(%d) desired(%d) current(%d)",
