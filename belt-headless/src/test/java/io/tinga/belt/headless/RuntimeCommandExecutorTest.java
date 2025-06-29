@@ -217,7 +217,7 @@ class RuntimeCommandExecutorTest {
                 when(executor.isShutdown()).thenReturn(true);
                 String[] modules = { faker.lorem().word(), faker.lorem().word(), faker.lorem().word() };
                 HeadlessCommand command = new HeadlessCommand(faker.lorem().word(),
-                                HeadlessGadgetComposition.CONCURRENT,
+                                HeadlessAction.CONCURRENT,
                                 false,
                                 Arrays.asList(modules));
                 this.testee.submit(command).join();

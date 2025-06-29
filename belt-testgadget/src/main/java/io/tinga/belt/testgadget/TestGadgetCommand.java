@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.tinga.belt.Gadget;
 import io.tinga.belt.input.GadgetCommandOption;
 
-public class TestGadgetCommand {
+public class TestGadgetCommand implements Gadget.Command<TestGadgetAction> {
 
     public static final String NAME_OPT = "n";
     public static final String IGNORE_OPT = "i";
@@ -49,5 +50,10 @@ public class TestGadgetCommand {
 
     public List<String> plugins() {
         return plugins;
+    }
+
+    @Override
+    public TestGadgetAction action() {
+        return TestGadgetAction.TEST;
     }
 }

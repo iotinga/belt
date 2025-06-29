@@ -44,7 +44,7 @@ public class CliCommandFactory implements GadgetCommandFactory {
     }
 
     @Override
-    public <C> C parseArgs(Gadget<?, C> gadget, String[] args) throws GadgetFatalException {
+    public <C extends Gadget.Command<?>> C parseArgs(Gadget<C> gadget, String[] args) throws GadgetFatalException {
         Options options = this.asOptions(gadget.commandOptions());
         try {
             CommandLine cmd = parser.parse(options, args);
@@ -64,7 +64,7 @@ public class CliCommandFactory implements GadgetCommandFactory {
         }
     }
 
-    public JsonNode asJsonNode(Gadget<?, ?> gadget, CommandLine cmd) {
+    public JsonNode asJsonNode(Gadget<?> gadget, CommandLine cmd) {
         ObjectNode opts = JsonNodeFactory.instance.objectNode();
 
         for (GadgetCommandOption option : gadget.commandOptions()) {

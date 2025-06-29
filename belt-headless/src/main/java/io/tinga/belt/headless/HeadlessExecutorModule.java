@@ -26,9 +26,9 @@ class HeadlessExecutorModule extends AbstractModule {
 
     public HeadlessExecutorModule(HeadlessCommand command) {
         this.command = command;
-        this.service = switch (command.threading()) {
-            case HeadlessGadgetComposition.SEQUENTIAL -> Executors.newSingleThreadExecutor();
-            case HeadlessGadgetComposition.CONCURRENT -> Executors.newThreadPerTaskExecutor(THREAD_FACTORY);
+        this.service = switch (command.action()) {
+            case HeadlessAction.SEQUENTIAL -> Executors.newSingleThreadExecutor();
+            case HeadlessAction.CONCURRENT -> Executors.newThreadPerTaskExecutor(THREAD_FACTORY);
         };
     }
 

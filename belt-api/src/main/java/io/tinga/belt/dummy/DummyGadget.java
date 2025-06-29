@@ -13,7 +13,7 @@ import io.tinga.belt.AbstractGadget;
 import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetSink;
 
-public class DummyGadget extends AbstractGadget<DummyGadgetCommandExecutor, DummyGadgetCommand> {
+public class DummyGadget extends AbstractGadget<DummyGadgetCommand> {
 
     public static final String NAME = "DUMMY";
 
@@ -35,11 +35,6 @@ public class DummyGadget extends AbstractGadget<DummyGadgetCommandExecutor, Dumm
     @Override
     public List<GadgetCommandOption> commandOptions() {
         return Arrays.asList(DummyGadgetCommandOptions.values());
-    }
-
-    @Override
-    public Class<DummyGadgetCommandExecutor> executorClass() {
-        return DummyGadgetCommandExecutor.class;
     }
 
     @Override

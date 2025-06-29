@@ -9,7 +9,6 @@ import com.google.inject.TypeLiteral;
 
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.AgentProxy;
-import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.impl.AgentProxyFactoryImpl;
@@ -18,11 +17,6 @@ import io.tinga.b3.core.impl.InitFromReportedTopicVersionSafeExecutor;
 import io.tinga.b3.core.impl.SingletonsITopicFactoryProxy;
 import io.tinga.b3.core.shadowing.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.core.shadowing.EdgeFirstShadowReportedPolicy;
-import io.tinga.b3.core.shadowing.ShadowDesiredPreProcessor;
-import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
-import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
-import io.tinga.b3.groupagent.driver.processors.EdgeGroupDesiredPreProcessor;
-import io.tinga.b3.groupagent.driver.processors.EdgeGroupReportedPostProcessor;
 import io.tinga.b3.protocol.GenericMessage;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import io.tinga.b3.protocol.topic.BasicTopicNameFactory;
@@ -41,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-public class GroupAgentGadget extends AbstractGadget<GroupAgentCommandExecutor, GroupAgentCommand> {
+public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     Logger log = LoggerFactory.getLogger(GroupAgentGadget.class);
 
     public static final String NAME = "GROUPAGENT";
@@ -65,14 +59,6 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommandExecutor, 
         })).to(EdgeFirstShadowDesiredPolicy.class);
         bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<JsonNode, GenericMessage>>() {
         })).to(EdgeFirstShadowReportedPolicy.class);
-
-        bind(Key.get(new TypeLiteral<ShadowDesiredPreProcessor<GenericMessage>>() {
-        })).to(EdgeGroupDesiredPreProcessor.class);
-        bind(Key.get(new TypeLiteral<ShadowReportedPostProcessor<GenericMessage>>() {
-        })).to(EdgeGroupReportedPostProcessor.class);
-
-        bind(Key.get(new TypeLiteral<EdgeDriver<JsonNode, GenericMessage>>() {
-        })).to(GroupAgentEdgeDriver.class).in(Singleton.class);
     }
 
     @Provides
@@ -114,11 +100,6 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommandExecutor, 
     }
 
     @Override
-    public Class<GroupAgentCommandExecutor> executorClass() {
-        return GroupAgentCommandExecutor.class;
-    }
-
-    @Override
     public List<GadgetCommandOption> commandOptions() {
         return Arrays.asList(GroupAgentCommandOption.values());
     }
@@ -126,7 +107,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommandExecutor, 
     @Override
     public com.google.inject.Module[] buildExecutorModules(Properties properties, GroupAgentCommand command) {
         log.debug("Building executor modules with properties {}", properties);
-        Module[] retval = {TopicFactory.getAsModule(properties), new GroupAgentCommandExecutorModule(command)};
+        Module[] retval = {TopicFactory.getAsModule(properties), new GroupAgentActionExecutorModule(command)};
         return retval;
     }
 }

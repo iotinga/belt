@@ -10,10 +10,10 @@ import io.tinga.b3.protocol.GenericMessage;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import io.tinga.belt.output.Status;
 
-public class GroupAgentCommandExecutor extends AbstractAgentCommandExecutor<GroupAgentCommand> {
+public class GroupAgentActionExecutor extends AbstractAgentCommandExecutor<GroupAgentCommand> {
 
     @Inject
-    public GroupAgentCommandExecutor(AgentTopic agentTopic,
+    public GroupAgentActionExecutor(AgentTopic agentTopic,
             ShadowReportedPolicy<JsonNode, GenericMessage> reportedPolicy,
             ShadowDesiredPolicy<JsonNode, GenericMessage> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<JsonNode, GenericMessage> driver) {

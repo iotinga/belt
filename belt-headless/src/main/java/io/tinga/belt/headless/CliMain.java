@@ -8,7 +8,7 @@ import com.google.inject.Module;
 import io.tinga.belt.cli.AbstractCli;
 import io.tinga.belt.output.WriterPrintStream;
 
-public class CliMain extends AbstractCli<HeadlessCommandExecutor, HeadlessCommand> {
+public class CliMain extends AbstractCli<HeadlessCommand> {
 
     private static final Logger log = LoggerFactory.getLogger(CliMain.class);
 

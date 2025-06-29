@@ -2,7 +2,9 @@ package io.tinga.b3.groupagent;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GroupAgentCommand {
+import io.tinga.belt.Gadget;
+
+public class GroupAgentCommand implements Gadget.Command<GroupAgentAction> {
 
     public static final String ACTION = "a";
     public static final String SHADOW_PATH = "s";
@@ -12,13 +14,12 @@ public class GroupAgentCommand {
     private String shadowPath;
 
     @JsonProperty(ACTION)
-    private GroupAgentCommandAction action;
+    private GroupAgentAction action;
 
     @JsonProperty(HELP)
     private String help;
 
-    public GroupAgentCommand() {
-    }
+    public GroupAgentCommand() {}
 
     public GroupAgentCommand(String help, String shadowPath) {
         this.help = help;
@@ -33,7 +34,7 @@ public class GroupAgentCommand {
         return this.shadowPath;
     }
 
-    public GroupAgentCommandAction action() {
+    public GroupAgentAction action() {
         return this.action;
     }
 

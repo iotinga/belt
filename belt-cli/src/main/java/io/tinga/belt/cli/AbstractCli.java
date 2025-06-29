@@ -18,26 +18,25 @@ import io.tinga.belt.GadgetLifecycleException;
 import io.tinga.belt.Gadget;
 import io.tinga.belt.GadgetContext;
 import io.tinga.belt.GadgetContextFactory;
-import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.input.GadgetCommandFactory;
 import io.tinga.belt.output.GadgetSystemDisplay;
 import io.tinga.belt.output.Status;
 
-public abstract class AbstractCli<E extends GadgetCommandExecutor<C>, C> implements Runnable {
+public abstract class AbstractCli<C extends Gadget.Command<?>> implements Runnable {
 
     public static final Module[] DEFAULT_ROOT_MODULES = { new CliRootModule() };
     private static final Logger log = LoggerFactory.getLogger(AbstractCli.class);
 
     private final Module[] rootModules;
     private final String[] args;
-    protected final Gadget<E, C> gadget;
+    protected final Gadget<C> gadget;
 
     private ExecutorService displayExecutor;
     private Injector cliInjector;
     private GadgetCommandFactory commandFactory;
     private GadgetContextFactory contextFactory;
 
-    public AbstractCli(String[] args, Gadget<E, C> gadget, Module... customRootModules) {
+    public AbstractCli(String[] args, Gadget<C> gadget, Module... customRootModules) {
         this.args = args;
         this.gadget = gadget;
         this.displayExecutor = Executors.newSingleThreadExecutor();
@@ -58,7 +57,7 @@ public abstract class AbstractCli<E extends GadgetCommandExecutor<C>, C> impleme
     public void init() {
         cliInjector = Guice.createInjector(rootModules);
         commandFactory = cliInjector.getInstance(Key.get(GadgetCommandFactory.class));
-        contextFactory = cliInjector.getInstance(Key.get(GadgetContextFactory.class));
+        contextFactory = cliInjector.getInstance(GadgetContextFactory.class);
     }
 
     public void run() {

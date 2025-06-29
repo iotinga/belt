@@ -91,7 +91,7 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
                         gadgetsResults.remove(result);
                         try {
                             Status status = result.resultNow();
-                            if (command.threading() == HeadlessGadgetComposition.SEQUENTIAL) {
+                            if (command.action() == HeadlessAction.SEQUENTIAL) {
                                 log.info(String.format("Completed %s", status));
                             } else if (command.ignore()) {
                                 log.warn(String.format("Completed %s", status));
