@@ -15,7 +15,7 @@ public interface Agent<S> {
         void bindTo(AgentTopic agent, String roleName);
     }
 
-    interface Command {
+    interface Config {
         String agentId();
     }
 

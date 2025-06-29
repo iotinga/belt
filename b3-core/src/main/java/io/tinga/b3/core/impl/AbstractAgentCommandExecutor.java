@@ -9,7 +9,6 @@ import io.tinga.b3.core.AgentInitException;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.GenericMessage;
 import io.tinga.b3.protocol.topic.AgentTopic;
-import io.tinga.b3.protocol.topic.RootTopic;
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.output.Status;
 
@@ -19,9 +18,9 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public class AgentCommandExecutor<C extends Agent.Command> implements Agent<JsonNode>, GadgetCommandExecutor<C> {
+public abstract class AbstractAgentCommandExecutor<C> implements Agent<JsonNode>, GadgetCommandExecutor<C> {
 
-    private static final Logger log = LoggerFactory.getLogger(AgentCommandExecutor.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractAgentCommandExecutor.class);
 
     protected static final int DEFAULT_THREAD_SLEEP_MS = 3000;
     protected static final int DEFAULT_INIT_SLEEP_MIN = 500;
@@ -32,21 +31,19 @@ public class AgentCommandExecutor<C extends Agent.Command> implements Agent<Json
     private final Agent.ShadowDesiredPolicy<JsonNode, GenericMessage> desiredPolicy;
     private final EdgeDriver<JsonNode, GenericMessage> driver;
 
-    private final RootTopic rootTopic;
     private final VersionSafeExecutor executor;
 
     private AgentTopic agentTopic;
     private String roleName;
 
     @Inject
-    public AgentCommandExecutor(RootTopic rootTopic,
+    public AbstractAgentCommandExecutor(AgentTopic agentTopic,
             Agent.ShadowReportedPolicy<JsonNode, GenericMessage> reportedPolicy,
             Agent.ShadowDesiredPolicy<JsonNode, GenericMessage> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<JsonNode, GenericMessage> driver) {
         this.executor = executor;
         this.reportedPolicy = reportedPolicy;
         this.desiredPolicy = desiredPolicy;
-        this.rootTopic = rootTopic;
         this.driver = driver;
     }
 
@@ -92,9 +89,10 @@ public class AgentCommandExecutor<C extends Agent.Command> implements Agent<Json
         retval.completeAsync(new Supplier<Status>() {
             @Override
             public Status get() {
+                Status retval = Status.OK;
                 try {
-                    AgentTopic agentTopic = rootTopic.agent(command.agentId());
                     bindTo(agentTopic, "#");
+                    retval = execute(command);
                     while (!Thread.currentThread().isInterrupted()) {
                         try {
                             Thread.sleep(getThreadSleepsMs());
@@ -107,11 +105,13 @@ public class AgentCommandExecutor<C extends Agent.Command> implements Agent<Json
                 } finally {
                     log.info("Shutdown");
                 }
-                return Status.OK;
+                return retval;
             }
         });
         return retval;
     }
+
+    public abstract Status execute(C command);
 
     @Override
     public AgentTopic getBoundAgentTopic() {

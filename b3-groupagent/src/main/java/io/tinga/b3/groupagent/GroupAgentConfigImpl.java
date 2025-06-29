@@ -11,6 +11,9 @@ public class GroupAgentConfigImpl implements GroupAgentConfig {
 
     private List<String> members;
 
+    @JsonProperty(GROUPAGENT_AGENT_ID)
+    private String agentId;
+
     @JsonProperty(GROUPAGENT_MEMBERS_IDS)
     private String membersIds;
 
@@ -37,6 +40,11 @@ public class GroupAgentConfigImpl implements GroupAgentConfig {
     @Override
     public String roleInMembers() {
         return this.roleInMembers;
+    }
+
+    @Override
+    public String agentId() {
+        return this.agentId;
     }
 
 }

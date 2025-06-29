@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
-import io.tinga.b3.groupagent.GroupAgentCommand;
+import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.protocol.GenericMessage;
 
 public class EdgeGroupReportedPostProcessor implements ShadowReportedPostProcessor<GenericMessage> {
@@ -16,12 +16,12 @@ public class EdgeGroupReportedPostProcessor implements ShadowReportedPostProcess
     public static final String FRAGS_PROPERTY_NAME = "frags";
     public static final String FRAGS_COUNT_PROPERTY_NAME = "fragsCount";
 
-    private final GroupAgentCommand command;
+    private final GroupAgentConfig config;
     private final ObjectMapper om;
 
     @Inject
-    public EdgeGroupReportedPostProcessor(GroupAgentCommand command, ObjectMapper om) {
-        this.command = command;
+    public EdgeGroupReportedPostProcessor(GroupAgentConfig config, ObjectMapper om) {
+        this.config = config;
         this.om = om;
     }
 
@@ -49,7 +49,7 @@ public class EdgeGroupReportedPostProcessor implements ShadowReportedPostProcess
 
         agent.set(FRAGS_PROPERTY_NAME, fragments);
         agent.put(FRAGS_COUNT_PROPERTY_NAME, count);
-        shadow.set(this.command.agentId(), agent);
+        shadow.set(this.config.agentId(), agent);
     }
 
 }

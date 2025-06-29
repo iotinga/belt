@@ -18,9 +18,9 @@ public class GroupAgentEdgeDriver
     private final Map<EdgeDriverFsmState, State<EdgeDriverFsmState, JsonNode, GenericMessage>> stateMap;
 
     @Inject
-    public GroupAgentEdgeDriver(GroupAgentCommand command, RootTopic rootTopic, EdgeDriverFsmConnected connected,
+    public GroupAgentEdgeDriver(GroupAgentConfig config, RootTopic rootTopic, EdgeDriverFsmConnected connected,
             EdgeDriverFsmDisconnected disconnected) {
-        super(rootTopic.agent(command.agentId()));
+        super(rootTopic.agent(config.agentId()));
         this.stateMap = Map.of(
             EdgeDriverFsmState.CONNECTED, connected,
             EdgeDriverFsmState.DISCONNECTED, disconnected
