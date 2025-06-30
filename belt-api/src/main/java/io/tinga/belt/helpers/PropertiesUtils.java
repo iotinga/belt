@@ -13,15 +13,17 @@ public class PropertiesUtils {
 
     public static final Logger log = LoggerFactory.getLogger(PropertiesUtils.class);
     public static final String DEFAULT_CONFIG_PROPERTIES_NAME = "belt.properties";
+    public static final String PROPERTIES_PATH_ENV = "BELT_PROPS";
     public static String propertiesPath = null;
-    
-    public static void setPropertiesPath(String path) {
-        propertiesPath = path;
-    }
 
     public static String getPropertiesPath() {
         if (propertiesPath == null) {
-            return DEFAULT_CONFIG_PROPERTIES_NAME;
+            String env = System.getenv(PROPERTIES_PATH_ENV);
+            if (env != null) {
+                propertiesPath = env.trim().length() > 0 ? env.trim() : DEFAULT_CONFIG_PROPERTIES_NAME;
+            } else {
+                propertiesPath = DEFAULT_CONFIG_PROPERTIES_NAME;
+            }
         }
 
         return propertiesPath;
