@@ -1,6 +1,6 @@
 package io.tinga.b3.entityagent;
 
-public enum EntityInputMode {
+public enum EntityCommandAction {
     RESOURCES,
     FILESYSTEM,
     MQTT

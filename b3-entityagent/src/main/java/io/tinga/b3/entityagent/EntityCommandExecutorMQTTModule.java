@@ -1,10 +1,13 @@
 package io.tinga.b3.entityagent;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.config.ConfigurationProvider;
+import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageBasicHandler;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageDummyProvider;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageHandler;
@@ -18,7 +21,7 @@ import io.tinga.b3.entityagent.operation.EntityTopicOperationDaemon;
 import io.tinga.b3.entityagent.reported.ReportedRetainedMessagesStore;
 import io.tinga.b3.entityagent.reported.ReportedStore;
 
-public class EntityCommandExecutorModule extends AbstractModule {
+public class EntityCommandExecutorMQTTModule extends AbstractModule {
 
     @Override
     protected void configure() {
@@ -28,6 +31,7 @@ public class EntityCommandExecutorModule extends AbstractModule {
         bind(JsonSchemaProvider.class).to(JsonSchemaResourcesProvider.class);
         bind(EntityOperationDaemon.class).to(EntityTopicOperationDaemon.class);
         bind(DesiredEntityMessageProvider.class).to(DesiredEntityMessageDummyProvider.class);
+        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorMQTT.class);
     }
 
     @Provides

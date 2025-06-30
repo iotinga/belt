@@ -7,18 +7,14 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Key;
 import com.google.inject.Module;
-import com.google.inject.TypeLiteral;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 
 import io.tinga.belt.AbstractGadget;
-import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
 import io.tinga.belt.output.GadgetSink;
-import io.tinga.b3.entityagent.cli.EntityCliCommandExecutorModule;
 import io.tinga.b3.entityagent.operation.EntityOperationFactory;
 import io.tinga.b3.entityagent.operation.EntityOperationTopicBasedFactory;
 import io.tinga.b3.protocol.B3MessageValidator;
@@ -41,7 +37,6 @@ public class EntityGadget extends AbstractGadget<EntityCommand> {
         bind(JsonSchemaFactory.class).toInstance(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7));
         bind(EntityOperationFactory.class).to(EntityOperationTopicBasedFactory.class);
         bind(B3MessageValidator.class).to(B3MessageVersionBasedValidator.class);
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutor.class);
     }
 
     @Override
@@ -57,12 +52,17 @@ public class EntityGadget extends AbstractGadget<EntityCommand> {
     @Override
     public Module[] buildExecutorModules(Properties properties, EntityCommand command) {
         log.debug("Building executor modules with properties {}", properties);
-        if (command == null || command.mode() == EntityInputMode.MQTT) {
-            Module[] retval = { TopicFactory.getAsModule(properties), new EntityCommandExecutorModule() };
-            return retval;
-        } else {
-            Module[] retval = { new EntityCliCommandExecutorModule(command) };
-            return retval;
+        switch (command.action()) {
+            case MQTT:
+                Module[] mqttModules = { TopicFactory.getAsModule(properties), new EntityCommandExecutorMQTTModule() };
+                return mqttModules;
+            case FILESYSTEM:
+                Module[] filesystemModules = { new EntityCommandExecutorFilesystemModule(command) };
+                return filesystemModules;
+            case RESOURCES:
+            default:
+                Module[] resourcesModules = { new EntityCommandExecutorFilesystemModule(command) };
+                return resourcesModules;
         }
     }
 

@@ -14,14 +14,13 @@ import io.tinga.belt.output.Status;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageProvider;
 import io.tinga.b3.entityagent.operation.EntityMessage;
 import io.tinga.b3.entityagent.operation.EntityOperation;
-import io.tinga.b3.entityagent.operation.EntityOperationDaemon;
 import io.tinga.b3.entityagent.operation.EntityOperationFactory;
 import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
 import io.tinga.b3.entityagent.operation.InvalidEntityOperationException;
 
-public class EntityCommandExecutor implements GadgetCommandExecutor<EntityCommand> {
+public class EntityCommandExecutorDefault implements GadgetCommandExecutor<EntityCommand> {
 
-    private static final Logger log = LoggerFactory.getLogger(EntityCommandExecutor.class);
+    private static final Logger log = LoggerFactory.getLogger(EntityCommandExecutorDefault.class);
 
     @Inject
     private EntityOperationGrantsChecker checker;
@@ -33,9 +32,6 @@ public class EntityCommandExecutor implements GadgetCommandExecutor<EntityComman
     private EntityOperationFactory operationFactory;
 
     @Inject
-    private EntityOperationDaemon daemon;
-
-    @Inject
     private GadgetSink out;
 
     @Override
@@ -45,31 +41,22 @@ public class EntityCommandExecutor implements GadgetCommandExecutor<EntityComman
         retval.completeAsync(new Supplier<Status>() {
             @Override
             public Status get() {
-                if (command == null || command.mode() == EntityInputMode.MQTT) {
-                    daemon.run();
-                    return Status.OK;
-                } else {
-                    return runOnce(command);
+                try {
+                    EntityMessage message = provider.load(command.desiredRef());
+                    EntityOperation operation = operationFactory.buildFrom(command.topic(), message);
+                    boolean result = checker.isAllowed(operation);
+                    if (result) {
+                        out.put(String.format("[ALLOWED]"));
+                    } else {
+                        out.put(String.format("[DENIED]"));
+                    }
+                } catch (InvalidEntityOperationException e) {
+                    out.put(String.format("[INVALID]"));
                 }
+                return Status.OK;
             }
         });
         return retval;
-    }
-
-    public Status runOnce(EntityCommand command) {
-        try {
-            EntityMessage message = provider.load(command.desiredRef());
-            EntityOperation operation = operationFactory.buildFrom(command.topic(), message);
-            boolean result = checker.isAllowed(operation);
-            if (result) {
-                out.put(String.format("[ALLOWED]"));
-            } else {
-                out.put(String.format("[DENIED]"));
-            }
-        } catch (InvalidEntityOperationException e) {
-            out.put(String.format("[INVALID]"));
-        }
-        return Status.OK;
     }
 
 }

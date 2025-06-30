@@ -4,9 +4,8 @@ import io.tinga.belt.input.GadgetCommandOption;
 
 public enum EntityCommandOption implements GadgetCommandOption {
 
-    NAME(EntityCommand.NAME_OPT, true, String.class, "ENTITY", "The name of the command"),
-    MODE(EntityCommand.MODE_OPT, true, EntityInputMode.class, EntityInputMode.RESOURCES.name(),
-            "Defines if desired, reported and schemas references as to be loaded from files or resources"),
+    MODE(GadgetCommandOption.ACTION_STANDARD_OPT, true, EntityCommandAction.class, EntityCommandAction.RESOURCES.name(),
+            "Defines the action to perform, in particular if we have to serve MQTT requests or evaluate specific requests from Filesystem o Resources"),
     DESIRED(EntityCommand.DESIRED_REF_OPT, true, String.class, "/desired.json",
             "The path to the desired json input file. It must be a json representing the full MQTT message"),
     REPORTED(EntityCommand.REPORTED_REF_OPT, true, String.class, "/reported.json",
