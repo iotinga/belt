@@ -9,10 +9,10 @@ import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
 import io.tinga.belt.output.Status;
 
-public class GroupAgentActionExecutor extends AbstractAgentCommandExecutor<GenericB3Message, GroupAgentCommand> {
+public class GroupAgentCommandExecutor extends AbstractAgentCommandExecutor<GenericB3Message, GroupAgentCommand> {
 
     @Inject
-    public GroupAgentActionExecutor(AgentTopic agentTopic, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public GroupAgentCommandExecutor(AgentTopic agentTopic, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> driver) {
         super(agentTopic, reportedPolicy, desiredPolicy, executor, driver);

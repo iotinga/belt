@@ -1,4 +1,4 @@
-package io.tinga.braid.protocol.topic;
+package io.tinga.b3.protocol.topic;
 
 import static io.tinga.b3.protocol.topic.TopicName.GLUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,9 +10,6 @@ import org.junit.jupiter.api.Test;
 import com.github.javafaker.Faker;
 
 import io.tinga.b3.protocol.TopicNameValidationException;
-import io.tinga.b3.protocol.topic.BasicTopicNameFactory;
-import io.tinga.b3.protocol.topic.TopicName;
-import io.tinga.b3.protocol.topic.TopicNameFactory;
 
 public class TopicNameBuilderTest {
     String fakeId;

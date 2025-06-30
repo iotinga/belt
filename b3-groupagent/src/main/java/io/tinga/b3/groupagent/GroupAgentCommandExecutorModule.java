@@ -12,12 +12,13 @@ import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.groupagent.driver.processors.EdgeGroupDesiredPreProcessor;
 import io.tinga.b3.groupagent.driver.processors.EdgeGroupReportedPostProcessor;
 import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.belt.input.GadgetCommandExecutor;
 
-public class GroupAgentActionExecutorModule extends AbstractModule {
+public class GroupAgentCommandExecutorModule extends AbstractModule {
 
     private final GroupAgentCommand command;
 
-    public GroupAgentActionExecutorModule(GroupAgentCommand command) {
+    public GroupAgentCommandExecutorModule(GroupAgentCommand command) {
         this.command = command;
     }
 
@@ -31,6 +32,9 @@ public class GroupAgentActionExecutorModule extends AbstractModule {
         })).to(EdgeGroupReportedPostProcessor.class);
         bind(Key.get(new TypeLiteral<EdgeDriver<GenericB3Message>>() {
         })).to(GroupAgentEdgeDriver.class).in(Singleton.class);
+
+        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<GroupAgentCommand>>() {
+        })).to(GroupAgentCommandExecutor.class);
     }
 
 }

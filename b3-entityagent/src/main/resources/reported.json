@@ -1,0 +1,14 @@
+{
+    "braid/entity/test": {
+        "TS": 1234567890,
+        "VER": 1,
+        "PROT": 1,
+        "ACTION": 4,
+        "STATUS": 0,
+        "BODY": {
+            "a": "ciao",
+            "b": 0,
+            "c": 100
+        }
+    }
+}

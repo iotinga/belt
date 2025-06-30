@@ -106,7 +106,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     @Override
     public com.google.inject.Module[] buildExecutorModules(Properties properties, GroupAgentCommand command) {
         log.debug("Building executor modules with properties {}", properties);
-        Module[] retval = {TopicFactory.getAsModule(properties), new GroupAgentActionExecutorModule(command)};
+        Module[] retval = {TopicFactory.getAsModule(properties), new GroupAgentCommandExecutorModule(command)};
         return retval;
     }
 }
