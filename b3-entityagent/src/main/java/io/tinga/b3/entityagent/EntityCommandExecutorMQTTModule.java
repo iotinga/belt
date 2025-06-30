@@ -2,11 +2,8 @@ package io.tinga.b3.entityagent;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 
-import io.tinga.belt.config.ConfigurationProvider;
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageBasicHandler;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageDummyProvider;
@@ -32,12 +29,6 @@ public class EntityCommandExecutorMQTTModule extends AbstractModule {
         bind(EntityOperationDaemon.class).to(EntityTopicOperationDaemon.class);
         bind(DesiredEntityMessageProvider.class).to(DesiredEntityMessageDummyProvider.class);
         bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorMQTT.class);
-    }
-
-    @Provides
-    @Singleton
-    public EntityConfig buildGadgetConfig(ConfigurationProvider provider) {
-        return provider.config(EntityGadget.NAME.toUpperCase(), EntityConfigImpl.class);
     }
 
 }

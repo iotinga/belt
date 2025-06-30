@@ -2,8 +2,6 @@ package io.tinga.b3.entityagent;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.input.GadgetCommandExecutor;
@@ -46,44 +44,6 @@ public class EntityCommandExecutorFilesystemModule extends AbstractModule {
         } else {
             bind(DesiredEntityMessageProvider.class).to(DesiredEntityMessageFromFileProvider.class);
         }
-    }
-
-    @Provides
-    @Singleton
-    public EntityConfig buildGadgetConfiguration() {
-        return new EntityConfig() {
-
-            @Override
-            public String getJsonSchemaBasePath() {
-                return command.schemaBaseDir();
-            }
-
-            @Override
-            public String getReportedTopicFilter() {
-                return command.topic();
-            }
-
-            @Override
-            public String getDesiredTopicFilter() {
-                return command.topic();
-            }
-
-            @Override
-            public int getRetainedStoreWaitOnInitMillis() {
-                return 0;
-            }
-
-            @Override
-            public boolean isJsonSchemaCacheEnabled() {
-                return false;
-            }
-
-            @Override
-            public String getReportedStoreRef() {
-                return command.reportedRef();
-            }
-
-        };
     }
 
 }

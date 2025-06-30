@@ -8,10 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Module;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 
 import io.tinga.belt.AbstractGadget;
+import io.tinga.belt.config.ConfigurationProvider;
 import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
 import io.tinga.belt.output.GadgetSink;
@@ -47,6 +50,12 @@ public class EntityGadget extends AbstractGadget<EntityCommand> {
     @Override
     public List<GadgetCommandOption> commandOptions() {
         return Arrays.asList(EntityCommandOption.values());
+    }
+
+    @Provides
+    @Singleton
+    public EntityConfig buildGadgetConfig(ConfigurationProvider provider) {
+        return provider.config(EntityGadget.NAME.toUpperCase(), EntityConfigImpl.class);
     }
 
     @Override
