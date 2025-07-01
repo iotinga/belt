@@ -70,7 +70,7 @@ public class EntityGadget extends AbstractGadget<EntityCommand> {
                 return filesystemModules;
             case RESOURCES:
             default:
-                Module[] resourcesModules = { new EntityCommandExecutorFilesystemModule(command) };
+                Module[] resourcesModules = { new EntityCommandExecutorResourcesModule(command) };
                 return resourcesModules;
         }
     }

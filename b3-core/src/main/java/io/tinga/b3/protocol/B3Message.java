@@ -89,6 +89,18 @@ public class B3Message<B> {
     }
 
     @Override
+    public String toString() {
+        String bodyString = this.body == null ? "[NULL]" : "[...]";
+        String version = this.version == null ? "[NULL]" : this.version.toString();
+        return String.format("%d[%d]:%s - %s - v%d %s", this.timestamp,
+                this.protocolVersion,
+                this.action.name(),
+                this.status.name(),
+                version,
+                bodyString);
+    }
+
+    @Override
     public boolean equals(Object other) {
         if (other == null) {
             return false;
@@ -104,36 +116,36 @@ public class B3Message<B> {
             return true;
         }
 
-        if(!this.getAction().equals(otherMessage.getAction())) {
+        if (!this.getAction().equals(otherMessage.getAction())) {
             return false;
         }
 
-        if(!this.getStatus().equals(otherMessage.getStatus())) {
+        if (!this.getStatus().equals(otherMessage.getStatus())) {
             return false;
         }
 
-        if(this.getTimestamp() == null) {
+        if (this.getTimestamp() == null) {
             return otherMessage.getTimestamp() == null;
         }
-        if(!this.getTimestamp().equals(otherMessage.getTimestamp())) {
+        if (!this.getTimestamp().equals(otherMessage.getTimestamp())) {
             return false;
         }
 
-        if(this.getProtocolVersion() == null) {
+        if (this.getProtocolVersion() == null) {
             return otherMessage.getProtocolVersion() == null;
         }
-        if(!this.getProtocolVersion().equals(otherMessage.getProtocolVersion())) {
+        if (!this.getProtocolVersion().equals(otherMessage.getProtocolVersion())) {
             return false;
         }
 
-        if(this.getVersion() == null) {
+        if (this.getVersion() == null) {
             return otherMessage.getVersion() == null;
         }
-        if(!this.getVersion().equals(otherMessage.getVersion())) {
+        if (!this.getVersion().equals(otherMessage.getVersion())) {
             return false;
         }
 
-        if(this.getBody() == null) {
+        if (this.getBody() == null) {
             return otherMessage.getBody() == null;
         }
         return this.getBody().equals(otherMessage.getBody());

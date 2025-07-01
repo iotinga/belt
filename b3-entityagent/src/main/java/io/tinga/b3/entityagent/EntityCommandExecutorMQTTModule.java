@@ -11,10 +11,8 @@ import io.tinga.b3.entityagent.desired.DesiredEntityMessageHandler;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaResourcesProvider;
-import io.tinga.b3.entityagent.operation.EntityOperationDaemon;
 import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
 import io.tinga.b3.entityagent.operation.EntityOperationJsonSchemaChecker;
-import io.tinga.b3.entityagent.operation.EntityTopicOperationDaemon;
 import io.tinga.b3.entityagent.reported.ReportedRetainedMessagesStore;
 import io.tinga.b3.entityagent.reported.ReportedStore;
 
@@ -26,9 +24,8 @@ public class EntityCommandExecutorMQTTModule extends AbstractModule {
         bind(DesiredEntityMessageHandler.class).to(DesiredEntityMessageBasicHandler.class);
         bind(ReportedStore.class).to(ReportedRetainedMessagesStore.class);
         bind(JsonSchemaProvider.class).to(JsonSchemaResourcesProvider.class);
-        bind(EntityOperationDaemon.class).to(EntityTopicOperationDaemon.class);
         bind(DesiredEntityMessageProvider.class).to(DesiredEntityMessageDummyProvider.class);
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorMQTT.class);
+        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorDaemon.class);
     }
 
 }

@@ -17,11 +17,12 @@ public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEdgeFirstShadowReportedPolicy.class);
 
-    private final VersionSafeExecutor executor;
-    private final EdgeDriver<M> fieldDriver;
-    private final ITopicFactoryProxy topicFactory;
+    protected final VersionSafeExecutor executor;
+    protected final EdgeDriver<M> fieldDriver;
+    protected final ITopicFactoryProxy topicFactory;
 
     private Topic<M> topic;
+
     private M lastSentMessage;
 
     @Inject
@@ -57,6 +58,14 @@ public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<
         });
 
         return true;
+    }
+    
+    protected Topic<M> getTopic() {
+        return topic;
+    }
+
+    protected M getLastSentMessage() {
+        return lastSentMessage;
     }
 
 }

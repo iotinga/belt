@@ -26,11 +26,11 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
     protected static final int DEFAULT_INIT_SLEEP_MAX = 5000;
     protected static final int DEFAULT_INIT_SLEEP_STEP = 500;
 
-    private final Agent.ShadowReportedPolicy<M> reportedPolicy;
-    private final Agent.ShadowDesiredPolicy<M> desiredPolicy;
-    private final EdgeDriver<M> driver;
+    protected final Agent.ShadowReportedPolicy<M> reportedPolicy;
+    protected final Agent.ShadowDesiredPolicy<M> desiredPolicy;
+    protected final EdgeDriver<M> driver;
 
-    private final VersionSafeExecutor executor;
+    protected final VersionSafeExecutor executor;
 
     private AgentTopic agentTopic;
     private String roleName;
@@ -92,7 +92,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
                 try {
                     bindTo(agentTopic, "#");
                     retval = execute(command);
-                    while (!Thread.currentThread().isInterrupted()) {
+                    while (keepAlive()) {
                         try {
                             Thread.sleep(getThreadSleepsMs());
                         } catch (InterruptedException e) {
@@ -110,6 +110,10 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
         return retval;
     }
 
+    protected boolean keepAlive() {
+        return !Thread.currentThread().isInterrupted();
+    }
+
     public abstract Status execute(C command);
 
     @Override
@@ -120,6 +124,14 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
     @Override
     public String getBoundRoleName() {
         return this.roleName;
+    }
+
+    protected AgentTopic getAgentTopic() {
+        return agentTopic;
+    }
+
+    protected String getRoleName() {
+        return roleName;
     }
 
     protected int getThreadSleepsMs() {

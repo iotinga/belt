@@ -1,5 +1,7 @@
 package io.tinga.b3.core.shadowing;
 
+import java.util.function.Function;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,11 +20,11 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEdgeFirstShadowDesiredPolicy.class);
 
-    private final VersionSafeExecutor executor;
-    private final EdgeDriver<M> fieldDriver;
-    private final ITopicFactoryProxy topicFactory;
+    protected final VersionSafeExecutor executor;
+    protected final EdgeDriver<M> fieldDriver;
+    protected final ITopicFactoryProxy topicFactory;
 
-    private Topic<M> topic;
+    protected Topic<M> topic;
 
     @Inject
     public AbstractEdgeFirstShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<M> fieldDriver,
@@ -40,7 +42,7 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
     @Override
     public boolean handle(String topicName, M event) throws Exception {
         this.executor.safeExecute(version -> {
-            if (event.getVersion() != Agent.VERSION_WILDCARD && version.apply(false) != event.getVersion()) {
+            if (hasNoConflicts(version, event)) {
                 log.info(String.format("Refusing desired update: wildcard(%d) desired(%d) current(%d)",
                         Agent.VERSION_WILDCARD, event.getVersion(), version.apply(false)));
                 return null;
@@ -56,6 +58,10 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
         });
 
         return true;
+    }
+
+    protected boolean hasNoConflicts(Function<Boolean, Integer> version, M event) {
+        return event.getVersion() != Agent.VERSION_WILDCARD && version.apply(false) != event.getVersion();
     }
 
     @Override

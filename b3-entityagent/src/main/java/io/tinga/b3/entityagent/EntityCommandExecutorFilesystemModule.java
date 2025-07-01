@@ -12,8 +12,6 @@ import io.tinga.b3.entityagent.desired.DesiredEntityMessageProvider;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageStdinProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaFromFileProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
-import io.tinga.b3.entityagent.operation.EntityDummyOperationDaemon;
-import io.tinga.b3.entityagent.operation.EntityOperationDaemon;
 import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
 import io.tinga.b3.entityagent.operation.EntityOperationJsonSchemaChecker;
 import io.tinga.b3.entityagent.reported.ReportedFromFileReadOnlyStore;
@@ -29,12 +27,10 @@ public class EntityCommandExecutorFilesystemModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(GadgetCommandExecutor.class).to(EntityCommandExecutorMQTT.class);
         bind(EntityCommand.class).toInstance(command);
         bind(EntityOperationGrantsChecker.class).to(EntityOperationJsonSchemaChecker.class);
         bind(DesiredEntityMessageHandler.class).to(DesiredEntityMessageBasicHandler.class);
-        bind(EntityOperationDaemon.class).to(EntityDummyOperationDaemon.class);
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorDefault.class);
+        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorOnce.class);
 
         bind(JsonSchemaProvider.class).to(JsonSchemaFromFileProvider.class);
         bind(ReportedStore.class).to(ReportedFromFileReadOnlyStore.class);
