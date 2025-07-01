@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EntityConfigImpl implements EntityConfig {
+public class EntityAgentConfigImpl implements EntityAgentConfig {
 
     @JsonProperty(ENTITY_REPORTED_TOPIC_FILTER)
     private String reportedTopicFilter;

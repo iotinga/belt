@@ -14,7 +14,7 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 
-import io.tinga.b3.entityagent.EntityConfig;
+import io.tinga.b3.entityagent.EntityAgentConfig;
 
 public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
 
@@ -23,7 +23,7 @@ public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
     private static final String PATH_FORMAT = "%s/%s.json";
 
     @Inject
-    private EntityConfig config;   
+    private EntityAgentConfig config;   
     
     @Inject
     private ObjectMapper om;

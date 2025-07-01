@@ -18,16 +18,16 @@ import io.tinga.belt.config.ConfigurationProvider;
 import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
 import io.tinga.belt.output.GadgetSink;
-import io.tinga.b3.entityagent.operation.EntityOperationFactory;
-import io.tinga.b3.entityagent.operation.EntityOperationTopicBasedFactory;
+import io.tinga.b3.entityagent.operation.OperationFactory;
+import io.tinga.b3.entityagent.operation.OperationTopicBasedFactory;
 import io.tinga.b3.protocol.B3MessageValidator;
 import io.tinga.b3.protocol.B3MessageVersionBasedValidator;
 import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
 import it.netgrid.bauer.TopicFactory;
 
-public class EntityGadget extends AbstractGadget<EntityCommand> {
-    private static final Logger log = LoggerFactory.getLogger(EntityGadget.class);
+public class EntityAgentGadget extends AbstractGadget<EntityAgentCommand> {
+    private static final Logger log = LoggerFactory.getLogger(EntityAgentGadget.class);
 
     public static final String NAME = "ENTITY";
 
@@ -40,41 +40,41 @@ public class EntityGadget extends AbstractGadget<EntityCommand> {
     protected void configure() {
         bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
         bind(JsonSchemaFactory.class).toInstance(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7));
-        bind(EntityOperationFactory.class).to(EntityOperationTopicBasedFactory.class);
+        bind(OperationFactory.class).to(OperationTopicBasedFactory.class);
         bind(B3MessageValidator.class).to(B3MessageVersionBasedValidator.class);
         bind(B3TopicFactory.class).to(B3TopicFactoryImpl.class);
 
     }
 
     @Override
-    public Class<EntityCommand> commandClass() {
-        return EntityCommand.class;
+    public Class<EntityAgentCommand> commandClass() {
+        return EntityAgentCommand.class;
     }
 
     @Override
     public List<GadgetCommandOption> commandOptions() {
-        return Arrays.asList(EntityCommandOption.values());
+        return Arrays.asList(EntityAgentCommandOption.values());
     }
 
     @Provides
     @Singleton
-    public EntityConfig buildGadgetConfig(ConfigurationProvider provider) {
-        return provider.config(EntityGadget.NAME.toUpperCase(), EntityConfigImpl.class);
+    public EntityAgentConfig buildGadgetConfig(ConfigurationProvider provider) {
+        return provider.config(EntityAgentGadget.NAME.toUpperCase(), EntityAgentConfigImpl.class);
     }
 
     @Override
-    public Module[] buildExecutorModules(Properties properties, EntityCommand command) {
+    public Module[] buildExecutorModules(Properties properties, EntityAgentCommand command) {
         log.debug("Building executor modules with properties {}", properties);
         switch (command.action()) {
             case MQTT:
-                Module[] mqttModules = { TopicFactory.getAsModule(properties), new EntityCommandExecutorMQTTModule() };
+                Module[] mqttModules = { TopicFactory.getAsModule(properties), new EntityAgentCommandExecutorMQTTModule() };
                 return mqttModules;
             case FILESYSTEM:
-                Module[] filesystemModules = { new EntityCommandExecutorFilesystemModule(command) };
+                Module[] filesystemModules = { new EntityAgentCommandExecutorFilesystemModule(command) };
                 return filesystemModules;
             case RESOURCES:
             default:
-                Module[] resourcesModules = { new EntityCommandExecutorResourcesModule(command) };
+                Module[] resourcesModules = { new EntityAgentCommandExecutorResourcesModule(command) };
                 return resourcesModules;
         }
     }

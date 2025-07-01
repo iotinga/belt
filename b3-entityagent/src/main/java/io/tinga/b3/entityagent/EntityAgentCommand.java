@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.tinga.belt.Gadget;
 import io.tinga.belt.input.GadgetCommandOption;
 
-public class EntityCommand implements Gadget.Command<EntityCommandAction> {
+public class EntityAgentCommand implements Gadget.Command<EntityAgentCommandAction> {
 
     public static final String REPORTED_REF_OPT = "r";
     public static final String DESIRED_REF_OPT = "d";
@@ -14,7 +14,7 @@ public class EntityCommand implements Gadget.Command<EntityCommandAction> {
     public static final String MODE_OPT = "m";
 
     @JsonProperty(GadgetCommandOption.ACTION_STANDARD_OPT)
-    private EntityCommandAction action;
+    private EntityAgentCommandAction action;
 
     @JsonProperty(REPORTED_REF_OPT)
     private String reportedRef;
@@ -28,10 +28,10 @@ public class EntityCommand implements Gadget.Command<EntityCommandAction> {
     @JsonProperty(SCHEMA_BASE_DIR_OPT)
     private String schemaBaseDir;
 
-    public EntityCommand() {}
+    public EntityAgentCommand() {}
 
-    public EntityCommand(String reportedRef, String desiredRef, String schemaBaseDir, String role,
-            EntityCommandAction action) {
+    public EntityAgentCommand(String reportedRef, String desiredRef, String schemaBaseDir, String role,
+            EntityAgentCommandAction action) {
         this.reportedRef = reportedRef;
         this.desiredRef = desiredRef;
         this.schemaBaseDir = schemaBaseDir;
@@ -55,7 +55,7 @@ public class EntityCommand implements Gadget.Command<EntityCommandAction> {
         return this.schemaBaseDir;
     };
 
-    public EntityCommandAction action() {
+    public EntityAgentCommandAction action() {
         return this.action;
     }
 

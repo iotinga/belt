@@ -19,23 +19,23 @@ import io.tinga.b3.core.shadowing.reported.ReportedStore;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaFromFileProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
-import io.tinga.b3.entityagent.operation.EntityOperationJsonSchemaChecker;
+import io.tinga.b3.entityagent.operation.OperationGrantsChecker;
+import io.tinga.b3.entityagent.operation.OperationJsonSchemaChecker;
 
-public class EntityCommandExecutorFilesystemModule extends AbstractModule {
+public class EntityAgentCommandExecutorFilesystemModule extends AbstractModule {
 
-    private final EntityCommand command;
+    private final EntityAgentCommand command;
 
-    public EntityCommandExecutorFilesystemModule(EntityCommand command) {
+    public EntityAgentCommandExecutorFilesystemModule(EntityAgentCommand command) {
         this.command = command;
     }
 
     @Override
     protected void configure() {
-        bind(EntityCommand.class).toInstance(command);
-        bind(EntityOperationGrantsChecker.class).to(EntityOperationJsonSchemaChecker.class);
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>() {
-        })).to(EntityCommandExecutorOnce.class);
+        bind(EntityAgentCommand.class).toInstance(command);
+        bind(OperationGrantsChecker.class).to(OperationJsonSchemaChecker.class);
+        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityAgentCommand>>() {
+        })).to(EntityAgentCommandExecutorOnce.class);
 
         bind(JsonSchemaProvider.class).to(JsonSchemaFromFileProvider.class);
         bind(ReportedStore.class).to(ReportedFromFileReadOnlyStore.class);

@@ -2,7 +2,7 @@ package io.tinga.b3.entityagent;
 
 import io.tinga.b3.core.Agent;
 
-public interface EntityConfig extends Agent.LocalShadowingConfig {
+public interface EntityAgentConfig extends Agent.LocalShadowingConfig {
 
     public static String ENTITY_REPORTED_TOPIC_FILTER = "REPORTED_TOPIC_FILTER";
     public static String ENTITY_MQTT_PAYLOAD_SHADOW_KEY = "MQTT_PAYLOAD_SHADOW_KEY";

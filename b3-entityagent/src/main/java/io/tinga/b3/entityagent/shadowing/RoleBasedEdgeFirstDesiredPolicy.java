@@ -10,14 +10,14 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.entityagent.operation.EntityOperationFactory;
-import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
+import io.tinga.b3.entityagent.operation.OperationFactory;
+import io.tinga.b3.entityagent.operation.OperationGrantsChecker;
 
-public class RoleBasedEdgeFirstDesiredPolicy extends AbstractEntityShadowDesiredPolicy {
+public class RoleBasedEdgeFirstDesiredPolicy extends AbstractEntityAgentShadowDesiredPolicy {
 
     @Inject
-    public RoleBasedEdgeFirstDesiredPolicy(EntityOperationGrantsChecker checker,
-            EntityOperationFactory operationFactory, VersionSafeExecutor executor,
+    public RoleBasedEdgeFirstDesiredPolicy(OperationGrantsChecker checker,
+            OperationFactory operationFactory, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> edgeDriver, ITopicFactoryProxy topicFactory) {
         super(checker, operationFactory, executor, edgeDriver, topicFactory);
     }

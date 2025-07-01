@@ -11,21 +11,21 @@ import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.shadowing.AbstractEdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.entityagent.operation.EntityOperation;
-import io.tinga.b3.entityagent.operation.EntityOperationFactory;
-import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
-import io.tinga.b3.entityagent.operation.InvalidEntityOperationException;
+import io.tinga.b3.entityagent.operation.Operation;
+import io.tinga.b3.entityagent.operation.OperationFactory;
+import io.tinga.b3.entityagent.operation.OperationGrantsChecker;
+import io.tinga.b3.entityagent.operation.InvalidOperationException;
 
-public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirstShadowDesiredPolicy<GenericB3Message> {
+public abstract class AbstractEntityAgentShadowDesiredPolicy extends AbstractEdgeFirstShadowDesiredPolicy<GenericB3Message> {
 
     private static final Logger log = LoggerFactory.getLogger(RoleBasedEdgeFirstDesiredPolicy.class);
 
-    private final EntityOperationGrantsChecker checker;
-    private final EntityOperationFactory operationFactory;
+    private final OperationGrantsChecker checker;
+    private final OperationFactory operationFactory;
 
     @Inject
-    public AbstractEntityShadowDesiredPolicy(EntityOperationGrantsChecker checker,
-            EntityOperationFactory operationFactory, VersionSafeExecutor executor,
+    public AbstractEntityAgentShadowDesiredPolicy(OperationGrantsChecker checker,
+            OperationFactory operationFactory, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> edgeDriver,
             ITopicFactoryProxy topicFactory) {
         super(executor, edgeDriver, topicFactory);
@@ -43,7 +43,7 @@ public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirs
 
     protected boolean processMessage(String topicName, GenericB3Message event) {
         try {
-            EntityOperation operation = operationFactory.buildFrom(topicName, event);
+            Operation operation = operationFactory.buildFrom(topicName, event);
             boolean result = checker.isAllowed(operation);
             if (result) {
                 log.info("[ ALLOW]: %s %s@%s -> %s", operation.message().getAction().name(), operation.role(),
@@ -58,7 +58,7 @@ public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirs
         } catch (EdgeDriverException e) {
             log.warn(e.getMessage());
                 return false;
-        } catch (InvalidEntityOperationException e) {
+        } catch (InvalidOperationException e) {
             log.warn(e.getMessage());
                 return false;
         }

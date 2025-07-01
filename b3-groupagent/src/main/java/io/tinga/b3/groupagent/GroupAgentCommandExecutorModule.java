@@ -9,8 +9,8 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.shadowing.ShadowDesiredPreProcessor;
 import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
-import io.tinga.b3.groupagent.driver.processors.EdgeGroupDesiredPreProcessor;
-import io.tinga.b3.groupagent.driver.processors.EdgeGroupReportedPostProcessor;
+import io.tinga.b3.groupagent.driver.processors.EdgeGroupAgentDesiredPreProcessor;
+import io.tinga.b3.groupagent.driver.processors.EdgeGroupAgentReportedPostProcessor;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.belt.input.GadgetCommandExecutor;
 
@@ -27,9 +27,9 @@ public class GroupAgentCommandExecutorModule extends AbstractModule {
         bind(GroupAgentCommand.class).toInstance(this.command);
 
         bind(Key.get(new TypeLiteral<ShadowDesiredPreProcessor<GenericB3Message>>() {
-        })).to(EdgeGroupDesiredPreProcessor.class);
+        })).to(EdgeGroupAgentDesiredPreProcessor.class);
         bind(Key.get(new TypeLiteral<ShadowReportedPostProcessor<GenericB3Message>>() {
-        })).to(EdgeGroupReportedPostProcessor.class);
+        })).to(EdgeGroupAgentReportedPostProcessor.class);
         bind(Key.get(new TypeLiteral<EdgeDriver<GenericB3Message>>() {
         })).to(GroupAgentEdgeDriver.class).in(Singleton.class);
 

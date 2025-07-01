@@ -14,21 +14,21 @@ import io.tinga.b3.core.shadowing.desired.DesiredGenericB3MessageProvider;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 
-public class EntityCommandExecutorOnce extends AbstractAgentCommandExecutor<GenericB3Message, EntityCommand> {
+public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
 
-    private static final Logger log = LoggerFactory.getLogger(EntityCommandExecutorOnce.class);
+    private static final Logger log = LoggerFactory.getLogger(EntityAgentCommandExecutorOnce.class);
 
     @Inject
     private DesiredGenericB3MessageProvider provider;
 
-    public EntityCommandExecutorOnce(B3Topic topicName, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public EntityAgentCommandExecutorOnce(B3Topic topicName, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> driver) {
         super(topicName, reportedPolicy, desiredPolicy, executor, driver);
     }
 
     @Override
-    public Status execute(EntityCommand command) {
+    public Status execute(EntityAgentCommand command) {
         GenericB3Message message = provider.load(command.desiredRef());
         try {
             String topicName = getBoundTopicName().shadow().desired(command.role()).build();

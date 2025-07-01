@@ -7,12 +7,12 @@ import io.tinga.b3.core.shadowing.ShadowDesiredPreProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.protocol.GenericB3Message;
 
-public class EdgeGroupDesiredPreProcessor implements ShadowDesiredPreProcessor<GenericB3Message> {
+public class EdgeGroupAgentDesiredPreProcessor implements ShadowDesiredPreProcessor<GenericB3Message> {
 
     private final GroupAgentConfig config;
 
     @Inject
-    public EdgeGroupDesiredPreProcessor(GroupAgentConfig config) {
+    public EdgeGroupAgentDesiredPreProcessor(GroupAgentConfig config) {
         this.config = config;
     }
 

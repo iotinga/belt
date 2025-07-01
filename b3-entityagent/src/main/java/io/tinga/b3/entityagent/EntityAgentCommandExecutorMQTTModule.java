@@ -11,19 +11,19 @@ import io.tinga.b3.core.shadowing.desired.DesiredGenericB3MessageProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaResourcesProvider;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
-import io.tinga.b3.entityagent.operation.EntityOperationJsonSchemaChecker;
+import io.tinga.b3.entityagent.operation.OperationGrantsChecker;
+import io.tinga.b3.entityagent.operation.OperationJsonSchemaChecker;
 import io.tinga.b3.entityagent.shadowing.RoleBasedEdgeFirstDesiredPolicy;
 
-public class EntityCommandExecutorMQTTModule extends AbstractModule {
+public class EntityAgentCommandExecutorMQTTModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(EntityOperationGrantsChecker.class).to(EntityOperationJsonSchemaChecker.class);
+        bind(OperationGrantsChecker.class).to(OperationJsonSchemaChecker.class);
         bind(JsonSchemaProvider.class).to(JsonSchemaResourcesProvider.class);
         bind(DesiredGenericB3MessageProvider.class).to(DesiredGenericB3MessageDummyProvider.class);
         bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>(){})).to(RoleBasedEdgeFirstDesiredPolicy.class);
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorDaemon.class);
+        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityAgentCommand>>(){})).to(EntityAgentCommandExecutorDaemon.class);
     }
 
 }

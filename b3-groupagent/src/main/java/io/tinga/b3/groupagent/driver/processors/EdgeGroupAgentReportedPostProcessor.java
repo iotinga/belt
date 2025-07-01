@@ -11,7 +11,7 @@ import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.protocol.GenericB3Message;
 
-public class EdgeGroupReportedPostProcessor implements ShadowReportedPostProcessor<GenericB3Message> {
+public class EdgeGroupAgentReportedPostProcessor implements ShadowReportedPostProcessor<GenericB3Message> {
 
     public static final String FRAGS_PROPERTY_NAME = "frags";
     public static final String FRAGS_COUNT_PROPERTY_NAME = "fragsCount";
@@ -20,7 +20,7 @@ public class EdgeGroupReportedPostProcessor implements ShadowReportedPostProcess
     private final ObjectMapper om;
 
     @Inject
-    public EdgeGroupReportedPostProcessor(GroupAgentConfig config, ObjectMapper om) {
+    public EdgeGroupAgentReportedPostProcessor(GroupAgentConfig config, ObjectMapper om) {
         this.config = config;
         this.om = om;
     }

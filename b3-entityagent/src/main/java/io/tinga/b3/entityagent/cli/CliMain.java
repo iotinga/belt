@@ -3,13 +3,13 @@ package io.tinga.b3.entityagent.cli;
 import com.google.inject.Module;
 
 import io.tinga.belt.cli.AbstractCli;
-import io.tinga.b3.entityagent.EntityCommand;
-import io.tinga.b3.entityagent.EntityGadget;
+import io.tinga.b3.entityagent.EntityAgentCommand;
+import io.tinga.b3.entityagent.EntityAgentGadget;
 
-public class CliMain extends AbstractCli<EntityCommand> {
+public class CliMain extends AbstractCli<EntityAgentCommand> {
 
     public CliMain(String[] args) {
-        super(args, new EntityGadget());
+        super(args, new EntityAgentGadget());
     }
 
     @Override

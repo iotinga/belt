@@ -18,9 +18,9 @@ import io.tinga.b3.core.shadowing.reported.ReportedStore;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.GenericB3Message;
 
-public class EntityOperationJsonSchemaChecker implements EntityOperationGrantsChecker {
+public class OperationJsonSchemaChecker implements OperationGrantsChecker {
 
-    private static final Logger log = LoggerFactory.getLogger(EntityOperationJsonSchemaChecker.class);
+    private static final Logger log = LoggerFactory.getLogger(OperationJsonSchemaChecker.class);
 
     @Inject
     private JsonUtils json;
@@ -35,7 +35,7 @@ public class EntityOperationJsonSchemaChecker implements EntityOperationGrantsCh
     private JsonSchemaProvider schemaProvider;
 
     @Override
-    public boolean isAllowed(EntityOperation operation) {
+    public boolean isAllowed(Operation operation) {
         try {
             if (!this.store.isInitialized()) {
                 Future<Integer> initialization = this.store.init();
