@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
+import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
@@ -45,7 +46,11 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
                 return null;
             }
 
-            this.fieldDriver.write(event);
+            try {
+                this.fieldDriver.write(event);
+            } catch (EdgeDriverException e) {
+                log.warn(e.getMessage());
+            }
 
             return null;
         });

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.tinga.b3.core.EdgeDriver;
+import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.core.connection.ConnectionState;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.AgentTopic;
@@ -70,10 +71,9 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
     }
 
     @Override
-    public void write(M desiredMessage) {
+    public void write(M desiredMessage) throws EdgeDriverException {
         if (desiredMessage == null) {
-            log.error("Invalid shadow desired message: desiredMessage is null");
-            return;
+            throw new EdgeDriverException("Invalid shadow desired message: desiredMessage is null");
         }
 
         this.onEvent(this.state::onWriteDelta, desiredMessage, null);
