@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
 import io.tinga.b3.entityagent.EntityConfig;
-import io.tinga.b3.entityagent.operation.EntityMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 
 public class ReportedFromFileReadOnlyStore implements ReportedStore {
 
@@ -51,16 +51,16 @@ public class ReportedFromFileReadOnlyStore implements ReportedStore {
     }
 
     @Override
-    public EntityMessage read(String topicName) {
+    public GenericB3Message read(String topicName) {
         if(this.cache != null && this.cache.has(topicName)) {
             JsonNode item = this.cache.get(topicName);
-            return this.om.convertValue(item, EntityMessage.class);
+            return this.om.convertValue(item, GenericB3Message.class);
         }
         return null;
     }
 
     @Override
-    public EntityMessage update(String topicName, EntityMessage newValue) {
+    public GenericB3Message update(String topicName, GenericB3Message newValue) {
         throw new UnsupportedOperationException("Read only entities store");
     }
 

@@ -8,12 +8,12 @@ import java.util.concurrent.Future;
 import com.google.inject.Inject;
 
 import io.tinga.b3.entityagent.EntityConfig;
-import io.tinga.b3.entityagent.operation.EntityMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 import it.netgrid.bauer.EventHandler;
 import it.netgrid.bauer.ITopicFactory;
 import it.netgrid.bauer.Topic;
 
-public class ReportedRetainedMessagesStore implements ReportedStore, EventHandler<EntityMessage> {
+public class ReportedRetainedMessagesStore implements ReportedStore, EventHandler<GenericB3Message> {
 
     @Inject
     private EntityConfig config;
@@ -21,9 +21,9 @@ public class ReportedRetainedMessagesStore implements ReportedStore, EventHandle
     @Inject
     private ITopicFactory topicFactory;
 
-    private Topic<EntityMessage> topic;
+    private Topic<GenericB3Message> topic;
     private CompletableFuture<Integer> initialization;
-    private final Map<String, EntityMessage> cache = new HashMap<>();
+    private final Map<String, GenericB3Message> cache = new HashMap<>();
 
     @Override
     public String getName() {
@@ -31,8 +31,8 @@ public class ReportedRetainedMessagesStore implements ReportedStore, EventHandle
     }
 
     @Override
-    public Class<EntityMessage> getEventClass() {
-        return EntityMessage.class;
+    public Class<GenericB3Message> getEventClass() {
+        return GenericB3Message.class;
     }
 
     @Override
@@ -64,19 +64,19 @@ public class ReportedRetainedMessagesStore implements ReportedStore, EventHandle
     }
 
     @Override
-    public boolean handle(String topic, EntityMessage event) throws Exception {
+    public boolean handle(String topic, GenericB3Message event) throws Exception {
         this.cache.put(topic, event);
         return true;
     }
 
     @Override
-    public synchronized EntityMessage read(String topicName) {
+    public synchronized GenericB3Message read(String topicName) {
         return this.cache.get(topicName);
     }
 
     @Override
-    public EntityMessage update(String topicName, EntityMessage newValue) {
-        EntityMessage current = this.cache.get(topicName);
+    public GenericB3Message update(String topicName, GenericB3Message newValue) {
+        GenericB3Message current = this.cache.get(topicName);
         this.cache.put(topicName, newValue);
         return current;
     }

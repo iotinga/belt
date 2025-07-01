@@ -16,6 +16,7 @@ import io.tinga.belt.helpers.JsonUtils;
 import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.entityagent.reported.ReportedStore;
+import io.tinga.b3.protocol.GenericB3Message;
 
 public class EntityOperationJsonSchemaChecker implements EntityOperationGrantsChecker {
 
@@ -42,7 +43,7 @@ public class EntityOperationJsonSchemaChecker implements EntityOperationGrantsCh
                 log.info(String.format("cache size: %d", cacheSize));
             }
 
-            EntityMessage reported = this.store.read(operation.reportedTopic());
+            GenericB3Message reported = this.store.read(operation.reportedTopic());
             JsonNode diff = json.diff(reported == null ? null : reported.getBody(),
                     operation.message() == null ? null : operation.message().getBody());
             out.put(diff.toPrettyString());

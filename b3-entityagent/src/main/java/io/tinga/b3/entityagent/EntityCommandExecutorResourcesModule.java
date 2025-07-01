@@ -11,12 +11,12 @@ import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.shadowing.SinkShadowReportedPolicy;
-import io.tinga.b3.entityagent.desired.DesiredEntityMessageProvider;
-import io.tinga.b3.entityagent.desired.DesiredEntityMessageResourcesProvider;
-import io.tinga.b3.entityagent.desired.DesiredEntityMessageStdinProvider;
+import io.tinga.b3.entityagent.desired.DesiredGenericB3MessageProvider;
+import io.tinga.b3.entityagent.desired.DesiredGenericB3MessageResourcesProvider;
+import io.tinga.b3.entityagent.desired.DesiredGenericB3MessageStdinProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaResourcesProvider;
-import io.tinga.b3.entityagent.operation.EntityMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
 import io.tinga.b3.entityagent.operation.EntityOperationJsonSchemaChecker;
 import io.tinga.b3.entityagent.reported.ReportedResourcesReadOnlyStore;
@@ -40,21 +40,21 @@ public class EntityCommandExecutorResourcesModule extends AbstractModule {
         bind(JsonSchemaProvider.class).to(JsonSchemaResourcesProvider.class);
         bind(ReportedStore.class).to(ReportedResourcesReadOnlyStore.class);
         if (command.desiredRef() == null) {
-            bind(DesiredEntityMessageProvider.class).to(DesiredEntityMessageStdinProvider.class);
+            bind(DesiredGenericB3MessageProvider.class).to(DesiredGenericB3MessageStdinProvider.class);
         } else {
-            bind(DesiredEntityMessageProvider.class).to(DesiredEntityMessageResourcesProvider.class);
+            bind(DesiredGenericB3MessageProvider.class).to(DesiredGenericB3MessageResourcesProvider.class);
         }
     }
 
 
     @Provides
     @Singleton
-    public Agent.ShadowReportedPolicy<EntityMessage> buildShadowReportedPolicy(final GadgetSink sink,
-            final EdgeDriver<EntityMessage> driver) {
-        return new SinkShadowReportedPolicy<EntityMessage>(sink, driver) {
+    public Agent.ShadowReportedPolicy<GenericB3Message> buildShadowReportedPolicy(final GadgetSink sink,
+            final EdgeDriver<GenericB3Message> driver) {
+        return new SinkShadowReportedPolicy<GenericB3Message>(sink, driver) {
             @Override
-            public Class<EntityMessage> getEventClass() {
-                return EntityMessage.class;
+            public Class<GenericB3Message> getEventClass() {
+                return GenericB3Message.class;
             }
 
         };

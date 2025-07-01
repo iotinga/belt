@@ -2,11 +2,11 @@ package io.tinga.b3.entityagent.reported;
 
 import java.util.concurrent.Future;
 
-import io.tinga.b3.entityagent.operation.EntityMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 
 public interface ReportedStore {
     public Future<Integer> init();
     public boolean isInitialized();
-    public EntityMessage read(String topicName);
-    public EntityMessage update(String topicName, EntityMessage newValue);
+    public GenericB3Message read(String topicName);
+    public GenericB3Message update(String topicName, GenericB3Message newValue);
 }

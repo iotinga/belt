@@ -10,13 +10,13 @@ import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.shadowing.AbstractEdgeFirstShadowDesiredPolicy;
-import io.tinga.b3.entityagent.operation.EntityMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.entityagent.operation.EntityOperation;
 import io.tinga.b3.entityagent.operation.EntityOperationFactory;
 import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
 import io.tinga.b3.entityagent.operation.InvalidEntityOperationException;
 
-public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirstShadowDesiredPolicy<EntityMessage> {
+public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirstShadowDesiredPolicy<GenericB3Message> {
 
     private static final Logger log = LoggerFactory.getLogger(RoleBasedEdgeFirstDesiredPolicy.class);
 
@@ -26,7 +26,7 @@ public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirs
     @Inject
     public AbstractEntityShadowDesiredPolicy(EntityOperationGrantsChecker checker,
             EntityOperationFactory operationFactory, VersionSafeExecutor executor,
-            EdgeDriver<EntityMessage> fieldDriver,
+            EdgeDriver<GenericB3Message> fieldDriver,
             ITopicFactoryProxy topicFactory) {
         super(executor, fieldDriver, topicFactory);
         this.checker = checker;
@@ -34,14 +34,14 @@ public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirs
     }
 
     @Override
-    public Class<EntityMessage> getEventClass() {
-        return EntityMessage.class;
+    public Class<GenericB3Message> getEventClass() {
+        return GenericB3Message.class;
     }
 
     @Override
-    abstract public boolean handle(String topicName, EntityMessage event) throws Exception;
+    abstract public boolean handle(String topicName, GenericB3Message event) throws Exception;
 
-    protected boolean processMessage(String topicName, EntityMessage event) {
+    protected boolean processMessage(String topicName, GenericB3Message event) {
         try {
             EntityOperation operation = operationFactory.buildFrom(topicName, event);
             boolean result = checker.isAllowed(operation);

@@ -9,7 +9,7 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.entityagent.operation.EntityMessage;
+import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.entityagent.operation.EntityOperationFactory;
 import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
 
@@ -18,19 +18,19 @@ public class RoleBasedEdgeFirstDesiredPolicy extends AbstractEntityShadowDesired
     @Inject
     public RoleBasedEdgeFirstDesiredPolicy(EntityOperationGrantsChecker checker,
             EntityOperationFactory operationFactory, VersionSafeExecutor executor,
-            EdgeDriver<EntityMessage> fieldDriver, ITopicFactoryProxy topicFactory) {
+            EdgeDriver<GenericB3Message> fieldDriver, ITopicFactoryProxy topicFactory) {
         super(checker, operationFactory, executor, fieldDriver, topicFactory);
     }
 
     private static final Logger log = LoggerFactory.getLogger(RoleBasedEdgeFirstDesiredPolicy.class);
 
     @Override
-    public Class<EntityMessage> getEventClass() {
-        return EntityMessage.class;
+    public Class<GenericB3Message> getEventClass() {
+        return GenericB3Message.class;
     }
 
     @Override
-    public boolean handle(String topicName, EntityMessage event) throws Exception {
+    public boolean handle(String topicName, GenericB3Message event) throws Exception {
         this.executor.safeExecute(version -> {
             if (hasNoConflicts(version, event)) {
                 log.info(String.format("Refusing desired update: wildcard(%d) desired(%d) current(%d)",
