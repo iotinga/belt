@@ -11,8 +11,6 @@ import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.shadowing.SinkShadowReportedPolicy;
-import io.tinga.b3.entityagent.desired.DesiredEntityMessageBasicHandler;
-import io.tinga.b3.entityagent.desired.DesiredEntityMessageHandler;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageProvider;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageResourcesProvider;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageStdinProvider;
@@ -36,7 +34,6 @@ public class EntityCommandExecutorResourcesModule extends AbstractModule {
     protected void configure() {
         bind(EntityCommand.class).toInstance(command);
         bind(EntityOperationGrantsChecker.class).to(EntityOperationJsonSchemaChecker.class);
-        bind(DesiredEntityMessageHandler.class).to(DesiredEntityMessageBasicHandler.class);
         bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorOnce.class);
         bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityCommand>>(){})).to(EntityCommandExecutorOnce.class);
         

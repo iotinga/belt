@@ -4,19 +4,30 @@ import io.tinga.b3.protocol.TopicNameValidationException;
 
 public interface B3Topic {
 
+    String DEFAULT_ROOT = "braid";
+    String GLUE = "/";
+    String RETAIN_PREFIX = "$retain";
+
     public enum Category {
         AGENT,
         ENTITY
     }
 
+    public interface Name {
+
+        String build();
+
+        String build(boolean retained);
+    }
+
     interface Shadow {
-        interface Reported extends TopicName {
-            interface Live extends TopicName {
+        interface Reported extends Name {
+            interface Live extends Name {
             }
 
             Live live();
 
-            interface Batch extends TopicName {
+            interface Batch extends Name {
             }
 
             Batch batch();
@@ -26,11 +37,11 @@ public interface B3Topic {
         Reported reported();
 
         interface Desired {
-            interface Role extends TopicName {
+            interface Role extends Name {
             }
 
             interface Batch {
-                interface Role extends TopicName {
+                interface Role extends Name {
                 }
             }
 
@@ -43,8 +54,8 @@ public interface B3Topic {
 
     }
 
-    interface Command extends TopicName {
-        interface Role extends TopicName {
+    interface Command extends Name {
+        interface Role extends Name {
         }
     }
 

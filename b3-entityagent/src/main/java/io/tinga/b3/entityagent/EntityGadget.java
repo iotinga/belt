@@ -22,6 +22,8 @@ import io.tinga.b3.entityagent.operation.EntityOperationFactory;
 import io.tinga.b3.entityagent.operation.EntityOperationTopicBasedFactory;
 import io.tinga.b3.protocol.B3MessageValidator;
 import io.tinga.b3.protocol.B3MessageVersionBasedValidator;
+import io.tinga.b3.protocol.topic.B3TopicFactory;
+import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
 import it.netgrid.bauer.TopicFactory;
 
 public class EntityGadget extends AbstractGadget<EntityCommand> {
@@ -40,6 +42,7 @@ public class EntityGadget extends AbstractGadget<EntityCommand> {
         bind(JsonSchemaFactory.class).toInstance(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7));
         bind(EntityOperationFactory.class).to(EntityOperationTopicBasedFactory.class);
         bind(B3MessageValidator.class).to(B3MessageVersionBasedValidator.class);
+        bind(B3TopicFactory.class).to(B3TopicFactoryImpl.class);
 
     }
 

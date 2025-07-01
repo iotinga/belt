@@ -6,9 +6,7 @@ import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.b3.core.Agent;
-import io.tinga.b3.entityagent.desired.DesiredEntityMessageBasicHandler;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageDummyProvider;
-import io.tinga.b3.entityagent.desired.DesiredEntityMessageHandler;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaResourcesProvider;
@@ -24,7 +22,6 @@ public class EntityCommandExecutorMQTTModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(EntityOperationGrantsChecker.class).to(EntityOperationJsonSchemaChecker.class);
-        bind(DesiredEntityMessageHandler.class).to(DesiredEntityMessageBasicHandler.class);
         bind(ReportedStore.class).to(ReportedRetainedMessagesStore.class);
         bind(JsonSchemaProvider.class).to(JsonSchemaResourcesProvider.class);
         bind(DesiredEntityMessageProvider.class).to(DesiredEntityMessageDummyProvider.class);

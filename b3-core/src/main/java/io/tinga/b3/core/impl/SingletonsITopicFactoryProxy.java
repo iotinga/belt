@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.protocol.topic.TopicName;
+import io.tinga.b3.protocol.topic.B3Topic;
 import it.netgrid.bauer.ITopicFactory;
 import it.netgrid.bauer.Topic;
 
@@ -23,7 +23,7 @@ public class SingletonsITopicFactoryProxy implements ITopicFactoryProxy {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <E> Topic<E> getTopic(TopicName topicName, boolean retained) {
+    public <E> Topic<E> getTopic(B3Topic.Name topicName, boolean retained) {
         String topic = topicName.build(retained);
         Topic<?> entry = this.cache.get(topic);
         if(entry != null) {

@@ -1,5 +1,5 @@
 package io.tinga.b3.protocol.topic;
 
-public interface TopicNameFactory {
+public interface B3TopicFactory {
     B3TopicRoot root();
 }

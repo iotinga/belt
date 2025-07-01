@@ -5,7 +5,7 @@ import java.util.List;
 
 import io.tinga.b3.protocol.TopicNameValidationException;
 
-class TopicNameElement implements B3Topic, B3Topic.Command, B3Topic.Command.Role,
+class B3TopicNameElement implements B3Topic, B3Topic.Command, B3Topic.Command.Role,
         B3Topic.Shadow.Desired, B3Topic.Shadow.Desired.Role, B3Topic.Shadow.Desired.Batch,
         B3Topic.Shadow.Desired.Batch.Role, B3Topic.Shadow, B3Topic.Shadow.Reported,
         B3Topic.Shadow.Reported.Batch, B3Topic.Shadow.Reported.Live {
@@ -14,7 +14,7 @@ class TopicNameElement implements B3Topic, B3Topic.Command, B3Topic.Command.Role
     private final List<String> stack;
     private final Category category;
 
-    public TopicNameElement(String root, Category category, String id) {
+    public B3TopicNameElement(String root, Category category, String id) {
         this.id = id;
         this.category = category;
         this.stack = new ArrayList<>();

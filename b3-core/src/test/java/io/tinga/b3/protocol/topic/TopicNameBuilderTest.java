@@ -1,6 +1,6 @@
 package io.tinga.b3.protocol.topic;
 
-import static io.tinga.b3.protocol.topic.TopicName.GLUE;
+import static io.tinga.b3.protocol.topic.B3Topic.GLUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -13,7 +13,7 @@ import io.tinga.b3.protocol.TopicNameValidationException;
 
 public class TopicNameBuilderTest {
     String fakeId;
-    TopicNameFactory factory;
+    B3TopicFactory factory;
     String roleString;
     String customRoot;
     String defaultRoot;
@@ -22,7 +22,7 @@ public class TopicNameBuilderTest {
     void setUp() {
         Faker faker = new Faker();
 
-        factory = new BasicTopicNameFactory();
+        factory = new B3TopicFactoryImpl();
         fakeId = faker.lorem().word();
         customRoot = faker.lorem().word();
         roleString = faker.lorem().word();
@@ -31,9 +31,9 @@ public class TopicNameBuilderTest {
 
     @Test
     public void customBuilderWithLastGlueWordTest() {
-        factory = new BasicTopicNameFactory(customRoot + GLUE);
+        factory = new B3TopicFactoryImpl(customRoot + GLUE);
         String expectedResult = customRoot + "/agent/" + fakeId + "/shadow/reported";
-        TopicName topic = factory.root().agent(fakeId).shadow().reported();
+        B3Topic.Name topic = factory.root().agent(fakeId).shadow().reported();
         String result = topic.build();
 //        System.out.println(result);
         assertEquals(expectedResult, result);

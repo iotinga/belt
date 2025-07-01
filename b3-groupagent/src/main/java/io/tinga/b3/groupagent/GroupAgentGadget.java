@@ -18,9 +18,9 @@ import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowReportedPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
-import io.tinga.b3.protocol.topic.BasicTopicNameFactory;
+import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
-import io.tinga.b3.protocol.topic.TopicNameFactory;
+import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.belt.AbstractGadget;
 import io.tinga.belt.config.ConfigurationProvider;
 import io.tinga.belt.input.GadgetCommandOption;
@@ -52,7 +52,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
         })).to(GenericAgentProxy.class);
         bind(Key.get(new TypeLiteral<AgentProxy.Factory>() {
         })).to(AgentProxyFactoryImpl.class);
-        bind(TopicNameFactory.class).to(BasicTopicNameFactory.class);
+        bind(B3TopicFactory.class).to(B3TopicFactoryImpl.class);
 
         bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {
         })).to(GenericEdgeFirstShadowDesiredPolicy.class);
@@ -61,12 +61,12 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     }
 
     @Provides
-    public B3TopicRoot buildRootTopic(TopicNameFactory topicNameFactory) {
+    public B3TopicRoot buildRootTopic(B3TopicFactory topicNameFactory) {
         return topicNameFactory.root();
     }
 
     @Provides
-    public B3Topic buildAgentTopic(TopicNameFactory topicNameFactory, GroupAgentConfig config) {
+    public B3Topic buildAgentTopic(B3TopicFactory topicNameFactory, GroupAgentConfig config) {
         return topicNameFactory.root().agent(config.agentId());
     }
 
