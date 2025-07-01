@@ -14,8 +14,8 @@ public class RoleBasedPassthroughDesiredPolicy extends AbstractEntityShadowDesir
     @Inject
     public RoleBasedPassthroughDesiredPolicy(EntityOperationGrantsChecker checker,
             EntityOperationFactory operationFactory, VersionSafeExecutor executor,
-            EdgeDriver<GenericB3Message> fieldDriver, ITopicFactoryProxy topicFactory) {
-        super(checker, operationFactory, executor, fieldDriver, topicFactory);
+            EdgeDriver<GenericB3Message> edgeDriver, ITopicFactoryProxy topicFactory) {
+        super(checker, operationFactory, executor, edgeDriver, topicFactory);
     }
 
     @Override

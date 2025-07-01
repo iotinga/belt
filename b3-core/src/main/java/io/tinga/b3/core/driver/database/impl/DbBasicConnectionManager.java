@@ -1,4 +1,4 @@
-package io.tinga.b3.core.database.impl;
+package io.tinga.b3.core.driver.database.impl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,8 +9,8 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.tinga.b3.core.database.DbConfig;
-import io.tinga.b3.core.database.DbConnectionManager;
+import io.tinga.b3.core.driver.database.DbConfig;
+import io.tinga.b3.core.driver.database.DbConnectionManager;
 import jakarta.inject.Inject;
 
 public class DbBasicConnectionManager implements DbConnectionManager {

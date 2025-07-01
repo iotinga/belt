@@ -3,7 +3,7 @@ package io.tinga.b3.groupagent.driver;
 import java.util.Map;
 import com.google.inject.Inject;
 
-import io.tinga.b3.core.impl.AbstractFsmEdgeDriver;
+import io.tinga.b3.core.driver.AbstractFsmEdgeDriver;
 import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.groupagent.driver.states.EdgeDriverFsmConnected;
 import io.tinga.b3.groupagent.driver.states.EdgeDriverFsmDisconnected;

@@ -1,4 +1,4 @@
-package io.tinga.b3.core.connection.opcua.impl;
+package io.tinga.b3.core.driver.connection.opcua.impl;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,9 +22,9 @@ import org.eclipse.milo.opcua.stack.core.util.EndpointUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.tinga.b3.core.connection.ConnectionState;
-import io.tinga.b3.core.connection.opcua.OPCUAConnection;
-import io.tinga.b3.core.connection.opcua.OPCUAType;
+import io.tinga.b3.core.driver.ConnectionState;
+import io.tinga.b3.core.driver.connection.opcua.OPCUAConnection;
+import io.tinga.b3.core.driver.connection.opcua.OPCUAType;
 
 public class BasicOPCUAConnection implements OPCUAConnection {
 

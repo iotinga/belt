@@ -1,4 +1,4 @@
-package io.tinga.b3.core.impl;
+package io.tinga.b3.core.driver;
 
 import com.google.inject.Inject;
 

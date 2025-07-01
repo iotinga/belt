@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.core.impl.AbstractAgentCommandExecutor;
+import io.tinga.b3.core.agent.AbstractAgentCommandExecutor;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.belt.output.Status;

@@ -15,11 +15,11 @@ public abstract class SinkShadowReportedPolicy<M extends B3Message<?>> implement
     protected Topic<M> topic;
     protected M lastSentMessage;
 
-    protected final EdgeDriver<M> fieldDriver;
+    protected final EdgeDriver<M> edgeDriver;
 
     @Inject
-    public SinkShadowReportedPolicy(GadgetSink out, EdgeDriver<M> fieldDriver) {
-        this.fieldDriver = fieldDriver;
+    public SinkShadowReportedPolicy(GadgetSink out, EdgeDriver<M> edgeDriver) {
+        this.edgeDriver = edgeDriver;
         this.out = out;
     }
 
@@ -36,7 +36,7 @@ public abstract class SinkShadowReportedPolicy<M extends B3Message<?>> implement
 
     @Override
     public void bindTo(B3Topic topicName, String roleName) {
-        this.fieldDriver.subscribe(this);
+        this.edgeDriver.subscribe(this);
     }
     
 }

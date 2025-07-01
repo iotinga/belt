@@ -1,4 +1,4 @@
-package io.tinga.b3.core.connection;
+package io.tinga.b3.core.driver;
 
 public enum ConnectionState {
     CONNECTING,

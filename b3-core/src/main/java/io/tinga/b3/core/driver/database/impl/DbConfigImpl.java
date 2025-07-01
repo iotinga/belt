@@ -1,8 +1,8 @@
-package io.tinga.b3.core.database.impl;
+package io.tinga.b3.core.driver.database.impl;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import io.tinga.b3.core.database.DbConfig;
+import io.tinga.b3.core.driver.database.DbConfig;
 
 public class DbConfigImpl implements DbConfig {
 

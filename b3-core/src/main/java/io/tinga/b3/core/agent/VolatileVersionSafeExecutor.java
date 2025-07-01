@@ -1,4 +1,4 @@
-package io.tinga.b3.core.impl;
+package io.tinga.b3.core.agent;
 
 import io.tinga.b3.core.AgentInitException;
 import io.tinga.b3.protocol.topic.B3Topic;

@@ -1,4 +1,4 @@
-package io.tinga.b3.core.impl;
+package io.tinga.b3.core.driver;
 
 import it.netgrid.bauer.EventHandler;
 import it.netgrid.bauer.Topic;

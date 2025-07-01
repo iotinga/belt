@@ -26,9 +26,9 @@ public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirs
     @Inject
     public AbstractEntityShadowDesiredPolicy(EntityOperationGrantsChecker checker,
             EntityOperationFactory operationFactory, VersionSafeExecutor executor,
-            EdgeDriver<GenericB3Message> fieldDriver,
+            EdgeDriver<GenericB3Message> edgeDriver,
             ITopicFactoryProxy topicFactory) {
-        super(executor, fieldDriver, topicFactory);
+        super(executor, edgeDriver, topicFactory);
         this.checker = checker;
         this.operationFactory = operationFactory;
     }
@@ -48,7 +48,7 @@ public abstract class AbstractEntityShadowDesiredPolicy extends AbstractEdgeFirs
             if (result) {
                 log.info("[ ALLOW]: %s %s@%s -> %s", operation.message().getAction().name(), operation.role(),
                         operation.desiredTopic(), operation.reportedTopic());
-                this.fieldDriver.write(event);
+                this.edgeDriver.write(event);
                 return true;
             } else {
                 log.info("[REJECT]: %s %s@%s -> %s", operation.message().getAction().name(), operation.role(),

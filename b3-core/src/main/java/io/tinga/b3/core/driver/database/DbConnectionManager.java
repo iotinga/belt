@@ -1,4 +1,4 @@
-package io.tinga.b3.core.database;
+package io.tinga.b3.core.driver.database;
 
 import java.sql.Connection;
 

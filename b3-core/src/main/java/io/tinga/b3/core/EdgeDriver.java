@@ -1,6 +1,6 @@
 package io.tinga.b3.core;
 
-import io.tinga.b3.core.connection.ConnectionState;
+import io.tinga.b3.core.driver.ConnectionState;
 import io.tinga.b3.protocol.B3Message;
 import it.netgrid.bauer.EventHandler;
 

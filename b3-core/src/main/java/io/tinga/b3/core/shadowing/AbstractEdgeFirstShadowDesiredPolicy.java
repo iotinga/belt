@@ -21,16 +21,16 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
     private static final Logger log = LoggerFactory.getLogger(AbstractEdgeFirstShadowDesiredPolicy.class);
 
     protected final VersionSafeExecutor executor;
-    protected final EdgeDriver<M> fieldDriver;
+    protected final EdgeDriver<M> edgeDriver;
     protected final ITopicFactoryProxy topicFactory;
 
     protected Topic<M> topic;
 
     @Inject
-    public AbstractEdgeFirstShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<M> fieldDriver,
+    public AbstractEdgeFirstShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
             ITopicFactoryProxy topicFactory) {
         this.executor = executor;
-        this.fieldDriver = fieldDriver;
+        this.edgeDriver = edgeDriver;
         this.topicFactory = topicFactory;
     }
 
@@ -49,7 +49,7 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
             }
 
             try {
-                this.fieldDriver.write(event);
+                this.edgeDriver.write(event);
             } catch (EdgeDriverException e) {
                 log.warn(e.getMessage());
             }

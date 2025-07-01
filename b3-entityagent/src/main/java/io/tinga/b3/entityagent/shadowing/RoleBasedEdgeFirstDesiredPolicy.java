@@ -18,8 +18,8 @@ public class RoleBasedEdgeFirstDesiredPolicy extends AbstractEntityShadowDesired
     @Inject
     public RoleBasedEdgeFirstDesiredPolicy(EntityOperationGrantsChecker checker,
             EntityOperationFactory operationFactory, VersionSafeExecutor executor,
-            EdgeDriver<GenericB3Message> fieldDriver, ITopicFactoryProxy topicFactory) {
-        super(checker, operationFactory, executor, fieldDriver, topicFactory);
+            EdgeDriver<GenericB3Message> edgeDriver, ITopicFactoryProxy topicFactory) {
+        super(checker, operationFactory, executor, edgeDriver, topicFactory);
     }
 
     private static final Logger log = LoggerFactory.getLogger(RoleBasedEdgeFirstDesiredPolicy.class);

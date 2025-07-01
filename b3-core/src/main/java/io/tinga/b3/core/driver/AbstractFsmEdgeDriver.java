@@ -1,4 +1,4 @@
-package io.tinga.b3.core.impl;
+package io.tinga.b3.core.driver;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.EdgeDriverException;
-import io.tinga.b3.core.connection.ConnectionState;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import it.netgrid.bauer.EventHandler;
@@ -58,7 +57,7 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
     protected abstract State<E, M> get(E state);
 
     /**
-     * Field Driver Interface ------------------------------------
+     * Edge Driver Interface ------------------------------------
      */
     @Override
     public void connect() {

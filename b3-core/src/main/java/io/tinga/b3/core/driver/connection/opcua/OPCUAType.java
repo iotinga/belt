@@ -1,4 +1,4 @@
-package io.tinga.b3.core.connection.opcua;
+package io.tinga.b3.core.driver.connection.opcua;
 
 public enum OPCUAType {
     UINT32,

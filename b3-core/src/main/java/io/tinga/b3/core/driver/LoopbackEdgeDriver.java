@@ -1,4 +1,4 @@
-package io.tinga.b3.core.impl;
+package io.tinga.b3.core.driver;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.EdgeDriverException;
-import io.tinga.b3.core.connection.ConnectionState;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import it.netgrid.bauer.EventHandler;

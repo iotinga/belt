@@ -1,6 +1,6 @@
-package io.tinga.b3.core.connection.opcua;
+package io.tinga.b3.core.driver.connection.opcua;
 
-import io.tinga.b3.core.connection.Connection;
+import io.tinga.b3.core.driver.Connection;
 
 public interface OPCUAConnection extends Connection {
     Object readVariable(int namespace, String identifier) throws Exception;

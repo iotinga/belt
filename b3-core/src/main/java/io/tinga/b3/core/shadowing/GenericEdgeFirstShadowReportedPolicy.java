@@ -10,9 +10,9 @@ import io.tinga.b3.protocol.GenericB3Message;
 public class GenericEdgeFirstShadowReportedPolicy extends AbstractEdgeFirstShadowReportedPolicy<GenericB3Message> {
 
     @Inject
-    public GenericEdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<GenericB3Message> fieldDriver,
+    public GenericEdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<GenericB3Message> edgeDriver,
             ITopicFactoryProxy topicFactory) {
-        super(executor, fieldDriver, topicFactory);
+        super(executor, edgeDriver, topicFactory);
     }
 
     @Override

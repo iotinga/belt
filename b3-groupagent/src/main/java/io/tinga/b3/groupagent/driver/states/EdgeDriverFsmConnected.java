@@ -13,9 +13,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import io.tinga.b3.core.AgentProxy;
-import io.tinga.b3.core.connection.ConnectionState;
-import io.tinga.b3.core.impl.AbstractFsmEdgeDriver;
-import io.tinga.b3.core.impl.AbstractFsmEdgeDriver.Context;
+import io.tinga.b3.core.driver.AbstractFsmEdgeDriver;
+import io.tinga.b3.core.driver.ConnectionState;
+import io.tinga.b3.core.driver.AbstractFsmEdgeDriver.Context;
 import io.tinga.b3.core.shadowing.ShadowDesiredPreProcessor;
 import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;

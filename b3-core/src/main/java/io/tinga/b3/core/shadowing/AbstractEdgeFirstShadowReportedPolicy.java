@@ -18,7 +18,7 @@ public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<
     private static final Logger log = LoggerFactory.getLogger(AbstractEdgeFirstShadowReportedPolicy.class);
 
     protected final VersionSafeExecutor executor;
-    protected final EdgeDriver<M> fieldDriver;
+    protected final EdgeDriver<M> edgeDriver;
     protected final ITopicFactoryProxy topicFactory;
 
     private Topic<M> topic;
@@ -26,17 +26,17 @@ public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<
     private M lastSentMessage;
 
     @Inject
-    public AbstractEdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<M> fieldDriver,
+    public AbstractEdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
             ITopicFactoryProxy topicFactory) {
         this.executor = executor;
-        this.fieldDriver = fieldDriver;
+        this.edgeDriver = edgeDriver;
         this.topicFactory = topicFactory;
     }
 
     @Override
     public void bindTo(B3Topic topicName, String roleName) {
         this.topic = this.topicFactory.getTopic(topicName.shadow().reported(), true);
-        this.fieldDriver.subscribe(this);
+        this.edgeDriver.subscribe(this);
     }
 
     @Override
