@@ -19,6 +19,10 @@ public interface Agent<M extends B3Message<?>> {
         String agentId();
     }
 
+    interface LocalShadowingConfig {
+        String getReportedStoreRef();
+    }
+
     void bindTo(B3Topic topicName, String roleName);
 
     B3Topic getBoundTopicName();

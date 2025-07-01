@@ -1,4 +1,4 @@
-package io.tinga.b3.entityagent.desired;
+package io.tinga.b3.core.shadowing.desired;
 
 import io.tinga.b3.protocol.GenericB3Message;
 

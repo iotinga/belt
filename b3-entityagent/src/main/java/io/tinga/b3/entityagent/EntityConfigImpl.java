@@ -41,11 +41,6 @@ public class EntityConfigImpl implements EntityConfig {
     }
 
     @Override
-    public int getRetainedStoreWaitOnInitMillis() {
-        return retainedStoreWaitOnInitMillis;
-    }
-
-    @Override
     public String getJsonSchemaBasePath() {
         return this.jsonSchemaBasePath;
     }

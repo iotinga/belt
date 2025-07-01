@@ -1,4 +1,4 @@
-package io.tinga.b3.entityagent.reported;
+package io.tinga.b3.core.shadowing.reported;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,13 +10,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
-import io.tinga.b3.entityagent.EntityConfig;
+import io.tinga.b3.core.Agent.LocalShadowingConfig;
 import io.tinga.b3.protocol.GenericB3Message;
 
 public class ReportedFromFileReadOnlyStore implements ReportedStore {
 
     @Inject
-    private EntityConfig config;
+    private LocalShadowingConfig config;
 
     @Inject
     private ObjectMapper om;

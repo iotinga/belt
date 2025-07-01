@@ -1,4 +1,4 @@
-package io.tinga.b3.entityagent.desired;
+package io.tinga.b3.core.shadowing.desired;
 
 import java.io.FileInputStream;
 import java.io.IOException;

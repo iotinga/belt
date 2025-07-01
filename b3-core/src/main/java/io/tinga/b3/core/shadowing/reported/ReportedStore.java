@@ -1,4 +1,4 @@
-package io.tinga.b3.entityagent.reported;
+package io.tinga.b3.core.shadowing.reported;
 
 import java.util.concurrent.Future;
 

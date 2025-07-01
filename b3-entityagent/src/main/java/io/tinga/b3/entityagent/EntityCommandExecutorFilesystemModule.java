@@ -11,16 +11,16 @@ import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.shadowing.SinkShadowReportedPolicy;
-import io.tinga.b3.entityagent.desired.DesiredGenericB3MessageFromFileProvider;
-import io.tinga.b3.entityagent.desired.DesiredGenericB3MessageProvider;
-import io.tinga.b3.entityagent.desired.DesiredGenericB3MessageStdinProvider;
+import io.tinga.b3.core.shadowing.desired.DesiredGenericB3MessageFromFileProvider;
+import io.tinga.b3.core.shadowing.desired.DesiredGenericB3MessageProvider;
+import io.tinga.b3.core.shadowing.desired.DesiredGenericB3MessageStdinProvider;
+import io.tinga.b3.core.shadowing.reported.ReportedFromFileReadOnlyStore;
+import io.tinga.b3.core.shadowing.reported.ReportedStore;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaFromFileProvider;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.entityagent.operation.EntityOperationGrantsChecker;
 import io.tinga.b3.entityagent.operation.EntityOperationJsonSchemaChecker;
-import io.tinga.b3.entityagent.reported.ReportedFromFileReadOnlyStore;
-import io.tinga.b3.entityagent.reported.ReportedStore;
 
 public class EntityCommandExecutorFilesystemModule extends AbstractModule {
 

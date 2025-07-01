@@ -1,6 +1,8 @@
 package io.tinga.b3.entityagent;
 
-public interface EntityConfig {
+import io.tinga.b3.core.Agent;
+
+public interface EntityConfig extends Agent.LocalShadowingConfig {
 
     public static String ENTITY_REPORTED_TOPIC_FILTER = "REPORTED_TOPIC_FILTER";
     public static String ENTITY_MQTT_PAYLOAD_SHADOW_KEY = "MQTT_PAYLOAD_SHADOW_KEY";
@@ -12,10 +14,8 @@ public interface EntityConfig {
     public static String ENTITY_REPORTED_STORE_REF = "REPORTED_STORE_REF";
 
     public boolean isJsonSchemaCacheEnabled();
-    public String getReportedStoreRef();
     public String getJsonSchemaBasePath();
     public String getReportedTopicFilter();
     public String getDesiredTopicFilter();
-    public int getRetainedStoreWaitOnInitMillis();
 
 }
