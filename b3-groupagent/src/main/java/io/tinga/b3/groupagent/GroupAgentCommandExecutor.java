@@ -15,7 +15,7 @@ public class GroupAgentCommandExecutor extends AbstractAgentCommandExecutor<Gene
     public GroupAgentCommandExecutor(B3Topic topicName, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> driver) {
-        super(agentTopic, reportedPolicy, desiredPolicy, executor, driver);
+        super(topicName, reportedPolicy, desiredPolicy, executor, driver);
     }
 
     @Override

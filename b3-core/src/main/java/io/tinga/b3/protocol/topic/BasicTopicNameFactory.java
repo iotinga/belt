@@ -28,7 +28,7 @@ public class BasicTopicNameFactory implements TopicNameFactory, B3TopicRoot {
     }
 
     @Override
-    public B3Topic topicName(String id) {
+    public B3Topic agent(String id) {
         if (id.contains(GLUE)) {
             throw new TopicNameValidationException("invalid char");
         }

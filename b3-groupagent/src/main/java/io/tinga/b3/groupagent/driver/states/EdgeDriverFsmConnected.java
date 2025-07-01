@@ -144,7 +144,7 @@ public class EdgeDriverFsmConnected
     private synchronized void updateShadowReported(B3Topic topicName, GenericB3Message message) {
         Context<GenericB3Message> context = this.contextOnEnterState;
         if (context != null) {
-            String shadowSectionName = this.getFragmentNameFor(agent);
+            String shadowSectionName = this.getFragmentNameFor(topicName);
             this.currentShadowReported.set(shadowSectionName, message.getBody());
             ObjectNode shadowReportedCopy = this.currentShadowReported.deepCopy();
             GenericB3Message newShadowMessage = new GenericB3Message(null, 0, 0, Action.PUT, Status.ACCEPTED,
@@ -181,7 +181,7 @@ public class EdgeDriverFsmConnected
 
     /** Support Methods */
     private String getFragmentNameFor(B3Topic topicName) {
-        return agentTopic.getId();
+        return topicName.getId();
     }
 
     @Override
