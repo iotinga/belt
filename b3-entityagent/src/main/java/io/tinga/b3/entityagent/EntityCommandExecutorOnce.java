@@ -31,7 +31,8 @@ public class EntityCommandExecutorOnce extends AbstractAgentCommandExecutor<Enti
     public Status execute(EntityCommand command) {
         EntityMessage message = provider.load(command.desiredRef());
         try {
-            this.desiredPolicy.handle(command.topic(), message);
+            String topicName = getBoundAgentTopic().shadow().desired(command.role()).build();
+            this.desiredPolicy.handle(topicName, message);
             return Status.OK;
         } catch (Exception e) {
             log.error("Unexpected error occurred during message processing", e);

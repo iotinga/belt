@@ -40,6 +40,7 @@ public class EntityGadget extends AbstractGadget<EntityCommand> {
         bind(JsonSchemaFactory.class).toInstance(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7));
         bind(EntityOperationFactory.class).to(EntityOperationTopicBasedFactory.class);
         bind(B3MessageValidator.class).to(B3MessageVersionBasedValidator.class);
+
     }
 
     @Override

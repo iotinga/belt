@@ -9,7 +9,7 @@ public class EntityCommand implements Gadget.Command<EntityCommandAction> {
 
     public static final String REPORTED_REF_OPT = "r";
     public static final String DESIRED_REF_OPT = "d";
-    public static final String TOPIC_OPT = "t";
+    public static final String ROLE_OPT = "r";
     public static final String SCHEMA_BASE_DIR_OPT = "s";
     public static final String MODE_OPT = "m";
 
@@ -22,21 +22,25 @@ public class EntityCommand implements Gadget.Command<EntityCommandAction> {
     @JsonProperty(DESIRED_REF_OPT)
     private String desiredRef;
 
-    @JsonProperty(TOPIC_OPT)
-    private String topic;
+    @JsonProperty(ROLE_OPT)
+    private String role;
 
     @JsonProperty(SCHEMA_BASE_DIR_OPT)
     private String schemaBaseDir;
 
     public EntityCommand() {}
 
-    public EntityCommand(String reportedRef, String desiredRef, String topic, String schemaBaseDir,
+    public EntityCommand(String reportedRef, String desiredRef, String schemaBaseDir, String role,
             EntityCommandAction action) {
         this.reportedRef = reportedRef;
         this.desiredRef = desiredRef;
-        this.topic = topic;
         this.schemaBaseDir = schemaBaseDir;
         this.action = action;
+        this.role = role;
+    }
+
+    public String role() {
+        return role;
     }
 
     public String reportedRef() {
@@ -45,10 +49,6 @@ public class EntityCommand implements Gadget.Command<EntityCommandAction> {
 
     public String desiredRef() {
         return this.desiredRef;
-    };
-
-    public String topic() {
-        return this.topic;
     };
 
     public String schemaBaseDir() {
