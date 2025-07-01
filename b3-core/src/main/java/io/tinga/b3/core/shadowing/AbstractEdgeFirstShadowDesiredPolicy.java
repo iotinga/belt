@@ -13,7 +13,7 @@ import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 import it.netgrid.bauer.Topic;
 
 public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?>> implements Agent.ShadowDesiredPolicy<M> {
@@ -65,8 +65,8 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
     }
 
     @Override
-    public void bindTo(AgentTopic agent, String roleName) {
-        this.topic = this.topicFactory.getTopic(agent.shadow().desired("#"), false);
+    public void bindTo(B3Topic topicName, String roleName) {
+        this.topic = this.topicFactory.getTopic(topicName.shadow().desired("#"), false);
         this.topic.addHandler(this);
     }
 

@@ -10,7 +10,7 @@ import com.google.inject.TypeLiteral;
 
 import io.tinga.b3.core.AgentProxy;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 
 public class AgentProxyFactoryImpl implements AgentProxy.Factory {
 
@@ -25,21 +25,21 @@ public class AgentProxyFactoryImpl implements AgentProxy.Factory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <M extends B3Message<?>> AgentProxy<M> getProxy(AgentTopic agent, String roleName) {
-        String cacheKey = this.buildCacheEntryKey(agent, roleName);
+    public <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic topicName, String roleName) {
+        String cacheKey = this.buildCacheEntryKey(topicName, roleName);
         AgentProxy<M> cacheItem = (AgentProxy<M>) this.cache.get(cacheKey);
         if (cacheItem == null) {
             cacheItem = this.injector.getInstance(Key.get(new TypeLiteral<AgentProxy<M>>() {
             }));
-            cacheItem.bindTo(agent, roleName);
+            cacheItem.bindTo(topicName, roleName);
             this.cache.put(cacheKey, (AgentProxy<B3Message<?>>) cacheItem);
         }
 
         return cacheItem;
     }
 
-    private String buildCacheEntryKey(AgentTopic agent, String desiredRole) {
-        return agent.toString() + "_" + desiredRole;
+    private String buildCacheEntryKey(B3Topic topicName, String desiredRole) {
+        return topicName.toString() + "_" + desiredRole;
     }
 
 }

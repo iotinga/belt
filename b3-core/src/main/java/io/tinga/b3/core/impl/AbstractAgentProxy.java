@@ -9,7 +9,7 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.AgentProxy;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public abstract class AbstractAgentProxy<M extends B3Message<?>> implements AgentProxy<M> {
     private static final Logger log = LoggerFactory.getLogger(AbstractAgentProxy.class);
 
-    private AgentTopic agentTopic;
+    private B3Topic topicName;
     private String roleName;
     private Topic<M> desiredTopic;
     private Topic<M> reportedTopic;
@@ -33,13 +33,13 @@ public abstract class AbstractAgentProxy<M extends B3Message<?>> implements Agen
     }
 
     @Override
-    public synchronized void bindTo(AgentTopic agent, String roleName) {
+    public synchronized void bindTo(B3Topic topicName, String roleName) {
         if (desiredTopic == null && this.reportedTopic == null) {
-            this.agentTopic = agent;
+            this.topicName = topicName;
             this.roleName = roleName;
             this.desiredTopic = topicFactoryProxy
-                    .getTopic(agent.shadow().desired(roleName), true);
-            this.reportedTopic = topicFactoryProxy.getTopic(agent.shadow().reported(), false);
+                    .getTopic(topicName.shadow().desired(roleName), true);
+            this.reportedTopic = topicFactoryProxy.getTopic(topicName.shadow().reported(), false);
             this.reportedTopic.addHandler(this);
         }
     }
@@ -67,8 +67,8 @@ public abstract class AbstractAgentProxy<M extends B3Message<?>> implements Agen
     }
 
     @Override
-    public AgentTopic getBoundAgentTopic() {
-        return this.agentTopic;
+    public B3Topic getBoundTopicName() {
+        return this.topicName;
     }
 
     @Override

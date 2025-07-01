@@ -17,9 +17,9 @@ import io.tinga.b3.core.impl.SingletonsITopicFactoryProxy;
 import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowReportedPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.BasicTopicNameFactory;
-import io.tinga.b3.protocol.topic.RootTopic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.b3.protocol.topic.TopicNameFactory;
 import io.tinga.belt.AbstractGadget;
 import io.tinga.belt.config.ConfigurationProvider;
@@ -61,12 +61,12 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     }
 
     @Provides
-    public RootTopic buildRootTopic(TopicNameFactory topicNameFactory) {
+    public B3TopicRoot buildRootTopic(TopicNameFactory topicNameFactory) {
         return topicNameFactory.root();
     }
 
     @Provides
-    public AgentTopic buildAgentTopic(TopicNameFactory topicNameFactory, GroupAgentConfig config) {
+    public B3Topic buildAgentTopic(TopicNameFactory topicNameFactory, GroupAgentConfig config) {
         return topicNameFactory.root().agent(config.agentId());
     }
 

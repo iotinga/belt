@@ -11,7 +11,7 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.core.connection.ConnectionState;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 import it.netgrid.bauer.EventHandler;
 
 public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
@@ -42,16 +42,16 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
     }
 
     private final List<EventHandler<M>> subscribers;
-    private final AgentTopic agentTopic;
+    private final B3Topic topicName;
     private final String shadowReportedTopic;
 
     private Context<M> currentContext;
     private State<E, M> state;
 
-    public AbstractFsmEdgeDriver(AgentTopic agentTopic) {
+    public AbstractFsmEdgeDriver(B3Topic topicName) {
         this.subscribers = new CopyOnWriteArrayList<>();
-        this.agentTopic = agentTopic;
-        this.shadowReportedTopic = this.agentTopic.shadow().reported().build();
+        this.topicName = topicName;
+        this.shadowReportedTopic = this.topicName.shadow().reported().build();
     }
 
     protected abstract State<E, M> buildInitialState();

@@ -2,7 +2,7 @@ package io.tinga.b3.core;
 
 import java.util.function.Function;
 
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 
 
 public interface VersionSafeExecutor {
@@ -11,6 +11,6 @@ public interface VersionSafeExecutor {
     public interface CriticalSection extends Function<Function<Boolean, Integer>, Void> {
     }
 
-    void initVersion(AgentTopic agentTopic) throws AgentInitException;
+    void initVersion(B3Topic topicName) throws AgentInitException;
     void safeExecute(CriticalSection versionCriticalSection) throws AgentInitException;
 }

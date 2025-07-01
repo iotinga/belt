@@ -7,7 +7,7 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.AgentInitException;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.output.Status;
 
@@ -32,11 +32,11 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
 
     protected final VersionSafeExecutor executor;
 
-    private AgentTopic agentTopic;
+    private B3Topic topicName;
     private String roleName;
 
     @Inject
-    public AbstractAgentCommandExecutor(AgentTopic agentTopic,
+    public AbstractAgentCommandExecutor(B3Topic topicName,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
             Agent.ShadowDesiredPolicy<M> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<M> driver) {
@@ -47,10 +47,10 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
     }
 
     @Override
-    public synchronized void bindTo(AgentTopic agent, String roleName) {
-        this.agentTopic = agent;
+    public synchronized void bindTo(B3Topic topicName, String roleName) {
+        this.topicName = topicName;
         this.roleName = roleName;
-        this.executor.initVersion(agent);
+        this.executor.initVersion(topicName);
         this.executor.safeExecute(version -> {
 
             Integer currentVersion = null;
@@ -73,8 +73,8 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
             }
 
             if (keepGoing) {
-                this.reportedPolicy.bindTo(agent, roleName);
-                this.desiredPolicy.bindTo(agent, roleName);
+                this.reportedPolicy.bindTo(topicName, roleName);
+                this.desiredPolicy.bindTo(topicName, roleName);
                 this.driver.connect();
             }
             return null;
@@ -90,7 +90,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
             public Status get() {
                 Status retval = Status.OK;
                 try {
-                    bindTo(agentTopic, "#");
+                    bindTo(topicName, "#");
                     retval = execute(command);
                     while (keepAlive()) {
                         try {
@@ -117,8 +117,8 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
     public abstract Status execute(C command);
 
     @Override
-    public AgentTopic getBoundAgentTopic() {
-        return this.agentTopic;
+    public B3Topic getBoundTopicName() {
+        return this.topicName;
     }
 
     @Override
@@ -126,8 +126,8 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
         return this.roleName;
     }
 
-    protected AgentTopic getAgentTopic() {
-        return agentTopic;
+    protected B3Topic getTopicName() {
+        return topicName;
     }
 
     protected String getRoleName() {

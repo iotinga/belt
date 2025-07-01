@@ -2,7 +2,12 @@ package io.tinga.b3.protocol.topic;
 
 import io.tinga.b3.protocol.TopicNameValidationException;
 
-public interface AgentTopic {
+public interface B3Topic {
+
+    public enum Category {
+        AGENT,
+        ENTITY
+    }
 
     interface Shadow {
         interface Reported extends TopicName {
@@ -47,6 +52,8 @@ public interface AgentTopic {
 
     String getId();
 
+    Category getCategory();
+
     Shadow shadow();
 
     Command command();
@@ -54,4 +61,3 @@ public interface AgentTopic {
     Command.Role command(String role) throws TopicNameValidationException;
 
 }
-

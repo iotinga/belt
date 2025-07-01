@@ -12,7 +12,7 @@ import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.impl.AbstractAgentCommandExecutor;
 import io.tinga.b3.entityagent.desired.DesiredEntityMessageProvider;
 import io.tinga.b3.entityagent.operation.EntityMessage;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 
 public class EntityCommandExecutorOnce extends AbstractAgentCommandExecutor<EntityMessage, EntityCommand> {
 
@@ -21,17 +21,17 @@ public class EntityCommandExecutorOnce extends AbstractAgentCommandExecutor<Enti
     @Inject
     private DesiredEntityMessageProvider provider;
 
-    public EntityCommandExecutorOnce(AgentTopic agentTopic, ShadowReportedPolicy<EntityMessage> reportedPolicy,
+    public EntityCommandExecutorOnce(B3Topic topicName, ShadowReportedPolicy<EntityMessage> reportedPolicy,
             ShadowDesiredPolicy<EntityMessage> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<EntityMessage> driver) {
-        super(agentTopic, reportedPolicy, desiredPolicy, executor, driver);
+        super(topicName, reportedPolicy, desiredPolicy, executor, driver);
     }
 
     @Override
     public Status execute(EntityCommand command) {
         EntityMessage message = provider.load(command.desiredRef());
         try {
-            String topicName = getBoundAgentTopic().shadow().desired(command.role()).build();
+            String topicName = getBoundTopicName().shadow().desired(command.role()).build();
             this.desiredPolicy.handle(topicName, message);
             return Status.OK;
         } catch (Exception e) {

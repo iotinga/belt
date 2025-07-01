@@ -5,18 +5,34 @@ import java.util.List;
 
 import io.tinga.b3.protocol.TopicNameValidationException;
 
-class EntityTopicNameElement implements EntityTopic, EntityTopic.Shadow, EntityTopic.Shadow.Desired,
-        EntityTopic.Shadow.Desired.Role, EntityTopic.Shadow.Reported, EntityTopic.Command, EntityTopic.Command.Role {
+class TopicNameElement implements B3Topic, B3Topic.Command, B3Topic.Command.Role,
+        B3Topic.Shadow.Desired, B3Topic.Shadow.Desired.Role, B3Topic.Shadow.Desired.Batch,
+        B3Topic.Shadow.Desired.Batch.Role, B3Topic.Shadow, B3Topic.Shadow.Reported,
+        B3Topic.Shadow.Reported.Batch, B3Topic.Shadow.Reported.Live {
 
     private final String id;
     private final List<String> stack;
+    private final Category category;
 
-    public EntityTopicNameElement(String root, String id) {
+    public TopicNameElement(String root, Category category, String id) {
+        this.id = id;
+        this.category = category;
         this.stack = new ArrayList<>();
         this.stack.add(root);
-        this.stack.add("entity");
+        this.stack.add(category.name().toLowerCase());
         this.stack.add(id);
-        this.id = id;
+    }
+
+    @Override
+    public Live live() {
+        this.stack.add("live");
+        return this;
+    }
+
+    @Override
+    public Reported.Batch batch() {
+        this.stack.add("batch");
+        return this;
     }
 
     @Override
@@ -42,6 +58,12 @@ class EntityTopicNameElement implements EntityTopic, EntityTopic.Shadow, EntityT
     }
 
     @Override
+    public Reported reported() {
+        this.stack.add("reported");
+        return this;
+    }
+
+    @Override
     public Desired desired() {
         this.stack.add("desired");
         return this;
@@ -58,8 +80,12 @@ class EntityTopicNameElement implements EntityTopic, EntityTopic.Shadow, EntityT
     }
 
     @Override
-    public Reported reported() {
-        this.stack.add("reported");
+    public Desired.Batch.Role batch(String role) {
+        this.stack.add("batch");
+        if (role.contains(GLUE)) {
+            throw new TopicNameValidationException("invalid char");
+        }
+        this.stack.add(role);
         return this;
     }
 
@@ -86,6 +112,11 @@ class EntityTopicNameElement implements EntityTopic, EntityTopic.Shadow, EntityT
 
         String current = this.build();
         return topic.startsWith(current);
+    }
+
+    @Override
+    public Category getCategory() {
+        return this.category;
     }
 
 }

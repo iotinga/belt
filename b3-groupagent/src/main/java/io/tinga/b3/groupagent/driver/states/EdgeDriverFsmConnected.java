@@ -22,8 +22,8 @@ import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.protocol.Action;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.AgentTopic;
-import io.tinga.b3.protocol.topic.RootTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.belt.output.Status;
 import it.netgrid.bauer.EventHandler;
 
@@ -37,18 +37,18 @@ public class EdgeDriverFsmConnected
     private final ShadowReportedPostProcessor<GenericB3Message> reportedPostProcessor;
     private final GroupAgentConfig config;
     private final AgentProxy.Factory factory;
-    private final RootTopic topicsRoot;
+    private final B3TopicRoot topicsRoot;
     private final ObjectNode currentShadowReported;
 
-    private final Map<AgentTopic, AgentProxy<GenericB3Message>> membersProxies = new HashMap<>();
-    private final Map<String, AgentTopic> fragNameMember = new HashMap<>();
+    private final Map<B3Topic, AgentProxy<GenericB3Message>> membersProxies = new HashMap<>();
+    private final Map<String, B3Topic> fragNameMember = new HashMap<>();
 
     private ConnectionState connectionState;
     private Context<GenericB3Message> contextOnEnterState;
 
     @Inject
     public EdgeDriverFsmConnected(GroupAgentConfig config,
-            AgentProxy.Factory factory, RootTopic topicsRoot, ObjectMapper om,
+            AgentProxy.Factory factory, B3TopicRoot topicsRoot, ObjectMapper om,
             ShadowDesiredPreProcessor<GenericB3Message> desiredPreProc,
             ShadowReportedPostProcessor<GenericB3Message> reportedPostProc) {
         this.connectionState = ConnectionState.CONNECTING;
@@ -105,7 +105,7 @@ public class EdgeDriverFsmConnected
         if (membersProxies.size() < 1)
             for (String memberAgentId : config.members()) {
                 final EdgeDriverFsmConnected fsmState = this;
-                final AgentTopic member = topicsRoot.agent(memberAgentId);
+                final B3Topic member = topicsRoot.agent(memberAgentId);
                 AgentProxy<GenericB3Message> memberProxy = factory.getProxy(member,
                         config.roleInMembers());
                 memberProxy.subscribe(new EventHandler<GenericB3Message>() {
@@ -141,7 +141,7 @@ public class EdgeDriverFsmConnected
         this.connectionState = ConnectionState.DISCONNECTED;
     }
 
-    private synchronized void updateShadowReported(AgentTopic agent, GenericB3Message message) {
+    private synchronized void updateShadowReported(B3Topic topicName, GenericB3Message message) {
         Context<GenericB3Message> context = this.contextOnEnterState;
         if (context != null) {
             String shadowSectionName = this.getFragmentNameFor(agent);
@@ -167,7 +167,7 @@ public class EdgeDriverFsmConnected
         while (keys.hasNext()) {
             String key = keys.next();
 
-            AgentTopic member = this.fragNameMember.get(key);
+            B3Topic member = this.fragNameMember.get(key);
             if (member != null) {
                 ObjectNode memberFragment = newShadowDesired.get(key).deepCopy();
                 GenericB3Message memberDesiredMessage = new GenericB3Message(desiredMessage.getTimestamp(),
@@ -180,7 +180,7 @@ public class EdgeDriverFsmConnected
     }
 
     /** Support Methods */
-    private String getFragmentNameFor(AgentTopic agentTopic) {
+    private String getFragmentNameFor(B3Topic topicName) {
         return agentTopic.getId();
     }
 

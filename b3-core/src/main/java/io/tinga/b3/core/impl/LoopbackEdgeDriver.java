@@ -9,20 +9,20 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.core.connection.ConnectionState;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 import it.netgrid.bauer.EventHandler;
 
 public class LoopbackEdgeDriver<M extends B3Message<?>> implements EdgeDriver<M> {
 
     private final List<EventHandler<M>> subscribers;
-    private final AgentTopic agentTopic;
+    private final B3Topic topicName;
     private final String shadowReportedTopic;
 
     @Inject
-    public LoopbackEdgeDriver(AgentTopic agentTopic) {
+    public LoopbackEdgeDriver(B3Topic topicName) {
         this.subscribers = new CopyOnWriteArrayList<>();
-        this.agentTopic = agentTopic;
-        this.shadowReportedTopic = this.agentTopic.shadow().reported().build();
+        this.topicName = topicName;
+        this.shadowReportedTopic = this.topicName.shadow().reported().build();
     }
 
     @Override

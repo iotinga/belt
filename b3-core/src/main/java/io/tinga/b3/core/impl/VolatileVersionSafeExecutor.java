@@ -1,7 +1,7 @@
 package io.tinga.b3.core.impl;
 
 import io.tinga.b3.core.AgentInitException;
-import io.tinga.b3.protocol.topic.AgentTopic;
+import io.tinga.b3.protocol.topic.B3Topic;
 
 /**
  * This VersionSafeExecutor requires always a fresh topic creation from the ITopicFactory without the retain
@@ -10,7 +10,7 @@ import io.tinga.b3.protocol.topic.AgentTopic;
 public class VolatileVersionSafeExecutor extends AbstracVersionSafeExecutor {
 
     @Override
-    public void initVersion(AgentTopic agentTopic) throws AgentInitException {
+    public void initVersion(B3Topic topicName) throws AgentInitException {
         if (!this.isInitialized()) {
             this.initCurrentReportedVersion(1);
         }
