@@ -18,17 +18,7 @@
     </properties>
 
     <dependencies>
-
-
-
-        <!-- JSON Schema -->
-        <dependency>
-            <groupId>com.networknt</groupId>
-            <artifactId>json-schema-validator</artifactId>
-            <version>${version.json-schema-validator}</version>
-        </dependency>
-
-        
+       
         <dependency>
             <groupId>io.tinga.belt</groupId>
             <artifactId>b3-core</artifactId>

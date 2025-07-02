@@ -48,6 +48,8 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
         this.driver = driver;
     }
 
+    public abstract Status execute(C command);
+
     @Override
     public synchronized void bindTo(B3Topic topicName, String roleName) {
         this.topicName = topicName;
@@ -115,8 +117,6 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     protected boolean keepAlive() {
         return !Thread.currentThread().isInterrupted();
     }
-
-    public abstract Status execute(C command);
 
     @Override
     public B3Topic getBoundTopicName() {

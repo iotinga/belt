@@ -23,6 +23,8 @@ import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.core.protocol.TestB3TopicFactory;
+import io.tinga.b3.core.shadowing.operation.OperationFactory;
+import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.TopicNameValidationException;
 import io.tinga.b3.protocol.topic.B3Topic;
@@ -43,6 +45,10 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     ITopicFactoryProxy factoryProxy;
     @Mock
     Topic<GenericB3Message> topic;
+    @Mock
+    OperationFactory operationFactory;
+    @Mock
+    OperationGrantsChecker<GenericB3Message> checker;
     @Spy
     B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
 
@@ -54,7 +60,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
                 GenericB3Message.class,
                 executor,
                 driver,
-                factoryProxy);
+                factoryProxy, operationFactory, checker);
     }
 
     @Test

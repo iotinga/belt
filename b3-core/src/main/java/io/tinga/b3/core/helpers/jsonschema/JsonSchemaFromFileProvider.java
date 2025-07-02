@@ -1,4 +1,4 @@
-package io.tinga.b3.entityagent.jsonschema;
+package io.tinga.b3.core.helpers.jsonschema;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,8 +15,6 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 
-import io.tinga.b3.entityagent.EntityAgentConfig;
-
 public class JsonSchemaFromFileProvider implements JsonSchemaProvider {
 
     private final static Logger log = LoggerFactory.getLogger(JsonSchemaFromFileProvider.class);
@@ -24,14 +22,14 @@ public class JsonSchemaFromFileProvider implements JsonSchemaProvider {
     private static final String PATH_FORMAT = "%s/%s.json";
 
     @Inject
-    private EntityAgentConfig config;
+    private JsonSchemaConfig config;
 
     @Inject
     private ObjectMapper om;
 
     @Inject
     private JsonSchemaFactory factory;
-    
+
     private final Map<String, JsonSchema> cache = new HashMap<>();
 
     @Override
@@ -43,7 +41,7 @@ public class JsonSchemaFromFileProvider implements JsonSchemaProvider {
                 InputStream schemaInputStream = new FileInputStream(schemaFilePath);
                 JsonNode jsonSchemaNode = this.om.readTree(schemaInputStream);
                 schema = this.factory.getSchema(jsonSchemaNode);
-                if(this.config.isJsonSchemaCacheEnabled()) {
+                if (this.config.isJsonSchemaCacheEnabled()) {
                     this.updateCache(topic, schema);
                 }
             } catch (IOException e) {

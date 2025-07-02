@@ -7,14 +7,14 @@ import com.google.inject.TypeLiteral;
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.helpers.B3MessageProvider;
-import io.tinga.b3.core.helpers.B3MessageResourcesProvider;
-import io.tinga.b3.core.helpers.B3MessageStdinProvider;
+import io.tinga.b3.core.helpers.ResourcesB3MessageProvider;
+import io.tinga.b3.core.helpers.StdinB3MessageProvider;
+import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
+import io.tinga.b3.core.helpers.jsonschema.JsonSchemaResourcesProvider;
 import io.tinga.b3.core.shadowing.SinkShadowReportedPolicy;
-import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
-import io.tinga.b3.entityagent.jsonschema.JsonSchemaResourcesProvider;
+import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
+import io.tinga.b3.core.shadowing.operation.OperationJsonSchemaChecker;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.entityagent.operation.OperationGrantsChecker;
-import io.tinga.b3.entityagent.operation.OperationJsonSchemaChecker;
 
 public class EntityAgentCommandExecutorResourcesModule extends AbstractModule {
 
@@ -37,9 +37,9 @@ public class EntityAgentCommandExecutorResourcesModule extends AbstractModule {
         bind(JsonSchemaProvider.class).to(JsonSchemaResourcesProvider.class);
         // bind(ReportedStore.class).to(ReportedResourcesReadOnlyStore.class);
         if (command.desiredRef() == null) {
-            bind(B3MessageProvider.class).to(B3MessageStdinProvider.class);
+            bind(B3MessageProvider.class).to(StdinB3MessageProvider.class);
         } else {
-            bind(B3MessageProvider.class).to(B3MessageResourcesProvider.class);
+            bind(B3MessageProvider.class).to(ResourcesB3MessageProvider.class);
         }
     }
 

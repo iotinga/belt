@@ -6,14 +6,15 @@ import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.helpers.B3MessageFromFileProvider;
+import io.tinga.b3.core.helpers.FromFileB3MessageProvider;
 import io.tinga.b3.core.helpers.B3MessageProvider;
-import io.tinga.b3.core.helpers.B3MessageStdinProvider;
-import io.tinga.b3.core.shadowing.SinkShadowReportedPolicy;
-import io.tinga.b3.entityagent.jsonschema.JsonSchemaFromFileProvider;
-import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
-import io.tinga.b3.entityagent.operation.OperationGrantsChecker;
-import io.tinga.b3.entityagent.operation.OperationJsonSchemaChecker;
+import io.tinga.b3.core.helpers.StdinB3MessageProvider;
+import io.tinga.b3.core.helpers.jsonschema.JsonSchemaFromFileProvider;
+import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
+import io.tinga.b3.core.shadowing.EdgeFirstShadowReportedPolicy;
+import io.tinga.b3.core.shadowing.PassthroughShadowDesiredPolicy;
+import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
+import io.tinga.b3.core.shadowing.operation.OperationJsonSchemaChecker;
 import io.tinga.b3.protocol.GenericB3Message;
 
 public class EntityAgentCommandExecutorFilesystemModule extends AbstractModule {
@@ -32,16 +33,18 @@ public class EntityAgentCommandExecutorFilesystemModule extends AbstractModule {
         })).to(EntityAgentCommandExecutorOnce.class);
 
         bind(JsonSchemaProvider.class).to(JsonSchemaFromFileProvider.class);
-        bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
-        })).to(Key.get(new TypeLiteral<SinkShadowReportedPolicy<GenericB3Message>>() {
+        bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {
+        })).to(Key.get(new TypeLiteral<PassthroughShadowDesiredPolicy<GenericB3Message>>() {
         }));
 
-        // bind(ReportedStore.class).to(ReportedFromFileReadOnlyStore.class);
+        bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
+        })).to(Key.get(new TypeLiteral<EdgeFirstShadowReportedPolicy<GenericB3Message>>() {
+        }));
 
         if (command.desiredRef() == null) {
-            bind(B3MessageProvider.class).to(B3MessageStdinProvider.class);
+            bind(B3MessageProvider.class).to(StdinB3MessageProvider.class);
         } else {
-            bind(B3MessageProvider.class).to(B3MessageFromFileProvider.class);
+            bind(B3MessageProvider.class).to(FromFileB3MessageProvider.class);
         }
     }
 

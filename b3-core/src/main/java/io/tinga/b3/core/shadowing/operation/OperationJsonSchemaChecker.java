@@ -1,4 +1,4 @@
-package io.tinga.b3.entityagent.operation;
+package io.tinga.b3.core.shadowing.operation;
 
 import java.util.Set;
 
@@ -12,11 +12,11 @@ import com.networknt.schema.ValidationMessage;
 
 import io.tinga.belt.helpers.JsonUtils;
 import io.tinga.belt.output.GadgetSink;
-// import io.tinga.b3.core.shadowing.reported.ReportedStore;
-import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
+import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
+import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.GenericB3Message;
 
-public class OperationJsonSchemaChecker implements OperationGrantsChecker {
+public class OperationJsonSchemaChecker<M extends B3Message<? extends JsonNode>> implements OperationGrantsChecker<M> {
 
     private static final Logger log = LoggerFactory.getLogger(OperationJsonSchemaChecker.class);
 
@@ -26,14 +26,14 @@ public class OperationJsonSchemaChecker implements OperationGrantsChecker {
     private final JsonSchemaProvider schemaProvider;
 
     @Inject
-    public OperationJsonSchemaChecker( JsonSchemaProvider schemaProvider, GadgetSink out, JsonUtils json) {
+    public OperationJsonSchemaChecker(JsonSchemaProvider schemaProvider, GadgetSink out, JsonUtils json) {
         this.json = json;
         this.out = out;
         this.schemaProvider = schemaProvider;
     }
 
     @Override
-    public boolean isAllowed(Operation operation) {
+    public boolean isAllowed(Operation<M> operation) {
         // try {
             // if (!this.store.isInitialized()) {
             //     Future<Integer> initialization = this.store.init();

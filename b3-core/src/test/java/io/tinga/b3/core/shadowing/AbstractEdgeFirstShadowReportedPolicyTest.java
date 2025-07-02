@@ -44,6 +44,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     ITopicFactoryProxy factoryProxy;
     @Mock
     Topic<GenericB3Message> topic;
+
     @Spy
     B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
 

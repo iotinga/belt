@@ -4,9 +4,9 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-          <groupId>io.tinga.belt</groupId>
-          <artifactId>belt</artifactId>
-          <version>0.1.4-SNAPSHOT</version>
+        <groupId>io.tinga.belt</groupId>
+        <artifactId>belt</artifactId>
+        <version>0.1.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>b3-core</artifactId>
@@ -38,6 +38,13 @@
             <groupId>io.tinga.belt</groupId>
             <artifactId>belt-core</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <!-- JSON Schema -->
+        <dependency>
+            <groupId>com.networknt</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>${version.json-schema-validator}</version>
         </dependency>
 
         <!-- JSON -->

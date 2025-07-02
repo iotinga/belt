@@ -1,4 +1,4 @@
-package io.tinga.b3.entityagent.jsonschema;
+package io.tinga.b3.core.helpers.jsonschema;
 
 import com.networknt.schema.JsonSchema;
 

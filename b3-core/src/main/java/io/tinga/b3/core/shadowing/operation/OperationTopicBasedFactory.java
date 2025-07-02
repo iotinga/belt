@@ -1,11 +1,11 @@
-package io.tinga.b3.entityagent.operation;
+package io.tinga.b3.core.shadowing.operation;
 
-import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.B3Message;
 
 public class OperationTopicBasedFactory implements OperationFactory {
 
     @Override
-    public Operation buildFrom(String topic, GenericB3Message message) throws InvalidOperationException {
+    public <M extends B3Message<?>> Operation<M> buildFrom(String topic, M message) throws InvalidOperationException {
         int lastSlashIndex = topic.lastIndexOf('/');
 
         if(lastSlashIndex == -1 || lastSlashIndex == topic.length() -1) {
@@ -13,7 +13,7 @@ public class OperationTopicBasedFactory implements OperationFactory {
         }
         String reportedTopic = topic.substring(0, lastSlashIndex);
         String role = topic.substring(lastSlashIndex + 1);
-        return new Operation(topic, message, reportedTopic, role);
+        return new Operation<M>(topic, message, reportedTopic, role);
     }
     
 }

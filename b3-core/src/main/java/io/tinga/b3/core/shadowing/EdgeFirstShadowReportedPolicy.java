@@ -64,6 +64,29 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>> extends AEven
         return true;
     }
 
+        // try {
+        //     Operation operation = operationFactory.buildFrom(topic, event);
+        //     boolean result = checker.isAllowed(operation);
+        //     if (result) {
+        //         out.put(String.format("[ ALLOW]: %s %s@%s -> %s", operation.message().getAction().name(),
+        //                 operation.role(),
+        //                 operation.desiredTopic(), operation.reportedTopic()));
+        //         this.topic.post(event);
+        //         return true;
+        //     } else {
+        //         out.put(String.format("[REJECT]: %s %s@%s -> %s", operation.message().getAction().name(),
+        //                 operation.role(),
+        //                 operation.desiredTopic(), operation.reportedTopic()));
+        //         return false;
+        //     }
+        // } catch (EdgeDriverException e) {
+        //     log.warn(e.getMessage());
+        //     return false;
+        // } catch (InvalidOperationException e) {
+        //     log.warn(e.getMessage());
+        //     return false;
+        // }
+
     protected Topic<M> getTopic() {
         return topic;
     }

@@ -1,7 +1,5 @@
 package io.tinga.b3.core.shadowing;
 
-import java.util.function.Function;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +17,10 @@ import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.belt.helpers.AEventHandler;
-import it.netgrid.bauer.Topic;
 
-public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEventHandler<M>
+public class PassthroughShadowDesiredPolicy<M extends B3Message<?>> extends AEventHandler<M>
         implements Agent.ShadowDesiredPolicy<M> {
-
-    private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowDesiredPolicy.class);
+    private static final Logger log = LoggerFactory.getLogger(PassthroughShadowDesiredPolicy.class);
 
     protected final VersionSafeExecutor executor;
     protected final EdgeDriver<M> edgeDriver;
@@ -32,10 +28,8 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
     protected final OperationFactory operationFactory;
     protected final OperationGrantsChecker<M> grantsChecker;
 
-    protected Topic<M> topic;
-
     @Inject
-    public EdgeFirstShadowDesiredPolicy(Class<M> eventClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
+    public PassthroughShadowDesiredPolicy(Class<M> eventClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
             ITopicFactoryProxy topicFactory, OperationFactory operationFactory,
             OperationGrantsChecker<M> grantsChecker) {
         super(eventClass);
@@ -54,12 +48,6 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
     @Override
     public boolean handle(String topicName, M event) throws Exception {
         this.executor.safeExecute(version -> {
-            if (hasConflicts(version, event)) {
-                log.info(String.format("Refusing desired update: wildcard(%d) desired(%d) current(%d)",
-                        Agent.VERSION_WILDCARD, event.getVersion(), version.apply(false)));
-                return null;
-            }
-
             try {
                 Operation<M> operation = operationFactory.buildFrom(topicName, event);
                 if (grantsChecker.isAllowed(operation)) {
@@ -75,14 +63,9 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
         return true;
     }
 
-    public boolean hasConflicts(Function<Boolean, Integer> version, M event) {
-        return !event.getVersion().equals(Agent.VERSION_WILDCARD) && !version.apply(false).equals(event.getVersion());
-    }
-
     @Override
     public void bindTo(B3Topic topicName, String roleName) {
-        this.topic = this.topicFactory.getTopic(topicName.shadow().desired("#"), false);
-        this.topic.addHandler(this);
+        // NOTHING TO DO
     }
 
 }
