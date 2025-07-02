@@ -7,9 +7,11 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersion;
 
@@ -22,6 +24,7 @@ import io.tinga.b3.entityagent.operation.OperationFactory;
 import io.tinga.b3.entityagent.operation.OperationTopicBasedFactory;
 import io.tinga.b3.protocol.B3MessageValidator;
 import io.tinga.b3.protocol.B3MessageVersionBasedValidator;
+import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
 import it.netgrid.bauer.TopicFactory;
@@ -38,6 +41,8 @@ public class EntityAgentGadget extends AbstractGadget<EntityAgentCommand> {
 
     @Override
     protected void configure() {
+        bind(Key.get(new TypeLiteral<Class<GenericB3Message>>(){})).toInstance(GenericB3Message.class);
+       
         bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
         bind(JsonSchemaFactory.class).toInstance(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7));
         bind(OperationFactory.class).to(OperationTopicBasedFactory.class);

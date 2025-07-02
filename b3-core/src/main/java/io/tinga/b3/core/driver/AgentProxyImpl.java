@@ -10,12 +10,13 @@ import io.tinga.b3.core.AgentProxy;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.belt.helpers.AEventHandler;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public abstract class AbstractAgentProxy<M extends B3Message<?>> implements AgentProxy<M> {
-    private static final Logger log = LoggerFactory.getLogger(AbstractAgentProxy.class);
+public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> implements AgentProxy<M> {
+    private static final Logger log = LoggerFactory.getLogger(AgentProxyImpl.class);
 
     private B3Topic topicName;
     private String roleName;
@@ -26,10 +27,17 @@ public abstract class AbstractAgentProxy<M extends B3Message<?>> implements Agen
 
     private M lastShadowReported;
 
-    public AbstractAgentProxy(ITopicFactoryProxy topicFactoryProxy) {
+    public AgentProxyImpl(
+            Class<M> messageClass, ITopicFactoryProxy topicFactoryProxy) {
+        super(messageClass);
         this.topicFactoryProxy = topicFactoryProxy;
         this.subscribers = new CopyOnWriteArrayList<>();
         this.reportedTopic.addHandler(this);
+    }
+
+    @Override
+    public String getName() {
+        return this.getClass().getName();
     }
 
     @Override
@@ -92,7 +100,8 @@ public abstract class AbstractAgentProxy<M extends B3Message<?>> implements Agen
             log.error("Trying to write before bindTo: message ignored");
             return;
         }
-        Integer currentVersion = this.lastShadowReported == null ? Agent.VERSION_WILDCARD : this.lastShadowReported.getVersion();
+        Integer currentVersion = this.lastShadowReported == null ? Agent.VERSION_WILDCARD
+                : this.lastShadowReported.getVersion();
         desiredMessage.setVersion(currentVersion);
         this.desiredTopic.post(desiredMessage);
     }

@@ -33,13 +33,6 @@
             <version>${version.guice}</version>
         </dependency>
 
-        <!-- Bauer API -->
-        <dependency>
-            <groupId>it.netgrid</groupId>
-            <artifactId>bauer-api</artifactId>
-            <version>${version.bauer}</version>
-        </dependency>
-
         <!-- BELT -->
         <dependency>
             <groupId>io.tinga.belt</groupId>

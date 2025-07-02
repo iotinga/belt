@@ -8,9 +8,9 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,28 +33,29 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
     private static final Faker faker = new Faker();
 
-    private static class DummyEdgeFirstShadowDesiredPolicy extends AbstractEdgeFirstShadowDesiredPolicy<GenericB3Message> {
+    @Mock
+    GenericB3Message message;
+    @Mock
+    VersionSafeExecutor executor;
+    @Mock
+    EdgeDriver<GenericB3Message> driver;
+    @Mock
+    ITopicFactoryProxy factoryProxy;
+    @Mock
+    Topic<GenericB3Message> topic;
+    @Spy
+    B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
 
-        public DummyEdgeFirstShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<GenericB3Message> edgeDriver,
-                ITopicFactoryProxy topicFactory) {
-            super(executor, edgeDriver, topicFactory);
-        }
+    EdgeFirstShadowDesiredPolicy<GenericB3Message> testee;
 
-        @Override
-        public Class<GenericB3Message> getEventClass() {
-            return GenericB3Message.class;
-        }
-
+    @BeforeEach
+    void setup() {
+        testee = new EdgeFirstShadowDesiredPolicy<>(
+                GenericB3Message.class,
+                executor,
+                driver,
+                factoryProxy);
     }
-
-    @Mock GenericB3Message message;
-    @Mock VersionSafeExecutor executor;
-    @Mock EdgeDriver<GenericB3Message> driver;
-    @Mock ITopicFactoryProxy factoryProxy;
-    @Mock Topic<GenericB3Message> topic;
-    @Spy B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
-
-    @InjectMocks DummyEdgeFirstShadowDesiredPolicy testee;
 
     @Test
     public void addTopicHandlerOnBind() {
@@ -66,8 +67,8 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
     @Test
     public void detectAConflictWhenDesiredVersionDifferentThanCurrent() {
-        int currentVersion = faker.random().nextInt(1,1000);
-        int messageVersion = faker.random().nextInt(1001,2000);
+        int currentVersion = faker.random().nextInt(1, 1000);
+        int messageVersion = faker.random().nextInt(1001, 2000);
         doAnswer(invocation -> Integer.valueOf(messageVersion)).when(message).getVersion();
         boolean result = testee.hasConflicts(flag -> currentVersion, message);
         assertTrue(result);
@@ -75,7 +76,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
     @Test
     public void doesntDetectAConflictWhenDesiredVersionEqualToCurrent() {
-        int currentVersion = faker.random().nextInt(1,1000);
+        int currentVersion = faker.random().nextInt(1, 1000);
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(message).getVersion();
         boolean result = testee.hasConflicts(flag -> currentVersion, message);
         assertFalse(result);
@@ -83,7 +84,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
     @Test
     public void doesntDetectAConflictWhenDesiredVersionIsWildcard() {
-        int currentVersion = faker.random().nextInt(1,1000);
+        int currentVersion = faker.random().nextInt(1, 1000);
         doAnswer(invocation -> Integer.valueOf(Agent.VERSION_WILDCARD)).when(message).getVersion();
         boolean result = testee.hasConflicts(flag -> currentVersion, message);
         assertFalse(result);
@@ -91,7 +92,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
     @Test
     public void writesAConflictFreeMessage() throws TopicNameValidationException, Exception {
-        int currentVersion = faker.random().nextInt(1,1000);
+        int currentVersion = faker.random().nextInt(1, 1000);
 
         doAnswer(invocation -> {
             CriticalSection section = invocation.getArgument(0);
@@ -108,8 +109,8 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
     @Test
     public void doesntWriteAConflictingMessage() throws TopicNameValidationException, Exception {
-        int currentVersion = faker.random().nextInt(1,1000);
-        int messageVersion = faker.random().nextInt(1001,2000);
+        int currentVersion = faker.random().nextInt(1, 1000);
+        int messageVersion = faker.random().nextInt(1001, 2000);
 
         doAnswer(invocation -> {
             CriticalSection section = invocation.getArgument(0);

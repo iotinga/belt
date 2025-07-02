@@ -11,11 +11,13 @@ import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.belt.helpers.AEventHandler;
 import it.netgrid.bauer.Topic;
 
-public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<?>> implements Agent.ShadowReportedPolicy<M> {
+public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>> extends AEventHandler<M>
+        implements Agent.ShadowReportedPolicy<M> {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractEdgeFirstShadowReportedPolicy.class);
+    private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowReportedPolicy.class);
 
     protected final VersionSafeExecutor executor;
     protected final EdgeDriver<M> edgeDriver;
@@ -26,8 +28,9 @@ public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<
     private M lastSentMessage;
 
     @Inject
-    public AbstractEdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
+    public EdgeFirstShadowReportedPolicy(Class<M> eventClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
             ITopicFactoryProxy topicFactory) {
+        super(eventClass);
         this.executor = executor;
         this.edgeDriver = edgeDriver;
         this.topicFactory = topicFactory;
@@ -49,7 +52,7 @@ public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<
         this.executor.safeExecute(version -> {
             if (lastSentMessage == null || !lastSentMessage.equals(event)) {
                 int messageVersion = event.getVersion();
-                event.setVersion( version.apply(true));
+                event.setVersion(version.apply(true));
                 this.topic.post(event);
                 lastSentMessage = event;
                 log.info(String.format("New reported published: wildcard(%d) messageVersion(%d) publishedVersion(%d)",
@@ -60,7 +63,7 @@ public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<
 
         return true;
     }
-    
+
     protected Topic<M> getTopic() {
         return topic;
     }

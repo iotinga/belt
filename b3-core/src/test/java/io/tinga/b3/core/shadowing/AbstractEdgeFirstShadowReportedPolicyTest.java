@@ -9,9 +9,9 @@ import static org.mockito.Mockito.verify;
 
 import java.util.function.Function;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,32 +29,34 @@ import it.netgrid.bauer.Topic;
 
 @ExtendWith(MockitoExtension.class)
 public class AbstractEdgeFirstShadowReportedPolicyTest {
-   
+
     private static final Faker faker = new Faker();
 
-    private static class DummyEdgeFirstShadowReportedPolicy extends AbstractEdgeFirstShadowReportedPolicy<GenericB3Message> {
+    @Mock
+    GenericB3Message firstMessage;
+    @Mock
+    GenericB3Message secondMessage;
+    @Mock
+    VersionSafeExecutor executor;
+    @Mock
+    EdgeDriver<GenericB3Message> driver;
+    @Mock
+    ITopicFactoryProxy factoryProxy;
+    @Mock
+    Topic<GenericB3Message> topic;
+    @Spy
+    B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
 
-        public DummyEdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<GenericB3Message> edgeDriver,
-                ITopicFactoryProxy topicFactory) {
-            super(executor, edgeDriver, topicFactory);
-        }
+    EdgeFirstShadowReportedPolicy<GenericB3Message> testee;
 
-        @Override
-        public Class<GenericB3Message> getEventClass() {
-            return GenericB3Message.class;
-        }
-
-    } 
-
-    @Mock GenericB3Message firstMessage;
-    @Mock GenericB3Message secondMessage;
-    @Mock VersionSafeExecutor executor;
-    @Mock EdgeDriver<GenericB3Message> driver;
-    @Mock ITopicFactoryProxy factoryProxy;
-    @Mock Topic<GenericB3Message> topic;
-    @Spy B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
-
-    @InjectMocks DummyEdgeFirstShadowReportedPolicy testee;
+    @BeforeEach
+    void setup() {
+        testee = new EdgeFirstShadowReportedPolicy<>(
+                GenericB3Message.class,
+                executor,
+                driver,
+                factoryProxy);
+    }
 
     @Test
     public void initTopicOnBind() {
@@ -72,9 +74,9 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
 
     @Test
     public void doesntPostAMessageEqualToThePreviouslySent() throws Exception {
-        final int currentVersion = faker.random().nextInt(1,1000);
+        final int currentVersion = faker.random().nextInt(1, 1000);
         final int nextVersion = currentVersion + 1;
-        Function<Boolean,Integer> version = (Boolean next) -> {
+        Function<Boolean, Integer> version = (Boolean next) -> {
             return next ? nextVersion : currentVersion;
         };
 
@@ -95,9 +97,9 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
 
     @Test
     public void postsAMessageNotEqualToThePreviouslySent() throws Exception {
-        final int currentVersion = faker.random().nextInt(1,1000);
+        final int currentVersion = faker.random().nextInt(1, 1000);
         final int nextVersion = currentVersion + 1;
-        Function<Boolean,Integer> version = (Boolean next) -> {
+        Function<Boolean, Integer> version = (Boolean next) -> {
             return next ? nextVersion : currentVersion;
         };
 
@@ -115,13 +117,13 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
         boolean result = testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), secondMessage);
         verify(topic, times(1)).post(secondMessage);
         assertTrue(result);
-    }    
-    
+    }
+
     @Test
     public void incrementsVersionOnOutcomingMessage() throws Exception {
-        final int currentVersion = faker.random().nextInt(1,1000);
+        final int currentVersion = faker.random().nextInt(1, 1000);
         final int nextVersion = currentVersion + 1;
-        Function<Boolean,Integer> version = (Boolean next) -> {
+        Function<Boolean, Integer> version = (Boolean next) -> {
             return next ? nextVersion : currentVersion;
         };
 

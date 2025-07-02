@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> implements Agent<M>, GadgetCommandExecutor<C> {
+public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
+        implements Agent<M>, GadgetCommandExecutor<C> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractAgentCommandExecutor.class);
 
@@ -36,7 +37,8 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C> im
     private String roleName;
 
     @Inject
-    public AbstractAgentCommandExecutor(B3Topic topicName,
+    public AbstractAgentCommandExecutor(
+            B3Topic topicName,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
             Agent.ShadowDesiredPolicy<M> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<M> driver) {

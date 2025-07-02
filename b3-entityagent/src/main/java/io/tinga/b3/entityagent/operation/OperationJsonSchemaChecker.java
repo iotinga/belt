@@ -1,8 +1,6 @@
 package io.tinga.b3.entityagent.operation;
 
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +12,7 @@ import com.networknt.schema.ValidationMessage;
 
 import io.tinga.belt.helpers.JsonUtils;
 import io.tinga.belt.output.GadgetSink;
-import io.tinga.b3.core.shadowing.reported.ReportedStore;
+// import io.tinga.b3.core.shadowing.reported.ReportedStore;
 import io.tinga.b3.entityagent.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.GenericB3Message;
 
@@ -22,28 +20,31 @@ public class OperationJsonSchemaChecker implements OperationGrantsChecker {
 
     private static final Logger log = LoggerFactory.getLogger(OperationJsonSchemaChecker.class);
 
-    @Inject
-    private JsonUtils json;
+    private final JsonUtils json;
+    private final GadgetSink out;
+    // private final ReportedStore store;
+    private final JsonSchemaProvider schemaProvider;
 
     @Inject
-    private GadgetSink out;
-
-    @Inject
-    private ReportedStore store;
-
-    @Inject
-    private JsonSchemaProvider schemaProvider;
+    public OperationJsonSchemaChecker( JsonSchemaProvider schemaProvider, GadgetSink out, JsonUtils json) {
+        this.json = json;
+        this.out = out;
+        this.schemaProvider = schemaProvider;
+    }
 
     @Override
     public boolean isAllowed(Operation operation) {
-        try {
-            if (!this.store.isInitialized()) {
-                Future<Integer> initialization = this.store.init();
-                int cacheSize = initialization.get();
-                log.info(String.format("cache size: %d", cacheSize));
-            }
+        // try {
+            // if (!this.store.isInitialized()) {
+            //     Future<Integer> initialization = this.store.init();
+            //     int cacheSize = initialization.get();
+            //     log.info(String.format("cache size: %d", cacheSize));
+            // }
 
-            GenericB3Message reported = this.store.read(operation.reportedTopic());
+            // GenericB3Message reported = this.store.read(operation.reportedTopic());
+            GenericB3Message reported = null;
+
+            
             JsonNode diff = json.diff(reported == null ? null : reported.getBody(),
                     operation.message() == null ? null : operation.message().getBody());
             out.put(diff.toPrettyString());
@@ -65,9 +66,9 @@ public class OperationJsonSchemaChecker implements OperationGrantsChecker {
             log.debug(String.format("[NO SCHEMA] %s", operation.desiredTopic()));
             return false;
 
-        } catch (InterruptedException | ExecutionException e) {
-            return false;
-        }
+        // } catch (InterruptedException | ExecutionException e) {
+        //     return false;
+        // }
     }
 
 }

@@ -14,12 +14,13 @@ import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.belt.helpers.AEventHandler;
 import it.netgrid.bauer.Topic;
 
-public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
+public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEventHandler<M>
         implements Agent.ShadowDesiredPolicy<M> {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractEdgeFirstShadowDesiredPolicy.class);
+    private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowDesiredPolicy.class);
 
     protected final VersionSafeExecutor executor;
     protected final EdgeDriver<M> edgeDriver;
@@ -28,8 +29,9 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
     protected Topic<M> topic;
 
     @Inject
-    public AbstractEdgeFirstShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
+    public EdgeFirstShadowDesiredPolicy(Class<M> eventClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
             ITopicFactoryProxy topicFactory) {
+        super(eventClass);
         this.executor = executor;
         this.edgeDriver = edgeDriver;
         this.topicFactory = topicFactory;

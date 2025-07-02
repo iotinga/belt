@@ -12,10 +12,10 @@ import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.agent.InitFromReportedTopicVersionSafeExecutor;
 import io.tinga.b3.core.driver.AgentProxyFactoryImpl;
-import io.tinga.b3.core.driver.GenericAgentProxy;
+// import io.tinga.b3.core.driver.GenericAgentProxy;
 import io.tinga.b3.core.driver.SingletonsITopicFactoryProxy;
-import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowDesiredPolicy;
-import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowReportedPolicy;
+// import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowDesiredPolicy;
+// import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowReportedPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
@@ -48,16 +48,16 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
 
         // FIELD PROXIES
         bind(ITopicFactoryProxy.class).to(SingletonsITopicFactoryProxy.class).in(Singleton.class);
-        bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
-        })).to(GenericAgentProxy.class);
+        // bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
+        // })).to(GenericAgentProxy.class);
         bind(Key.get(new TypeLiteral<AgentProxy.Factory>() {
         })).to(AgentProxyFactoryImpl.class);
         bind(B3TopicFactory.class).to(B3TopicFactoryImpl.class);
 
-        bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {
-        })).to(GenericEdgeFirstShadowDesiredPolicy.class);
-        bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
-        })).to(GenericEdgeFirstShadowReportedPolicy.class);
+        // bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {
+        // })).to(GenericEdgeFirstShadowDesiredPolicy.class);
+        // bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
+        // })).to(GenericEdgeFirstShadowReportedPolicy.class);
     }
 
     @Provides

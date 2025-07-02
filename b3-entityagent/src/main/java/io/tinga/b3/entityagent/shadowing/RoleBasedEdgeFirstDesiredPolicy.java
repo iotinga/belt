@@ -14,6 +14,8 @@ import io.tinga.b3.entityagent.operation.OperationFactory;
 import io.tinga.b3.entityagent.operation.OperationGrantsChecker;
 
 public class RoleBasedEdgeFirstDesiredPolicy extends AbstractEntityAgentShadowDesiredPolicy {
+    
+    private static final Logger log = LoggerFactory.getLogger(RoleBasedEdgeFirstDesiredPolicy.class);
 
     @Inject
     public RoleBasedEdgeFirstDesiredPolicy(OperationGrantsChecker checker,
@@ -22,12 +24,6 @@ public class RoleBasedEdgeFirstDesiredPolicy extends AbstractEntityAgentShadowDe
         super(checker, operationFactory, executor, edgeDriver, topicFactory);
     }
 
-    private static final Logger log = LoggerFactory.getLogger(RoleBasedEdgeFirstDesiredPolicy.class);
-
-    @Override
-    public Class<GenericB3Message> getEventClass() {
-        return GenericB3Message.class;
-    }
 
     @Override
     public boolean handle(String topicName, GenericB3Message event) throws Exception {

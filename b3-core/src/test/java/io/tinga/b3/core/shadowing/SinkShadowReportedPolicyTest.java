@@ -5,9 +5,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,25 +25,24 @@ public class SinkShadowReportedPolicyTest {
 
     private static final Faker faker = new Faker();
 
-    private static class DummySinkShadowReportedPolicy extends SinkShadowReportedPolicy<GenericB3Message> {
+    @Mock
+    GadgetSink out;
+    @Mock
+    EdgeDriver<GenericB3Message> edgeDriver;
+    @Mock
+    GenericB3Message message;
+    @Spy
+    B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
 
-        public DummySinkShadowReportedPolicy(GadgetSink out, EdgeDriver<GenericB3Message> edgeDriver) {
-            super(out, edgeDriver);
-        }
+    SinkShadowReportedPolicy<GenericB3Message> testee;
 
-        @Override
-        public Class<GenericB3Message> getEventClass() {
-            return GenericB3Message.class;
-        }
-        
+    @BeforeEach
+    void setup() {
+        testee = new SinkShadowReportedPolicy<>(
+                GenericB3Message.class,
+                out,
+                edgeDriver);
     }
-    
-    @Mock GadgetSink out;
-    @Mock EdgeDriver<GenericB3Message> edgeDriver;
-    @Mock GenericB3Message message;
-    @Spy B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
-    
-    @InjectMocks DummySinkShadowReportedPolicy testee;
 
     @Test
     public void subscribeToDriverOnBind() {

@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.agent.AbstractAgentCommandExecutor;
-import io.tinga.b3.core.shadowing.desired.DesiredGenericB3MessageProvider;
+import io.tinga.b3.core.helpers.B3MessageProvider;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 
@@ -19,7 +19,7 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     private static final Logger log = LoggerFactory.getLogger(EntityAgentCommandExecutorOnce.class);
 
     @Inject
-    private DesiredGenericB3MessageProvider provider;
+    private B3MessageProvider<GenericB3Message> provider;
 
     public EntityAgentCommandExecutorOnce(B3Topic topicName, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,

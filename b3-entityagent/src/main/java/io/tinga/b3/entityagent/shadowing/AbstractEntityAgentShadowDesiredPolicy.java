@@ -9,14 +9,14 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.core.shadowing.AbstractEdgeFirstShadowDesiredPolicy;
+import io.tinga.b3.core.shadowing.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.entityagent.operation.Operation;
 import io.tinga.b3.entityagent.operation.OperationFactory;
 import io.tinga.b3.entityagent.operation.OperationGrantsChecker;
 import io.tinga.b3.entityagent.operation.InvalidOperationException;
 
-public abstract class AbstractEntityAgentShadowDesiredPolicy extends AbstractEdgeFirstShadowDesiredPolicy<GenericB3Message> {
+public abstract class AbstractEntityAgentShadowDesiredPolicy extends EdgeFirstShadowDesiredPolicy<GenericB3Message> {
 
     private static final Logger log = LoggerFactory.getLogger(RoleBasedEdgeFirstDesiredPolicy.class);
 
@@ -28,14 +28,9 @@ public abstract class AbstractEntityAgentShadowDesiredPolicy extends AbstractEdg
             OperationFactory operationFactory, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> edgeDriver,
             ITopicFactoryProxy topicFactory) {
-        super(executor, edgeDriver, topicFactory);
+        super(GenericB3Message.class, executor, edgeDriver, topicFactory);
         this.checker = checker;
         this.operationFactory = operationFactory;
-    }
-
-    @Override
-    public Class<GenericB3Message> getEventClass() {
-        return GenericB3Message.class;
     }
 
     @Override
