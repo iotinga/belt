@@ -15,6 +15,8 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 
+import io.tinga.b3.protocol.topic.B3Topic;
+
 public class JsonSchemaFromFileProvider implements JsonSchemaProvider {
 
     private final static Logger log = LoggerFactory.getLogger(JsonSchemaFromFileProvider.class);
@@ -33,16 +35,17 @@ public class JsonSchemaFromFileProvider implements JsonSchemaProvider {
     private final Map<String, JsonSchema> cache = new HashMap<>();
 
     @Override
-    public JsonSchema getSchemaFor(String topic) {
-        JsonSchema schema = this.config.isJsonSchemaCacheEnabled() ? this.cache.get(topic) : null;
+    public JsonSchema getSchemaFor(B3Topic.Name topic) {
+        String topicPath = topic.build();
+        JsonSchema schema = this.config.isJsonSchemaCacheEnabled() ? this.cache.get(topicPath) : null;
         if (schema == null) {
             try {
-                String schemaFilePath = String.format(PATH_FORMAT, this.config.getJsonSchemaBasePath(), topic);
+                String schemaFilePath = String.format(PATH_FORMAT, this.config.getJsonSchemaBasePath(), topicPath);
                 InputStream schemaInputStream = new FileInputStream(schemaFilePath);
                 JsonNode jsonSchemaNode = this.om.readTree(schemaInputStream);
                 schema = this.factory.getSchema(jsonSchemaNode);
                 if (this.config.isJsonSchemaCacheEnabled()) {
-                    this.updateCache(topic, schema);
+                    this.updateCache(topicPath, schema);
                 }
             } catch (IOException e) {
                 log.error(String.format("%s: unable to load schema", topic));

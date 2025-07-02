@@ -10,7 +10,7 @@ public interface B3Topic {
 
     public enum Category {
         AGENT,
-        ENTITY
+        ENTITY;
     }
 
     public interface Name {
@@ -60,7 +60,7 @@ public interface B3Topic {
     }
 
     boolean isAnchestorOf(String topic);
-
+    
     String getId();
 
     Category getCategory();

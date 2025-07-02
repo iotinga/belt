@@ -16,7 +16,6 @@ import io.tinga.b3.core.driver.AgentProxyFactoryImpl;
 import io.tinga.b3.core.driver.SingletonsITopicFactoryProxy;
 // import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowDesiredPolicy;
 // import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowReportedPolicy;
-import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
 import io.tinga.b3.protocol.topic.B3TopicRoot;

@@ -1,19 +1,30 @@
 package io.tinga.b3.core.shadowing.operation;
 
 import io.tinga.b3.protocol.B3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicFactory;
 
 public class OperationTopicBasedFactory implements OperationFactory {
 
-    @Override
-    public <M extends B3Message<?>> Operation<M> buildFrom(String topic, M message) throws InvalidOperationException {
-        int lastSlashIndex = topic.lastIndexOf('/');
+    private final B3TopicFactory topicFactory;
 
-        if(lastSlashIndex == -1 || lastSlashIndex == topic.length() -1) {
+    public OperationTopicBasedFactory(B3TopicFactory topicFactory) {
+        this.topicFactory = topicFactory;
+    }
+
+    @Override
+    public <M extends B3Message<?>> Operation<M> buildFrom(B3Topic.Name topicName, M message)
+            throws InvalidOperationException {
+        if (topicName == null || message == null) {
             throw new InvalidOperationException();
         }
-        String reportedTopic = topic.substring(0, lastSlashIndex);
-        String role = topic.substring(lastSlashIndex + 1);
-        return new Operation<M>(topic, message, reportedTopic, role);
+        return new Operation<M>(topicName, message);
     }
-    
+
+    @Override
+    public <M extends B3Message<?>> Operation<M> buildFrom(String topicPath, M message) throws InvalidOperationException {
+        B3Topic.Name topicName = this.topicFactory.parse(topicPath);
+        return this.buildFrom(topicName, message);
+    }
+
 }

@@ -22,12 +22,12 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.VersionSafeExecutor.CriticalSection;
-import io.tinga.b3.core.protocol.TestB3TopicFactory;
 import io.tinga.b3.core.shadowing.operation.OperationFactory;
 import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.TopicNameValidationException;
 import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.TestB3TopicFactory;
 import it.netgrid.bauer.Topic;
 
 @ExtendWith(MockitoExtension.class)

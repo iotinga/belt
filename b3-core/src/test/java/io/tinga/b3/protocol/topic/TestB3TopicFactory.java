@@ -1,7 +1,4 @@
-package io.tinga.b3.core.protocol;
-
-import io.tinga.b3.protocol.topic.B3TopicFactory;
-import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
+package io.tinga.b3.protocol.topic;
 
 public class TestB3TopicFactory extends B3TopicFactoryImpl {
 

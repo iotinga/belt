@@ -10,20 +10,25 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.ValidationMessage;
 
-import io.tinga.belt.helpers.JsonUtils;
-import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.belt.helpers.JsonUtils;
+import io.tinga.belt.output.GadgetSink;
 
-public class OperationJsonSchemaChecker<M extends B3Message<? extends JsonNode>> extends AbstractJsonSchemaOperationGrantsChecker<M> {
+public class AbstractJsonSchemaOperationGrantsChecker<M extends B3Message<? extends JsonNode>> implements OperationGrantsChecker<M> {
 
-    private static final Logger log = LoggerFactory.getLogger(OperationJsonSchemaChecker.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractJsonSchemaOperationGrantsChecker.class);
+
+    protected final JsonUtils json;
+    protected final GadgetSink out;
+    protected final JsonSchemaProvider schemaProvider;
 
     @Inject
-    public OperationJsonSchemaChecker(JsonSchemaProvider schemaProvider, GadgetSink out, JsonUtils json) {
-        super(schemaProvider, out, json);
+    public AbstractJsonSchemaOperationGrantsChecker(JsonSchemaProvider schemaProvider, GadgetSink out, JsonUtils json) {
+        this.json = json;
+        this.out = out;
+        this.schemaProvider = schemaProvider;
     }
 
     @Override
@@ -36,7 +41,7 @@ public class OperationJsonSchemaChecker<M extends B3Message<? extends JsonNode>>
             // }
 
             // GenericB3Message reported = this.store.read(operation.reportedTopic());
-            GenericB3Message reported = null;
+            M reported = null;
 
             
             JsonNode diff = json.diff(reported == null ? null : reported.getBody(),
@@ -69,5 +74,4 @@ public class OperationJsonSchemaChecker<M extends B3Message<? extends JsonNode>>
     public void bindTo(B3Topic.Name topicName) {
         
     }
-
 }
