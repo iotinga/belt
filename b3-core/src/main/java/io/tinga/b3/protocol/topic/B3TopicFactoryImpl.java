@@ -12,6 +12,7 @@ public class B3TopicFactoryImpl implements B3TopicFactory, B3TopicRoot {
 
     private final String root;
 
+
     @Inject
     public B3TopicFactoryImpl() {
         this.root = DEFAULT_ROOT;

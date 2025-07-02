@@ -51,6 +51,7 @@ public abstract class AbstractEdgeFirstShadowReportedPolicy<M extends B3Message<
                 int messageVersion = event.getVersion();
                 event.setVersion( version.apply(true));
                 this.topic.post(event);
+                lastSentMessage = event;
                 log.info(String.format("New reported published: wildcard(%d) messageVersion(%d) publishedVersion(%d)",
                         Agent.VERSION_WILDCARD, messageVersion, event.getVersion()));
             }

@@ -32,7 +32,7 @@ public class RoleBasedEdgeFirstDesiredPolicy extends AbstractEntityAgentShadowDe
     @Override
     public boolean handle(String topicName, GenericB3Message event) throws Exception {
         this.executor.safeExecute(version -> {
-            if (hasNoConflicts(version, event)) {
+            if (hasConflicts(version, event)) {
                 log.info(String.format("Refusing desired update: wildcard(%d) desired(%d) current(%d)",
                         Agent.VERSION_WILDCARD, event.getVersion(), version.apply(false)));
                 return null;

@@ -1,5 +1,6 @@
 package io.tinga.b3.protocol.topic;
 
+import static io.tinga.b3.protocol.topic.B3Topic.DEFAULT_ROOT;
 import static io.tinga.b3.protocol.topic.B3Topic.GLUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -21,7 +22,7 @@ public class TopicNameBuilderTest {
     @BeforeEach
     void setUp() {
         Faker faker = new Faker();
-
+        defaultRoot = DEFAULT_ROOT;
         factory = new B3TopicFactoryImpl();
         fakeId = faker.lorem().word();
         customRoot = faker.lorem().word();

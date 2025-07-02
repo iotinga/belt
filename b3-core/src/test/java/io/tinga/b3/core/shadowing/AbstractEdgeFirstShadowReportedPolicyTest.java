@@ -1,0 +1,141 @@
+package io.tinga.b3.core.shadowing;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import java.util.function.Function;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.github.javafaker.Faker;
+
+import io.tinga.b3.core.EdgeDriver;
+import io.tinga.b3.core.ITopicFactoryProxy;
+import io.tinga.b3.core.VersionSafeExecutor;
+import io.tinga.b3.core.VersionSafeExecutor.CriticalSection;
+import io.tinga.b3.core.protocol.TestB3TopicFactory;
+import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
+import it.netgrid.bauer.Topic;
+
+@ExtendWith(MockitoExtension.class)
+public class AbstractEdgeFirstShadowReportedPolicyTest {
+   
+    private static final Faker faker = new Faker();
+
+    private static class DummyEdgeFirstShadowReportedPolicy extends AbstractEdgeFirstShadowReportedPolicy<GenericB3Message> {
+
+        public DummyEdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<GenericB3Message> edgeDriver,
+                ITopicFactoryProxy topicFactory) {
+            super(executor, edgeDriver, topicFactory);
+        }
+
+        @Override
+        public Class<GenericB3Message> getEventClass() {
+            return GenericB3Message.class;
+        }
+
+    } 
+
+    @Mock GenericB3Message firstMessage;
+    @Mock GenericB3Message secondMessage;
+    @Mock VersionSafeExecutor executor;
+    @Mock EdgeDriver<GenericB3Message> driver;
+    @Mock ITopicFactoryProxy factoryProxy;
+    @Mock Topic<GenericB3Message> topic;
+    @Spy B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
+
+    @InjectMocks DummyEdgeFirstShadowReportedPolicy testee;
+
+    @Test
+    public void initTopicOnBind() {
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        testee.bindTo(topicName, faker.lorem().word());
+        verify(factoryProxy, times(1)).getTopic(any(B3Topic.Name.class), eq(true));
+    }
+
+    @Test
+    public void subscribesToDriverOnBind() {
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        testee.bindTo(topicName, faker.lorem().word());
+        verify(driver, times(1)).subscribe(testee);
+    }
+
+    @Test
+    public void doesntPostAMessageEqualToThePreviouslySent() throws Exception {
+        final int currentVersion = faker.random().nextInt(1,1000);
+        final int nextVersion = currentVersion + 1;
+        Function<Boolean,Integer> version = (Boolean next) -> {
+            return next ? nextVersion : currentVersion;
+        };
+
+        doAnswer(invocation -> {
+            CriticalSection section = invocation.getArgument(0);
+            section.apply(version);
+            return null;
+        }).when(executor).safeExecute(any());
+
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
+        testee.bindTo(topicName, faker.lorem().word());
+        testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        boolean result = testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        verify(topic, times(1)).post(firstMessage);
+        assertTrue(result);
+    }
+
+    @Test
+    public void postsAMessageNotEqualToThePreviouslySent() throws Exception {
+        final int currentVersion = faker.random().nextInt(1,1000);
+        final int nextVersion = currentVersion + 1;
+        Function<Boolean,Integer> version = (Boolean next) -> {
+            return next ? nextVersion : currentVersion;
+        };
+
+        doAnswer(invocation -> {
+            CriticalSection section = invocation.getArgument(0);
+            section.apply(version);
+            return null;
+        }).when(executor).safeExecute(any());
+
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
+        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
+        testee.bindTo(topicName, faker.lorem().word());
+        testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        boolean result = testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), secondMessage);
+        verify(topic, times(1)).post(secondMessage);
+        assertTrue(result);
+    }    
+    
+    @Test
+    public void incrementsVersionOnOutcomingMessage() throws Exception {
+        final int currentVersion = faker.random().nextInt(1,1000);
+        final int nextVersion = currentVersion + 1;
+        Function<Boolean,Integer> version = (Boolean next) -> {
+            return next ? nextVersion : currentVersion;
+        };
+
+        doAnswer(invocation -> {
+            CriticalSection section = invocation.getArgument(0);
+            section.apply(version);
+            return null;
+        }).when(executor).safeExecute(any());
+
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
+        testee.bindTo(topicName, faker.lorem().word());
+        boolean result = testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        verify(firstMessage, times(1)).setVersion(nextVersion);
+        assertTrue(result);
+    }
+}

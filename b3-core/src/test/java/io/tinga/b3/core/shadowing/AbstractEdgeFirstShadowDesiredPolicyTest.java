@@ -1,0 +1,125 @@
+package io.tinga.b3.core.shadowing;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.github.javafaker.Faker;
+
+import io.tinga.b3.core.Agent;
+import io.tinga.b3.core.EdgeDriver;
+import io.tinga.b3.core.ITopicFactoryProxy;
+import io.tinga.b3.core.VersionSafeExecutor;
+import io.tinga.b3.core.VersionSafeExecutor.CriticalSection;
+import io.tinga.b3.core.protocol.TestB3TopicFactory;
+import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.TopicNameValidationException;
+import io.tinga.b3.protocol.topic.B3Topic;
+import it.netgrid.bauer.Topic;
+
+@ExtendWith(MockitoExtension.class)
+public class AbstractEdgeFirstShadowDesiredPolicyTest {
+
+    private static final Faker faker = new Faker();
+
+    private static class DummyEdgeFirstShadowDesiredPolicy extends AbstractEdgeFirstShadowDesiredPolicy<GenericB3Message> {
+
+        public DummyEdgeFirstShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<GenericB3Message> edgeDriver,
+                ITopicFactoryProxy topicFactory) {
+            super(executor, edgeDriver, topicFactory);
+        }
+
+        @Override
+        public Class<GenericB3Message> getEventClass() {
+            return GenericB3Message.class;
+        }
+
+    }
+
+    @Mock GenericB3Message message;
+    @Mock VersionSafeExecutor executor;
+    @Mock EdgeDriver<GenericB3Message> driver;
+    @Mock ITopicFactoryProxy factoryProxy;
+    @Mock Topic<GenericB3Message> topic;
+    @Spy B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
+
+    @InjectMocks DummyEdgeFirstShadowDesiredPolicy testee;
+
+    @Test
+    public void addTopicHandlerOnBind() {
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(false));
+        testee.bindTo(topicName, faker.lorem().word());
+        verify(factoryProxy, times(1)).getTopic(any(B3Topic.Name.class), eq(false));
+        verify(topic, times(1)).addHandler(testee);
+    }
+
+    @Test
+    public void detectAConflictWhenDesiredVersionDifferentThanCurrent() {
+        int currentVersion = faker.random().nextInt(1,1000);
+        int messageVersion = faker.random().nextInt(1001,2000);
+        doAnswer(invocation -> Integer.valueOf(messageVersion)).when(message).getVersion();
+        boolean result = testee.hasConflicts(flag -> currentVersion, message);
+        assertTrue(result);
+    }
+
+    @Test
+    public void doesntDetectAConflictWhenDesiredVersionEqualToCurrent() {
+        int currentVersion = faker.random().nextInt(1,1000);
+        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(message).getVersion();
+        boolean result = testee.hasConflicts(flag -> currentVersion, message);
+        assertFalse(result);
+    }
+
+    @Test
+    public void doesntDetectAConflictWhenDesiredVersionIsWildcard() {
+        int currentVersion = faker.random().nextInt(1,1000);
+        doAnswer(invocation -> Integer.valueOf(Agent.VERSION_WILDCARD)).when(message).getVersion();
+        boolean result = testee.hasConflicts(flag -> currentVersion, message);
+        assertFalse(result);
+    }
+
+    @Test
+    public void writesAConflictFreeMessage() throws TopicNameValidationException, Exception {
+        int currentVersion = faker.random().nextInt(1,1000);
+
+        doAnswer(invocation -> {
+            CriticalSection section = invocation.getArgument(0);
+            section.apply(flag -> currentVersion);
+            return null;
+        }).when(executor).safeExecute(any());
+
+        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(message).getVersion();
+
+        boolean result = testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), message);
+        verify(driver, times(1)).write(message);
+        assertTrue(result);
+    }
+
+    @Test
+    public void doesntWriteAConflictingMessage() throws TopicNameValidationException, Exception {
+        int currentVersion = faker.random().nextInt(1,1000);
+        int messageVersion = faker.random().nextInt(1001,2000);
+
+        doAnswer(invocation -> {
+            CriticalSection section = invocation.getArgument(0);
+            section.apply(flag -> currentVersion);
+            return null;
+        }).when(executor).safeExecute(any());
+
+        doAnswer(invocation -> Integer.valueOf(messageVersion)).when(message).getVersion();
+        boolean result = testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), message);
+        verify(driver, times(0)).write(message);
+        assertTrue(result);
+    }
+}

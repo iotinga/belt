@@ -16,7 +16,8 @@ import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import it.netgrid.bauer.Topic;
 
-public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?>> implements Agent.ShadowDesiredPolicy<M> {
+public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
+        implements Agent.ShadowDesiredPolicy<M> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractEdgeFirstShadowDesiredPolicy.class);
 
@@ -42,7 +43,7 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
     @Override
     public boolean handle(String topicName, M event) throws Exception {
         this.executor.safeExecute(version -> {
-            if (hasNoConflicts(version, event)) {
+            if (hasConflicts(version, event)) {
                 log.info(String.format("Refusing desired update: wildcard(%d) desired(%d) current(%d)",
                         Agent.VERSION_WILDCARD, event.getVersion(), version.apply(false)));
                 return null;
@@ -60,8 +61,8 @@ public abstract class AbstractEdgeFirstShadowDesiredPolicy<M extends B3Message<?
         return true;
     }
 
-    protected boolean hasNoConflicts(Function<Boolean, Integer> version, M event) {
-        return event.getVersion() != Agent.VERSION_WILDCARD && version.apply(false) != event.getVersion();
+    public boolean hasConflicts(Function<Boolean, Integer> version, M event) {
+        return !event.getVersion().equals(Agent.VERSION_WILDCARD) && !version.apply(false).equals(event.getVersion());
     }
 
     @Override
