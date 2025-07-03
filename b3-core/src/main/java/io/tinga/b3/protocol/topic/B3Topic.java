@@ -4,7 +4,7 @@ import io.tinga.b3.protocol.TopicNameValidationException;
 
 public interface B3Topic {
 
-    String DEFAULT_ROOT = "braid";
+    String DEFAULT_ROOT = "b3";
     String GLUE = "/";
     String RETAIN_PREFIX = "$retain";
 
@@ -60,7 +60,7 @@ public interface B3Topic {
     }
 
     boolean isAnchestorOf(String topic);
-    
+
     String getId();
 
     Category getCategory();

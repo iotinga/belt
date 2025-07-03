@@ -12,7 +12,7 @@ public enum EntityAgentCommandOption implements GadgetCommandOption {
             "The path to the reported json input file. It must be a json object with topics as keys and full reported mqtt messages as values"),
     SCHEMAS(EntityAgentCommand.SCHEMA_BASE_DIR_OPT, true, String.class, "/schema",
             "The schemas base directory. In this director the tool will search the schema using the topic as sub-path."),
-    TOPIC(EntityAgentCommand.ROLE_OPT, true, String.class, "braid/entity/test/admin",
+    TOPIC(EntityAgentCommand.ROLE_OPT, true, String.class, "b3/entity/test/admin",
             "The topic to simulate as source of the desired."),
 
     HELP(GadgetCommandOption.HELP_STANDARD_OPT, false, null, null, "Shows this guide");

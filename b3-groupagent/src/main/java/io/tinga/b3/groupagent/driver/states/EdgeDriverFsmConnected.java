@@ -20,7 +20,6 @@ import io.tinga.b3.core.shadowing.ShadowDesiredPreProcessor;
 import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
-import io.tinga.b3.protocol.B3Method;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
@@ -147,7 +146,7 @@ public class EdgeDriverFsmConnected
             String shadowSectionName = this.getFragmentNameFor(topicName);
             this.currentShadowReported.set(shadowSectionName, message.getBody());
             ObjectNode shadowReportedCopy = this.currentShadowReported.deepCopy();
-            GenericB3Message newShadowMessage = new GenericB3Message(null, 0, 0, B3Method.PUT, Status.ACCEPTED,
+            GenericB3Message newShadowMessage = new GenericB3Message(null, 0, 0, null, Status.ACCEPTED,
                     shadowReportedCopy);
             this.reportedPostProcessor.inPlaceProcess(newShadowMessage);
             context.reportedEmitter().apply(newShadowMessage);
@@ -171,7 +170,7 @@ public class EdgeDriverFsmConnected
             if (member != null) {
                 ObjectNode memberFragment = newShadowDesired.get(key).deepCopy();
                 GenericB3Message memberDesiredMessage = new GenericB3Message(desiredMessage.getTimestamp(),
-                        desiredMessage.getVersion(), desiredMessage.getProtocolVersion(), desiredMessage.getMethod(),
+                        desiredMessage.getVersion(), desiredMessage.getProtocolVersion(), desiredMessage.getCorrelationId(),
                         desiredMessage.getStatus(),
                         memberFragment);
                 this.membersProxies.get(member).write(memberDesiredMessage);
