@@ -1,7 +1,7 @@
 package io.tinga.b3.protocol.topic;
 
 import static io.tinga.b3.protocol.topic.B3TopicRoot.DEFAULT_ROOT;
-import static io.tinga.b3.protocol.topic.B3TopicRoot.GLUE;
+import static io.tinga.b3.protocol.topic.B3Topic.GLUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -34,7 +34,7 @@ public class B3TopicFactoryImplBuildTest {
         factory = new B3TopicFactoryImpl(customRoot + GLUE);
         String expectedResult = customRoot + "/agent/" + fakeId + "/shadow/reported";
         B3TopicRoot.Name topic = factory.agent(fakeId).shadow().reported();
-        String result = topic.build();
+        String result = topic.build().toString();
         assertEquals(expectedResult, result);
     }
 
@@ -42,7 +42,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentShadowReportedTest() {
         // 1
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/shadow/reported";
-        String result = factory.agent(fakeId).shadow().reported().build();
+        String result = factory.agent(fakeId).shadow().reported().build().toString();
         assertEquals(expectedResult, result);
     }
 
@@ -50,7 +50,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentShadowDesiredRoleTest() {
         // 2
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/shadow/desired/" + roleString;
-        String result = factory.agent(fakeId).shadow().desired(roleString).build();
+        String result = factory.agent(fakeId).shadow().desired(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -59,7 +59,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentShadowDesiredRoleStringTest() {
         // 2 stringRole
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/shadow/desired/" + roleString;
-        String result = factory.agent(fakeId).shadow().desired(roleString).build();
+        String result = factory.agent(fakeId).shadow().desired(roleString).build().toString();
         assertEquals(expectedResult, result);
     }
 
@@ -75,7 +75,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentShadowReportedBatchTest() {
         // 3
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/shadow/reported/batch";
-        String result = factory.agent(fakeId).shadow().reported().batch().build();
+        String result = factory.agent(fakeId).shadow().reported().batch().build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -84,7 +84,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentShadowDesiredBatchRoleTest() {
         // 4
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/shadow/desired/batch/" + roleString;
-        String result = factory.agent(fakeId).shadow().desired().batch(roleString).build();
+        String result = factory.agent(fakeId).shadow().desired().batch(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -93,7 +93,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentShadowDesiredBatchRoleStringTest() {
         // 4 stringRole
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/shadow/desired/batch/" + roleString;
-        String result = factory.agent(fakeId).shadow().desired().batch(roleString).build();
+        String result = factory.agent(fakeId).shadow().desired().batch(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -111,7 +111,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentShadowReportedLiveTest() {
         // 5
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/shadow/reported/live";
-        String result = factory.agent(fakeId).shadow().reported().live().build();
+        String result = factory.agent(fakeId).shadow().reported().live().build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -120,7 +120,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentCommandTest() {
         // 6
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/command";
-        String result = factory.agent(fakeId).command().build();
+        String result = factory.agent(fakeId).command().build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -129,7 +129,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentCommandRoleTest() {
         // 7
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/command/" + roleString;
-        String result = factory.agent(fakeId).command(roleString).build();
+        String result = factory.agent(fakeId).command(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -138,7 +138,7 @@ public class B3TopicFactoryImplBuildTest {
     public void agentCommandRoleStringTest() {
         // 7 stringRole
         String expectedResult = defaultRoot + "/agent/" + fakeId + "/command/" + roleString;
-        String result = factory.agent(fakeId).command(roleString).build();
+        String result = factory.agent(fakeId).command(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -155,7 +155,7 @@ public class B3TopicFactoryImplBuildTest {
     public void entityShadowReportedTest() {
         // 1
         String expectedResult = defaultRoot + "/entity/" + fakeId + "/shadow/reported";
-        String result = factory.entity(fakeId).shadow().reported().build();
+        String result = factory.entity(fakeId).shadow().reported().build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -164,7 +164,7 @@ public class B3TopicFactoryImplBuildTest {
     public void entityShadowDesiredRoleTest() {
         // 2
         String expectedResult = defaultRoot + "/entity/" + fakeId + "/shadow/desired/" + roleString;
-        String result = factory.entity(fakeId).shadow().desired(roleString).build();
+        String result = factory.entity(fakeId).shadow().desired(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -173,7 +173,7 @@ public class B3TopicFactoryImplBuildTest {
     public void entityShadowDesiredRoleStringTest() {
         // 2 stringRole
         String expectedResult = defaultRoot + "/entity/" + fakeId + "/shadow/desired/" + roleString;
-        String result = factory.entity(fakeId).shadow().desired(roleString).build();
+        String result = factory.entity(fakeId).shadow().desired(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -189,7 +189,7 @@ public class B3TopicFactoryImplBuildTest {
     public void entityCommandTest() {
         // 3
         String expectedResult = defaultRoot + "/entity/" + fakeId + "/command";
-        String result = factory.entity(fakeId).command().build();
+        String result = factory.entity(fakeId).command().build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -198,7 +198,7 @@ public class B3TopicFactoryImplBuildTest {
     public void entityCommandRoleTest() {
         // 4
         String expectedResult = defaultRoot + "/entity/" + fakeId + "/command/" + roleString;
-        String result = factory.entity(fakeId).command(roleString).build();
+        String result = factory.entity(fakeId).command(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }
@@ -207,7 +207,7 @@ public class B3TopicFactoryImplBuildTest {
     public void entityCommandRoleStringTest() {
         // 4 stringRole
         String expectedResult = defaultRoot + "/entity/" + fakeId + "/command/" + roleString;
-        String result = factory.entity(fakeId).command(roleString).build();
+        String result = factory.entity(fakeId).command(roleString).build().toString();
         assertEquals(expectedResult, result);
 
     }

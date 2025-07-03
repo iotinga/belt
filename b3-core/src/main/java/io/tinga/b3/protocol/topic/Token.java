@@ -5,7 +5,7 @@ import java.util.Map;
 
 import io.tinga.b3.protocol.topic.B3TopicRoot.Category;
 
-class Token {
+public record Token(Name name, String value) {
 
     enum Name {
         RETAIN, ROOT, AGENT, ENTITY, COMMAND, SHADOW, BATCH, LIVE, REPORTED, DESIRED, AGENT_ID, ENTITY_ID, ROLE_NAME;
@@ -23,28 +23,7 @@ class Token {
             entry(Name.DESIRED));
 
     private static Map.Entry<Token.Name, Token> entry(Token.Name name) {
-        return new AbstractMap.SimpleEntry<>(name, new Token(name));
-    }
-
-    public final String value;
-    public final Name name;
-
-    private Token(Name name) {
-        this.name = name;
-        this.value = name.name().toLowerCase();
-    }
-
-    private Token(Name name, String value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    public String value() {
-        return value;
-    }
-
-    public Name name() {
-        return name;
+        return new AbstractMap.SimpleEntry<>(name, new Token(name, name.name()));
     }
 
     public static Token from(Name name) {

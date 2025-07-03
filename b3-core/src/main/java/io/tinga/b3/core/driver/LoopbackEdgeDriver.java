@@ -21,7 +21,7 @@ public class LoopbackEdgeDriver<M extends B3Message<?>> implements EdgeDriver<M>
     public LoopbackEdgeDriver(B3TopicRoot topicRoot) {
         this.subscribers = new CopyOnWriteArrayList<>();
         this.topicRoot = topicRoot;
-        this.shadowReportedTopic = this.topicRoot.shadow().reported().build();
+        this.shadowReportedTopic = this.topicRoot.shadow().reported().build().toString();
     }
 
     @Override

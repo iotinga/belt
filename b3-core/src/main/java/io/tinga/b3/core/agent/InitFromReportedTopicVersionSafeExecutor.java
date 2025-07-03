@@ -32,7 +32,7 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
     public void initVersion(B3TopicRoot topicRoot) throws AgentInitException {
         try {
             this.topicRoot = topicRoot;
-            this.reportedTopic = this.topicFactory.getTopic(this.topicRoot.shadow().reported().build());
+            this.reportedTopic = this.topicFactory.getTopic(this.topicRoot.shadow().reported().build().toString());
             this.reportedTopic.addHandler(this);
         } catch (Exception e) {
             throw new AgentInitException(e.getMessage());

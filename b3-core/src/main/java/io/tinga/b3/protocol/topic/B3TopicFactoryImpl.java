@@ -2,8 +2,8 @@ package io.tinga.b3.protocol.topic;
 
 import com.google.inject.Inject;
 
+import static io.tinga.b3.protocol.topic.B3Topic.GLUE;
 import static io.tinga.b3.protocol.topic.B3TopicRoot.DEFAULT_ROOT;
-import static io.tinga.b3.protocol.topic.B3TopicRoot.GLUE;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -18,6 +18,17 @@ import io.tinga.b3.protocol.topic.B3TopicRoot.Category;
 public class B3TopicFactoryImpl implements B3TopicFactory {
 
     private final String root;
+
+    private record B3TopicRecord(List<Token> tokens) implements B3Topic {
+        public String toString() {
+            return tokens.stream().map(Token::value).collect(Collectors.joining(GLUE));
+        }
+
+        public String toString(boolean retained) {
+            String prefix = retained ? B3Topic.RETAIN_PREFIX + GLUE : "";
+            return prefix + toString();
+        }
+    }
 
     private static final Map<List<Token.Name>, BiFunction<B3TopicImpl, String, B3TopicImpl>> transitions = Map
             .ofEntries(
@@ -131,19 +142,13 @@ public class B3TopicFactoryImpl implements B3TopicFactory {
         }
 
         private void validate(String value) throws TopicNameValidationException {
-            if (value.contains(GLUE))
+            if (value.contains(B3Topic.GLUE))
                 throw new TopicNameValidationException("invalid char");
         }
 
         @Override
-        public String build() {
-            return stack.stream().map(Token::value).collect(Collectors.joining(GLUE));
-        }
-
-        @Override
-        public String build(boolean retained) {
-            String prefix = retained ? RETAIN_PREFIX + GLUE : "";
-            return prefix + build();
+        public B3Topic build() {
+            return new B3TopicRecord(this.stack);
         }
 
         @Override
@@ -153,7 +158,7 @@ public class B3TopicFactoryImpl implements B3TopicFactory {
 
         @Override
         public boolean isAnchestorOf(B3TopicRoot.Name topic) {
-            return topic != null && topic.build().startsWith(this.build());
+            return topic != null && topic.build().toString().startsWith(this.build().toString());
         }
 
         @Override

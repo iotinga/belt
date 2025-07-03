@@ -50,7 +50,7 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
     public AbstractFsmEdgeDriver(B3TopicRoot topicRoot) {
         this.subscribers = new CopyOnWriteArrayList<>();
         this.topicRoot = topicRoot;
-        this.shadowReportedTopic = this.topicRoot.shadow().reported().build();
+        this.shadowReportedTopic = this.topicRoot.shadow().reported().build().toString();
     }
 
     protected abstract State<E, M> buildInitialState();

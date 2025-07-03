@@ -5,8 +5,6 @@ import io.tinga.b3.protocol.TopicNameValidationException;
 public interface B3TopicRoot {
 
     String DEFAULT_ROOT = "b3";
-    String GLUE = "/";
-    String RETAIN_PREFIX = "$retain";
 
     public enum Category {
         AGENT,
@@ -14,10 +12,7 @@ public interface B3TopicRoot {
     }
 
     public interface Name {
-
-        String build();
-
-        String build(boolean retained);
+        B3Topic build();
     }
 
     interface Shadow {

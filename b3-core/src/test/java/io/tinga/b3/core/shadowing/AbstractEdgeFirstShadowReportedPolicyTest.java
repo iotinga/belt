@@ -90,8 +90,8 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3TopicRoot.Name.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         testee.bindTo(topicRoot, faker.lorem().word());
-        testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), firstMessage);
-        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build().toString(), firstMessage);
+        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build().toString(), firstMessage);
         verify(topic, times(1)).post(firstMessage);
         assertTrue(result);
     }
@@ -114,8 +114,8 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
         testee.bindTo(topicRoot, faker.lorem().word());
-        testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), firstMessage);
-        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), secondMessage);
+        testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build().toString(), firstMessage);
+        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build().toString(), secondMessage);
         verify(topic, times(1)).post(secondMessage);
         assertTrue(result);
     }
@@ -137,7 +137,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3TopicRoot.Name.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         testee.bindTo(topicRoot, faker.lorem().word());
-        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build().toString(), firstMessage);
         verify(firstMessage, times(1)).setVersion(nextVersion);
         assertTrue(result);
     }

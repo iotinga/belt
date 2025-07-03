@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 
 public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
@@ -31,11 +32,11 @@ public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
     @Inject
     private JsonSchemaFactory factory;
 
-    private final Map<String, JsonSchema> cache = new HashMap<>();
+    private final Map<B3Topic, JsonSchema> cache = new HashMap<>();
 
     @Override
     public JsonSchema getSchemaFor(B3TopicRoot.Name topic) {
-        String topicPath = topic.build();
+        B3Topic topicPath = topic.build();
         JsonSchema schema = this.config.isJsonSchemaCacheEnabled() ? this.cache.get(topicPath) : null;
 
         if (schema == null) {

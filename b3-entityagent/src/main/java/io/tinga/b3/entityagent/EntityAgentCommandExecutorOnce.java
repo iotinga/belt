@@ -31,7 +31,7 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     public Status execute(EntityAgentCommand command) {
         GenericB3Message message = provider.load(command.desiredRef());
         try {
-            String topicRoot = getBoundTopicName().shadow().desired(command.role()).build();
+            String topicRoot = getBoundTopicName().shadow().desired(command.role()).build().toString();
             this.desiredPolicy.handle(topicRoot, message);
             return Status.OK;
         } catch (Exception e) {
