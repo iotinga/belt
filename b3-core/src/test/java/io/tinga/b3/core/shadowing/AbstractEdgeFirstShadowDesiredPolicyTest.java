@@ -18,12 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.javafaker.Faker;
 
 import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.core.VersionSafeExecutor.CriticalSection;
-import io.tinga.b3.core.shadowing.operation.OperationFactory;
-import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
+import io.tinga.b3.core.OperationFactory;
+import io.tinga.b3.core.OperationGrantsChecker;
+import io.tinga.b3.core.driver.EdgeDriver;
+import io.tinga.b3.core.shadowing.VersionSafeExecutor.CriticalSection;
+import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.TopicNameValidationException;
 import io.tinga.b3.protocol.topic.B3TopicFactory;

@@ -1,4 +1,4 @@
-package io.tinga.b3.core.shadowing.operation;
+package io.tinga.b3.core.impl;
 
 import java.util.Set;
 
@@ -12,6 +12,7 @@ import com.networknt.schema.ValidationMessage;
 
 import io.tinga.belt.helpers.JsonUtils;
 import io.tinga.belt.output.GadgetSink;
+import io.tinga.b3.core.Operation;
 import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.GenericB3Message;

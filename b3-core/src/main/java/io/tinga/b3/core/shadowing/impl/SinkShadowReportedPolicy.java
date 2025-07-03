@@ -1,9 +1,9 @@
-package io.tinga.b3.core.shadowing;
+package io.tinga.b3.core.shadowing.impl;
 
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.EdgeDriver;
+import io.tinga.b3.core.driver.EdgeDriver;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;

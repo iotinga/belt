@@ -1,5 +1,8 @@
-package io.tinga.b3.core.shadowing.operation;
+package io.tinga.b3.core.impl;
 
+import io.tinga.b3.core.InvalidOperationException;
+import io.tinga.b3.core.Operation;
+import io.tinga.b3.core.OperationFactory;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.b3.protocol.topic.B3Topic;

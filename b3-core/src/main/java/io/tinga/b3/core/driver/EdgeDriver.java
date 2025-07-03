@@ -1,6 +1,6 @@
-package io.tinga.b3.core;
+package io.tinga.b3.core.driver;
 
-import io.tinga.b3.core.driver.ConnectionState;
+import io.tinga.b3.core.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 
 public interface EdgeDriver<M extends B3Message<?>> {

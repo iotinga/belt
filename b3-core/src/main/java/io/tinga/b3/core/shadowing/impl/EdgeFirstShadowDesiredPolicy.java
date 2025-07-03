@@ -1,4 +1,4 @@
-package io.tinga.b3.core.shadowing;
+package io.tinga.b3.core.shadowing.impl;
 
 import java.util.function.Function;
 
@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.EdgeDriver;
-import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.core.shadowing.operation.InvalidOperationException;
-import io.tinga.b3.core.shadowing.operation.Operation;
-import io.tinga.b3.core.shadowing.operation.OperationFactory;
-import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
+import io.tinga.b3.core.InvalidOperationException;
+import io.tinga.b3.core.Operation;
+import io.tinga.b3.core.OperationFactory;
+import io.tinga.b3.core.OperationGrantsChecker;
+import io.tinga.b3.core.driver.EdgeDriver;
+import io.tinga.b3.core.driver.EdgeDriverException;
+import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicFactory;

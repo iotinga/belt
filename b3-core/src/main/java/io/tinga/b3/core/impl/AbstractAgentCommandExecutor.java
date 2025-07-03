@@ -1,11 +1,11 @@
-package io.tinga.b3.core.agent;
+package io.tinga.b3.core.impl;
 
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.AgentInitException;
-import io.tinga.b3.core.VersionSafeExecutor;
+import io.tinga.b3.core.driver.EdgeDriver;
+import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.belt.input.GadgetCommandExecutor;

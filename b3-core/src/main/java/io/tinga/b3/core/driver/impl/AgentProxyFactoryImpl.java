@@ -1,4 +1,4 @@
-package io.tinga.b3.core.driver;
+package io.tinga.b3.core.driver.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 
-import io.tinga.b3.core.AgentProxy;
+import io.tinga.b3.core.driver.AgentProxy;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 

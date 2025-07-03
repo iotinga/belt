@@ -1,4 +1,4 @@
-package io.tinga.b3.core;
+package io.tinga.b3.core.driver;
 
 public class EdgeDriverException extends Exception {
 

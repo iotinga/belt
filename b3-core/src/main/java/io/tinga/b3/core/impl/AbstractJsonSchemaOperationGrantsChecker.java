@@ -1,4 +1,4 @@
-package io.tinga.b3.core.shadowing.operation;
+package io.tinga.b3.core.impl;
 
 import java.util.Set;
 
@@ -10,6 +10,8 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.ValidationMessage;
 
+import io.tinga.b3.core.Operation;
+import io.tinga.b3.core.OperationGrantsChecker;
 import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;

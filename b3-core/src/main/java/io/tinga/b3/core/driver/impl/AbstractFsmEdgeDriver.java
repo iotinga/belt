@@ -1,4 +1,4 @@
-package io.tinga.b3.core.driver;
+package io.tinga.b3.core.driver.impl;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -8,8 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.tinga.b3.core.B3EventHandler;
-import io.tinga.b3.core.EdgeDriver;
-import io.tinga.b3.core.EdgeDriverException;
+import io.tinga.b3.core.driver.ConnectionState;
+import io.tinga.b3.core.driver.EdgeDriver;
+import io.tinga.b3.core.driver.EdgeDriverException;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;

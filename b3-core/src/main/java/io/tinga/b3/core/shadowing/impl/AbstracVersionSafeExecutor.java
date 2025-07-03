@@ -1,7 +1,7 @@
-package io.tinga.b3.core.agent;
+package io.tinga.b3.core.shadowing.impl;
 
 import io.tinga.b3.core.AgentInitException;
-import io.tinga.b3.core.VersionSafeExecutor;
+import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 
 public abstract class AbstracVersionSafeExecutor implements VersionSafeExecutor {
 

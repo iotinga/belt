@@ -1,4 +1,4 @@
-package io.tinga.b3.core.shadowing.operation;
+package io.tinga.b3.core;
 
 public class InvalidOperationException extends Exception {
     

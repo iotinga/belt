@@ -1,7 +1,8 @@
-package io.tinga.b3.core;
+package io.tinga.b3.core.shadowing;
 
 import java.util.function.Function;
 
+import io.tinga.b3.core.AgentInitException;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 
 

@@ -7,13 +7,12 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 
 import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.AgentProxy;
 import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.core.VersionSafeExecutor;
-import io.tinga.b3.core.agent.InitFromReportedTopicVersionSafeExecutor;
-import io.tinga.b3.core.driver.AgentProxyFactoryImpl;
-// import io.tinga.b3.core.driver.GenericAgentProxy;
-import io.tinga.b3.core.driver.SingletonsITopicFactoryProxy;
+import io.tinga.b3.core.driver.AgentProxy;
+import io.tinga.b3.core.driver.impl.AgentProxyFactoryImpl;
+import io.tinga.b3.core.driver.impl.SingletonsITopicFactoryProxy;
+import io.tinga.b3.core.shadowing.VersionSafeExecutor;
+import io.tinga.b3.core.shadowing.impl.InitFromReportedTopicVersionSafeExecutor;
 // import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowDesiredPolicy;
 // import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowReportedPolicy;
 import io.tinga.b3.protocol.topic.B3TopicRoot;

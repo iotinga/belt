@@ -1,4 +1,4 @@
-package io.tinga.b3.core.shadowing;
+package io.tinga.b3.core.driver;
 
 public interface ShadowDesiredPreProcessor<M> {
     void initialize();

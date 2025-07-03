@@ -1,4 +1,4 @@
-package io.tinga.b3.core.shadowing.operation;
+package io.tinga.b3.core;
 
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;

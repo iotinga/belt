@@ -1,4 +1,4 @@
-package io.tinga.b3.core.agent;
+package io.tinga.b3.core.shadowing.impl;
 
 import com.google.inject.Inject;
 
