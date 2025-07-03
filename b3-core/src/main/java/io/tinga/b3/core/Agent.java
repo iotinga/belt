@@ -6,11 +6,11 @@ import io.tinga.b3.protocol.topic.B3TopicRoot;
 public interface Agent<M extends B3Message<?>> {
     int VERSION_WILDCARD = 0;
 
-    interface ShadowDesiredPolicy<M> extends B3EventHandler<M> {
+    interface ShadowDesiredPolicy<M extends B3Message<?>> extends B3EventHandler<M> {
         void bindTo(B3TopicRoot topicRoot, String roleName);
     }
 
-    interface ShadowReportedPolicy<M> extends B3EventHandler<M> {
+    interface ShadowReportedPolicy<M extends B3Message<?>> extends B3EventHandler<M> {
         void bindTo(B3TopicRoot topicRoot, String roleName);
     }
 
