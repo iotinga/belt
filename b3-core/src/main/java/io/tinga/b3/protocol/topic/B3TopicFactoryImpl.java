@@ -6,44 +6,160 @@ import static io.tinga.b3.protocol.topic.B3Topic.DEFAULT_ROOT;
 import static io.tinga.b3.protocol.topic.B3Topic.GLUE;
 
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import io.tinga.b3.protocol.TopicNameValidationException;
 import io.tinga.b3.protocol.topic.B3Topic.Category;
 
-public class B3TopicFactoryImpl implements B3TopicFactory, B3TopicRoot {
+public class B3TopicFactoryImpl implements B3TopicFactory {
 
     private final String root;
 
-    private static final Map<List<Token>, BiFunction<B3TopicNameElement, String, B3TopicNameElement>> transitions = Map
+    private static final Map<List<Token.Name>, BiFunction<B3TopicImpl, String, B3TopicImpl>> transitions = Map
             .ofEntries(
-                    entry(List.of(Token.AGENT, Token.SHADOW), (t, v) -> (B3TopicNameElement) t.shadow()),
-                    entry(List.of(Token.AGENT, Token.COMMAND), (t, v) -> (B3TopicNameElement) t.command()),
-                    entry(List.of(Token.ENTITY, Token.SHADOW), (t, v) -> (B3TopicNameElement) t.shadow()),
-                    entry(List.of(Token.ENTITY, Token.COMMAND), (t, v) -> (B3TopicNameElement) t.command()),
-                    entry(List.of(Token.SHADOW, Token.DESIRED), (t, v) -> (B3TopicNameElement) t.desired()),
-                    entry(List.of(Token.SHADOW, Token.REPORTED), (t, v) -> (B3TopicNameElement) t.reported()),
-                    entry(List.of(Token.REPORTED, Token.LIVE), (t, v) -> (B3TopicNameElement) t.live()),
-                    entry(List.of(Token.REPORTED, Token.BATCH), (t, v) -> (B3TopicNameElement) t.batch()),
-                    entry(List.of(Token.DESIRED, Token.BATCH), (t, v) -> (B3TopicNameElement) t.batch()),
-                    entry(List.of(Token.COMMAND, Token.ROLE_NAME), (t, v) -> {
-                        t.stepBack();
-                        return (B3TopicNameElement) t.command(v);
+                    entry(List.of(Token.Name.AGENT, Token.Name.SHADOW), (e, t) -> (B3TopicImpl) e.shadow()),
+                    entry(List.of(Token.Name.AGENT, Token.Name.COMMAND), (e, t) -> (B3TopicImpl) e.command()),
+                    entry(List.of(Token.Name.ENTITY, Token.Name.SHADOW), (e, t) -> (B3TopicImpl) e.shadow()),
+                    entry(List.of(Token.Name.ENTITY, Token.Name.COMMAND), (e, t) -> (B3TopicImpl) e.command()),
+                    entry(List.of(Token.Name.SHADOW, Token.Name.DESIRED), (e, t) -> (B3TopicImpl) e.desired()),
+                    entry(List.of(Token.Name.SHADOW, Token.Name.REPORTED), (e, t) -> (B3TopicImpl) e.reported()),
+                    entry(List.of(Token.Name.REPORTED, Token.Name.LIVE), (e, t) -> (B3TopicImpl) e.live()),
+                    entry(List.of(Token.Name.REPORTED, Token.Name.BATCH), (e, t) -> (B3TopicImpl) e.batch()),
+                    entry(List.of(Token.Name.DESIRED, Token.Name.BATCH), (e, t) -> (B3TopicImpl) e.batch()),
+                    entry(List.of(Token.Name.COMMAND, Token.Name.ROLE_NAME), (e, t) -> {
+                        e.stepBack();
+                        return (B3TopicImpl) e.command(t);
                     }),
-                    entry(List.of(Token.DESIRED, Token.ROLE_NAME), (t, v) -> {
-                        t.stepBack();
-                        return (B3TopicNameElement) t.desired(v);
+                    entry(List.of(Token.Name.DESIRED, Token.Name.ROLE_NAME), (e, t) -> {
+                        e.stepBack();
+                        return (B3TopicImpl) e.desired(t);
                     }),
-                    entry(List.of(Token.BATCH, Token.ROLE_NAME), (t, v) -> {
-                        t.stepBack();
-                        return (B3TopicNameElement) t.batch(v);
+                    entry(List.of(Token.Name.BATCH, Token.Name.ROLE_NAME), (e, t) -> {
+                        e.stepBack();
+                        return (B3TopicImpl) e.batch(t);
                     }));
 
-    private static Map.Entry<List<Token>, BiFunction<B3TopicNameElement, String, B3TopicNameElement>> entry(
-            List<Token> key, BiFunction<B3TopicNameElement, String, B3TopicNameElement> value) {
+    private static Map.Entry<List<Token.Name>, BiFunction<B3TopicImpl, String, B3TopicImpl>> entry(
+            List<Token.Name> key, BiFunction<B3TopicImpl, String, B3TopicImpl> value) {
         return new AbstractMap.SimpleEntry<>(key, value);
+    }
+
+    private class B3TopicImpl implements B3Topic, B3Topic.Command, B3Topic.Command.Role,
+            B3Topic.Shadow.Desired, B3Topic.Shadow.Desired.Role, B3Topic.Shadow.Desired.Batch,
+            B3Topic.Shadow.Desired.Batch.Role, B3Topic.Shadow, B3Topic.Shadow.Reported,
+            B3Topic.Shadow.Reported.Batch, B3Topic.Shadow.Reported.Live {
+
+        private final String id;
+        protected final List<Token> stack;
+        private final Category category;
+
+        public B3TopicImpl(String root, Category category, String id) {
+            this.id = id;
+            this.category = category;
+            this.stack = new ArrayList<>();
+            this.stack.add(Token.from(Token.Name.ROOT, root));
+            this.stack.add(Token.from(category));
+            this.stack.add(Token.from(category, id));
+        }
+
+        @Override
+        public Live live() {
+            this.stack.add(Token.from(Token.Name.LIVE));
+            return this;
+        }
+
+        @Override
+        public Reported.Batch batch() {
+            this.stack.add(Token.from(Token.Name.BATCH));
+            return this;
+        }
+
+        @Override
+        public Shadow shadow() {
+            this.stack.add(Token.from(Token.Name.SHADOW));
+            return this;
+        }
+
+        @Override
+        public Command command() {
+            this.stack.add(Token.from(Token.Name.COMMAND));
+            return this;
+        }
+
+        @Override
+        public Command.Role command(String role) {
+            validate(role);
+            this.stack.add(Token.from(Token.Name.COMMAND));
+            this.stack.add(Token.from(Token.Name.ROLE_NAME, role));
+            return this;
+        }
+
+        @Override
+        public Reported reported() {
+            this.stack.add(Token.from(Token.Name.REPORTED));
+            return this;
+        }
+
+        @Override
+        public Desired desired() {
+            this.stack.add(Token.from(Token.Name.DESIRED));
+            return this;
+        }
+
+        @Override
+        public Desired.Role desired(String role) {
+            validate(role);
+            this.stack.add(Token.from(Token.Name.DESIRED));
+            this.stack.add(Token.from(Token.Name.ROLE_NAME, role));
+            return this;
+        }
+
+        @Override
+        public Desired.Batch.Role batch(String role) {
+            validate(role);
+            this.stack.add(Token.from(Token.Name.BATCH));
+            this.stack.add(Token.from(Token.Name.ROLE_NAME, role));
+            return this;
+        }
+
+        public Token stepBack() {
+            return this.stack.removeLast();
+        }
+
+        private void validate(String value) throws TopicNameValidationException {
+            if (value.contains(GLUE))
+                throw new TopicNameValidationException("invalid char");
+        }
+
+        @Override
+        public String build() {
+            return stack.stream().map(Token::value).collect(Collectors.joining(GLUE));
+        }
+
+        @Override
+        public String build(boolean retained) {
+            String prefix = retained ? RETAIN_PREFIX + GLUE : "";
+            return prefix + build();
+        }
+
+        @Override
+        public String getId() {
+            return this.id;
+        }
+
+        @Override
+        public boolean isAnchestorOf(B3Topic.Name topic) {
+            return topic != null && topic.build().startsWith(this.build());
+        }
+
+        @Override
+        public Category getCategory() {
+            return this.category;
+        }
     }
 
     @Inject
@@ -57,16 +173,11 @@ public class B3TopicFactoryImpl implements B3TopicFactory, B3TopicRoot {
     }
 
     @Override
-    public B3TopicRoot root() {
-        return this;
-    }
-
-    @Override
     public B3Topic agent(String id) {
         if (id.contains(GLUE)) {
             throw new TopicNameValidationException("invalid char");
         }
-        return new B3TopicNameElement(this.root, Category.AGENT, id);
+        return new B3TopicImpl(this.root, Category.AGENT, id);
     }
 
     @Override
@@ -74,7 +185,7 @@ public class B3TopicFactoryImpl implements B3TopicFactory, B3TopicRoot {
         if (id.contains(GLUE)) {
             throw new TopicNameValidationException("invalid char");
         }
-        return new B3TopicNameElement(this.root, Category.ENTITY, id);
+        return new B3TopicImpl(this.root, Category.ENTITY, id);
     }
 
     @Override
@@ -93,25 +204,25 @@ public class B3TopicFactoryImpl implements B3TopicFactory, B3TopicRoot {
             throw new TopicNameValidationException("Invalid category in topicPath: " + topicPath);
         }
 
-        B3TopicNameElement retval = new B3TopicNameElement(parts[0], category, parts[2]);
-        Token prevToken = Token.valueOf(category.name());
+        B3TopicImpl retval = new B3TopicImpl(parts[0], category, parts[2]);
+        Token.Name prevToken = Token.Name.valueOf(category.name());
 
         for (int i = 3; i < parts.length; i++) {
             String raw = parts[i];
-            Token token;
+            Token.Name token;
             try {
-                token = Token.valueOf(raw.toUpperCase());
+                token = Token.Name.valueOf(raw.toUpperCase());
             } catch (Exception e) {
-                token = Token.ROLE_NAME;
+                token = Token.Name.ROLE_NAME;
             }
 
-            List<Token> key = List.of(prevToken, token);
-            BiFunction<B3TopicNameElement, String, B3TopicNameElement> action = transitions.get(key);
+            List<Token.Name> key = List.of(prevToken, token);
+            BiFunction<B3TopicImpl, String, B3TopicImpl> action = transitions.get(key);
 
             if (action == null)
                 throw new TopicNameValidationException("Invalid transition: " + prevToken + " -> " + raw);
 
-            String param = (token == Token.ROLE_NAME) ? raw : null;
+            String param = (token == Token.Name.ROLE_NAME) ? raw : null;
             retval = action.apply(retval, param);
             prevToken = token;
         }

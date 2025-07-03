@@ -32,7 +32,7 @@ public class SinkShadowReportedPolicyTest {
     @Mock
     GenericB3Message message;
     @Spy
-    B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
+    B3Topic topicName = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
     SinkShadowReportedPolicy<GenericB3Message> testee;
 

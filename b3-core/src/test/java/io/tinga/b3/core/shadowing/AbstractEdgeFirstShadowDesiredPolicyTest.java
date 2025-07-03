@@ -50,7 +50,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     @Mock
     OperationGrantsChecker<GenericB3Message> checker;
     @Spy
-    B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
+    B3Topic topicName = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
     EdgeFirstShadowDesiredPolicy<GenericB3Message> testee;
 

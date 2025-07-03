@@ -46,7 +46,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     Topic<GenericB3Message> topic;
 
     @Spy
-    B3Topic topicName = TestB3TopicFactory.instance().root().agent(faker.lorem().word());
+    B3Topic topicName = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
     EdgeFirstShadowReportedPolicy<GenericB3Message> testee;
 

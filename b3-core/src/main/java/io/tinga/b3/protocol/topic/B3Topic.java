@@ -59,7 +59,7 @@ public interface B3Topic {
         }
     }
 
-    boolean isAnchestorOf(String topic);
+    boolean isAnchestorOf(B3Topic.Name topic);
 
     String getId();
 

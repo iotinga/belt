@@ -12,7 +12,7 @@ import io.tinga.b3.protocol.TopicNameValidationException;
 
 
 @ExtendWith(MockitoExtension.class)
-public class B3TopicFactoryImplTest {
+public class B3TopicFactoryImplParseTest {
 
     @InjectMocks B3TopicFactoryImpl sut;
 
