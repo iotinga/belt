@@ -33,12 +33,12 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
 
     protected final VersionSafeExecutor executor;
 
-    private B3Topic topicName;
+    private B3Topic topicRoot;
     private String roleName;
 
     @Inject
     public AbstractAgentCommandExecutor(
-            B3Topic topicName,
+            B3Topic topicRoot,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
             Agent.ShadowDesiredPolicy<M> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<M> driver) {
@@ -51,10 +51,10 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     public abstract Status execute(C command);
 
     @Override
-    public synchronized void bindTo(B3Topic topicName, String roleName) {
-        this.topicName = topicName;
+    public synchronized void bindTo(B3Topic topicRoot, String roleName) {
+        this.topicRoot = topicRoot;
         this.roleName = roleName;
-        this.executor.initVersion(topicName);
+        this.executor.initVersion(topicRoot);
         this.executor.safeExecute(version -> {
 
             Integer currentVersion = null;
@@ -77,8 +77,8 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
             }
 
             if (keepGoing) {
-                this.reportedPolicy.bindTo(topicName, roleName);
-                this.desiredPolicy.bindTo(topicName, roleName);
+                this.reportedPolicy.bindTo(topicRoot, roleName);
+                this.desiredPolicy.bindTo(topicRoot, roleName);
                 this.driver.connect();
             }
             return null;
@@ -94,7 +94,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
             public Status get() {
                 Status retval = Status.OK;
                 try {
-                    bindTo(topicName, "#");
+                    bindTo(topicRoot, "#");
                     retval = execute(command);
                     while (keepAlive()) {
                         try {
@@ -120,7 +120,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
 
     @Override
     public B3Topic getBoundTopicName() {
-        return this.topicName;
+        return this.topicRoot;
     }
 
     @Override
@@ -129,7 +129,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     }
 
     protected B3Topic getTopicName() {
-        return topicName;
+        return topicRoot;
     }
 
     protected String getRoleName() {

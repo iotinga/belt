@@ -14,14 +14,14 @@ import it.netgrid.bauer.EventHandler;
 public class LoopbackEdgeDriver<M extends B3Message<?>> implements EdgeDriver<M> {
 
     private final List<EventHandler<M>> subscribers;
-    private final B3Topic topicName;
+    private final B3Topic topicRoot;
     private final String shadowReportedTopic;
 
     @Inject
-    public LoopbackEdgeDriver(B3Topic topicName) {
+    public LoopbackEdgeDriver(B3Topic topicRoot) {
         this.subscribers = new CopyOnWriteArrayList<>();
-        this.topicName = topicName;
-        this.shadowReportedTopic = this.topicName.shadow().reported().build();
+        this.topicRoot = topicRoot;
+        this.shadowReportedTopic = this.topicRoot.shadow().reported().build();
     }
 
     @Override

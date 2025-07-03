@@ -71,7 +71,7 @@ public class AbstractJsonSchemaOperationGrantsChecker<M extends B3Message<? exte
     }
 
     @Override
-    public void bindTo(B3Topic.Name topicName) {
+    public void bindTo(B3Topic.Name topicRoot) {
         
     }
 }

@@ -17,8 +17,8 @@ public class PassthroughITopicFactoryProxy implements ITopicFactoryProxy {
     }
 
     @Override
-    public <E> Topic<E> getTopic(B3Topic.Name topicName, boolean retained) {
-        return this.factory.getTopic(topicName.build(retained));
+    public <E> Topic<E> getTopic(B3Topic.Name topicRoot, boolean retained) {
+        return this.factory.getTopic(topicRoot.build(retained));
     }
 
 }

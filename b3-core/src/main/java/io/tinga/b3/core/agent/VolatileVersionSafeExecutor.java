@@ -10,7 +10,7 @@ import io.tinga.b3.protocol.topic.B3Topic;
 public class VolatileVersionSafeExecutor extends AbstracVersionSafeExecutor {
 
     @Override
-    public void initVersion(B3Topic topicName) throws AgentInitException {
+    public void initVersion(B3Topic topicRoot) throws AgentInitException {
         if (!this.isInitialized()) {
             this.initCurrentReportedVersion(1);
         }

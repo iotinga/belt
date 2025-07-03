@@ -9,7 +9,7 @@ import it.netgrid.bauer.EventHandler;
  */
 public interface AgentProxy<M extends B3Message<?>> extends EventHandler<M>, Agent<M> {
     interface Factory {
-        <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic topicName, String roleName);
+        <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic topicRoot, String roleName);
     }
 
     void write(M desiredMessage);

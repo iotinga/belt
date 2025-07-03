@@ -37,7 +37,7 @@ public class SinkShadowReportedPolicy<M extends B3Message<?>> extends AEventHand
     }
 
     @Override
-    public void bindTo(B3Topic topicName, String roleName) {
+    public void bindTo(B3Topic topicRoot, String roleName) {
         this.edgeDriver.subscribe(this);
     }
     

@@ -66,7 +66,7 @@ public class OperationJsonSchemaChecker<M extends B3Message<? extends JsonNode>>
     }
 
     @Override
-    public void bindTo(B3Topic.Name topicName) {
+    public void bindTo(B3Topic.Name topicRoot) {
         
     }
 

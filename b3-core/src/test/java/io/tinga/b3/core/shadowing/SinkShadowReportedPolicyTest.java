@@ -32,7 +32,7 @@ public class SinkShadowReportedPolicyTest {
     @Mock
     GenericB3Message message;
     @Spy
-    B3Topic topicName = TestB3TopicFactory.instance().agent(faker.lorem().word());
+    B3Topic topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
     SinkShadowReportedPolicy<GenericB3Message> testee;
 
@@ -46,7 +46,7 @@ public class SinkShadowReportedPolicyTest {
 
     @Test
     public void subscribeToDriverOnBind() {
-        testee.bindTo(topicName, faker.lorem().word());
+        testee.bindTo(topicRoot, faker.lorem().word());
         verify(edgeDriver, times(1)).subscribe(testee);
     }
 

@@ -13,18 +13,18 @@ public class OperationTopicBasedFactory implements OperationFactory {
     }
 
     @Override
-    public <M extends B3Message<?>> Operation<M> buildFrom(B3Topic.Name topicName, M message)
+    public <M extends B3Message<?>> Operation<M> buildFrom(B3Topic.Name topicRoot, M message)
             throws InvalidOperationException {
-        if (topicName == null || message == null) {
+        if (topicRoot == null || message == null) {
             throw new InvalidOperationException();
         }
-        return new Operation<M>(topicName, message);
+        return new Operation<M>(topicRoot, message);
     }
 
     @Override
     public <M extends B3Message<?>> Operation<M> buildFrom(String topicPath, M message) throws InvalidOperationException {
-        B3Topic.Name topicName = this.topicFactory.parse(topicPath);
-        return this.buildFrom(topicName, message);
+        B3Topic.Name topicRoot = this.topicFactory.parse(topicPath);
+        return this.buildFrom(topicRoot, message);
     }
 
 }

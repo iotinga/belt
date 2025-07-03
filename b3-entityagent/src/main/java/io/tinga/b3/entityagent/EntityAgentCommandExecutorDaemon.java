@@ -17,10 +17,10 @@ public class EntityAgentCommandExecutorDaemon extends AbstractAgentCommandExecut
     private static final Logger log = LoggerFactory.getLogger(EntityAgentCommandExecutorDaemon.class);
 
     @Inject
-    public EntityAgentCommandExecutorDaemon(B3Topic topicName, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public EntityAgentCommandExecutorDaemon(B3Topic topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> driver) {
-        super(topicName, reportedPolicy, desiredPolicy, executor, driver);
+        super(topicRoot, reportedPolicy, desiredPolicy, executor, driver);
     }
 
 

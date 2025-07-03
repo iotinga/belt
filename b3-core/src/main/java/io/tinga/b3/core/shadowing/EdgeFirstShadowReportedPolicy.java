@@ -37,8 +37,8 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>> extends AEven
     }
 
     @Override
-    public void bindTo(B3Topic topicName, String roleName) {
-        this.topic = this.topicFactory.getTopic(topicName.shadow().reported(), true);
+    public void bindTo(B3Topic topicRoot, String roleName) {
+        this.topic = this.topicFactory.getTopic(topicRoot.shadow().reported(), true);
         this.edgeDriver.subscribe(this);
     }
 
@@ -48,7 +48,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>> extends AEven
     }
 
     @Override
-    public boolean handle(String topicName, M event) throws Exception {
+    public boolean handle(String topicRoot, M event) throws Exception {
         this.executor.safeExecute(version -> {
             if (lastSentMessage == null || !lastSentMessage.equals(event)) {
                 int messageVersion = event.getVersion();

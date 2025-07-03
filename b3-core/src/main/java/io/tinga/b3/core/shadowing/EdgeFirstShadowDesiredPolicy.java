@@ -52,7 +52,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
     }
 
     @Override
-    public boolean handle(String topicName, M event) throws Exception {
+    public boolean handle(String topicRoot, M event) throws Exception {
         this.executor.safeExecute(version -> {
             if (hasConflicts(version, event)) {
                 log.info(String.format("Refusing desired update: wildcard(%d) desired(%d) current(%d)",
@@ -61,7 +61,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
             }
 
             try {
-                Operation<M> operation = operationFactory.buildFrom(topicName, event);
+                Operation<M> operation = operationFactory.buildFrom(topicRoot, event);
                 if (grantsChecker.isAllowed(operation)) {
                     this.edgeDriver.write(event);
                 }
@@ -80,8 +80,8 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
     }
 
     @Override
-    public void bindTo(B3Topic topicName, String roleName) {
-        this.topic = this.topicFactory.getTopic(topicName.shadow().desired("#"), false);
+    public void bindTo(B3Topic topicRoot, String roleName) {
+        this.topic = this.topicFactory.getTopic(topicRoot.shadow().desired("#"), false);
         this.topic.addHandler(this);
     }
 

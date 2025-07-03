@@ -50,7 +50,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     @Mock
     OperationGrantsChecker<GenericB3Message> checker;
     @Spy
-    B3Topic topicName = TestB3TopicFactory.instance().agent(faker.lorem().word());
+    B3Topic topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
     EdgeFirstShadowDesiredPolicy<GenericB3Message> testee;
 
@@ -66,7 +66,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     @Test
     public void addTopicHandlerOnBind() {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(false));
-        testee.bindTo(topicName, faker.lorem().word());
+        testee.bindTo(topicRoot, faker.lorem().word());
         verify(factoryProxy, times(1)).getTopic(any(B3Topic.Name.class), eq(false));
         verify(topic, times(1)).addHandler(testee);
     }
@@ -108,7 +108,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(message).getVersion();
 
-        boolean result = testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), message);
+        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), message);
         verify(driver, times(1)).write(message);
         assertTrue(result);
     }
@@ -125,7 +125,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
         }).when(executor).safeExecute(any());
 
         doAnswer(invocation -> Integer.valueOf(messageVersion)).when(message).getVersion();
-        boolean result = testee.handle(topicName.shadow().desired(faker.lorem().word()).build(), message);
+        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), message);
         verify(driver, times(0)).write(message);
         assertTrue(result);
     }

@@ -21,18 +21,18 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     @Inject
     private B3MessageProvider<GenericB3Message> provider;
 
-    public EntityAgentCommandExecutorOnce(B3Topic topicName, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public EntityAgentCommandExecutorOnce(B3Topic topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> driver) {
-        super(topicName, reportedPolicy, desiredPolicy, executor, driver);
+        super(topicRoot, reportedPolicy, desiredPolicy, executor, driver);
     }
 
     @Override
     public Status execute(EntityAgentCommand command) {
         GenericB3Message message = provider.load(command.desiredRef());
         try {
-            String topicName = getBoundTopicName().shadow().desired(command.role()).build();
-            this.desiredPolicy.handle(topicName, message);
+            String topicRoot = getBoundTopicName().shadow().desired(command.role()).build();
+            this.desiredPolicy.handle(topicRoot, message);
             return Status.OK;
         } catch (Exception e) {
             log.error("Unexpected error occurred during message processing", e);

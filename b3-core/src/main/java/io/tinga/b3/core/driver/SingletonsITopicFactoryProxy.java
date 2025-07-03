@@ -23,8 +23,8 @@ public class SingletonsITopicFactoryProxy implements ITopicFactoryProxy {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <E> Topic<E> getTopic(B3Topic.Name topicName, boolean retained) {
-        String topic = topicName.build(retained);
+    public <E> Topic<E> getTopic(B3Topic.Name topicRoot, boolean retained) {
+        String topic = topicRoot.build(retained);
         Topic<?> entry = this.cache.get(topic);
         if(entry != null) {
             return (Topic<E>) entry;
