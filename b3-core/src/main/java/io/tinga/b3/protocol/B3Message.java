@@ -14,8 +14,8 @@ public class B3Message<B> {
     @JsonProperty("PROT")
     private Integer protocolVersion;
 
-    @JsonProperty("ACTION")
-    private Action action;
+    @JsonProperty("CORRELATION_ID")
+    private String correlationId;
 
     @JsonProperty("STATUS")
     private Status status;
@@ -26,18 +26,18 @@ public class B3Message<B> {
     public B3Message() {
     }
 
-    public B3Message(Long timestamp, Integer version, Integer protocolVersion, Action action, Status status,
+    public B3Message(Long timestamp, Integer version, Integer protocolVersion, String correlationId, Status status,
             B body) {
         this.timestamp = timestamp;
         this.version = version;
         this.protocolVersion = protocolVersion;
-        this.action = action;
+        this.correlationId = correlationId;
         this.status = status;
         this.body = body;
     }
 
     public B3Message<B> response(Long timestamp, Status status, Integer version, B body) {
-        return new B3Message<B>(timestamp, version, protocolVersion, action, status, body);
+        return new B3Message<B>(timestamp, version, protocolVersion, correlationId, status, body);
     }
 
     public Long getTimestamp() {
@@ -52,8 +52,8 @@ public class B3Message<B> {
         return protocolVersion;
     }
 
-    public Action getAction() {
-        return action;
+    public String getCorrelationId() {
+        return correlationId;
     }
 
     public Status getStatus() {
@@ -76,8 +76,8 @@ public class B3Message<B> {
         this.protocolVersion = protocolVersion;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+    public void setMethod(String correlationId) {
+        this.correlationId = correlationId;
     }
 
     public void setStatus(Status status) {
@@ -94,7 +94,7 @@ public class B3Message<B> {
         String version = this.version == null ? "[NULL]" : this.version.toString();
         return String.format("%d[%d]:%s - %s - v%d %s", this.timestamp,
                 this.protocolVersion,
-                this.action.name(),
+                this.correlationId,
                 this.status.name(),
                 version,
                 bodyString);
@@ -116,7 +116,7 @@ public class B3Message<B> {
             return true;
         }
 
-        if (!this.getAction().equals(otherMessage.getAction())) {
+        if (!this.getCorrelationId().equals(otherMessage.getCorrelationId())) {
             return false;
         }
 

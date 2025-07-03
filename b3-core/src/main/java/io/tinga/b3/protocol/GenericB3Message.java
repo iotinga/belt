@@ -5,59 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.tinga.belt.output.Status;
 
 public class GenericB3Message extends B3Message<ObjectNode> {
-    public GenericB3Message(Long timestamp, Integer version, Integer protocolVersion, Action action, Status status,
+    public GenericB3Message(Long timestamp, Integer version, Integer protocolVersion, String correlationId, Status status,
                         ObjectNode body) {
-        super(timestamp, version, protocolVersion, action, status, body);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == null) {
-            return false;
-        }
-
-        if (!(other instanceof GenericB3Message)) {
-            return false;
-        }
-
-        GenericB3Message otherMessage = (GenericB3Message) other;
-
-        if (this == otherMessage) {
-            return true;
-        }
-
-        if(!this.getAction().equals(otherMessage.getAction())) {
-            return false;
-        }
-
-        if(!this.getStatus().equals(otherMessage.getStatus())) {
-            return false;
-        }
-
-        if(this.getTimestamp() == null) {
-            return otherMessage.getTimestamp() == null;
-        }
-        if(!this.getTimestamp().equals(otherMessage.getTimestamp())) {
-            return false;
-        }
-
-        if(this.getProtocolVersion() == null) {
-            return otherMessage.getProtocolVersion() == null;
-        }
-        if(!this.getProtocolVersion().equals(otherMessage.getProtocolVersion())) {
-            return false;
-        }
-
-        if(this.getVersion() == null) {
-            return otherMessage.getVersion() == null;
-        }
-        if(!this.getVersion().equals(otherMessage.getVersion())) {
-            return false;
-        }
-
-        if(this.getBody() == null) {
-            return otherMessage.getBody() == null;
-        }
-        return this.getBody().equals(otherMessage.getBody());
+        super(timestamp, version, protocolVersion, correlationId, status, body);
     }
 }

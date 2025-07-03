@@ -21,8 +21,8 @@ public class B3MessageVersionBasedValidator implements B3MessageValidator {
         if (message != null && message.getTimestamp() == null) {
             errors.add("timestamp is null");
         }
-        if (message != null && message.getAction() == null) {
-            errors.add("action is null");
+        if (message != null && message.getCorrelationId() == null) {
+            errors.add("correlationId is null");
         }
         if (message != null && message.getStatus() == null) {
             errors.add("%s status is null");

@@ -36,7 +36,6 @@ public class TopicNameBuilderTest {
         String expectedResult = customRoot + "/agent/" + fakeId + "/shadow/reported";
         B3Topic.Name topic = factory.root().agent(fakeId).shadow().reported();
         String result = topic.build();
-//        System.out.println(result);
         assertEquals(expectedResult, result);
     }
 
