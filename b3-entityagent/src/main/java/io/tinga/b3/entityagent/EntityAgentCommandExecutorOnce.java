@@ -12,6 +12,7 @@ import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.agent.AbstractAgentCommandExecutor;
 import io.tinga.b3.core.helpers.B3MessageProvider;
 import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 
 public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
@@ -31,8 +32,8 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     public Status execute(EntityAgentCommand command) {
         GenericB3Message message = provider.load(command.desiredRef());
         try {
-            String topicRoot = getBoundTopicName().shadow().desired(command.role()).build().toString();
-            this.desiredPolicy.handle(topicRoot, message);
+            B3Topic topic = getBoundTopicName().shadow().desired(command.role()).build();
+            this.desiredPolicy.handle(topic, message);
             return Status.OK;
         } catch (Exception e) {
             log.error("Unexpected error occurred during message processing", e);

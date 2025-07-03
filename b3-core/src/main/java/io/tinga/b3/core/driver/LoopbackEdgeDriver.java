@@ -5,23 +5,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.google.inject.Inject;
 
+import io.tinga.b3.core.B3EventHandler;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.protocol.B3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
-import it.netgrid.bauer.EventHandler;
 
 public class LoopbackEdgeDriver<M extends B3Message<?>> implements EdgeDriver<M> {
 
-    private final List<EventHandler<M>> subscribers;
+    private final List<B3EventHandler<M>> subscribers;
     private final B3TopicRoot topicRoot;
-    private final String shadowReportedTopic;
+    private final B3Topic shadowReportedTopic;
 
     @Inject
     public LoopbackEdgeDriver(B3TopicRoot topicRoot) {
         this.subscribers = new CopyOnWriteArrayList<>();
         this.topicRoot = topicRoot;
-        this.shadowReportedTopic = this.topicRoot.shadow().reported().build().toString();
+        this.shadowReportedTopic = this.topicRoot.shadow().reported().build();
     }
 
     @Override
@@ -45,7 +46,7 @@ public class LoopbackEdgeDriver<M extends B3Message<?>> implements EdgeDriver<M>
             throw new EdgeDriverException("Invalid shadow desired message: desiredMessage is null");
         }
 
-        for (EventHandler<M> subscriber : this.subscribers) {
+        for (B3EventHandler<M> subscriber : this.subscribers) {
             try {
                 subscriber.handle(this.shadowReportedTopic, desiredMessage);
             } catch (Exception e) {
@@ -56,12 +57,12 @@ public class LoopbackEdgeDriver<M extends B3Message<?>> implements EdgeDriver<M>
     }
 
     @Override
-    public void subscribe(EventHandler<M> observer) {
+    public void subscribe(B3EventHandler<M> observer) {
         subscribers.add(observer);
     }
 
     @Override
-    public void unsubscribe(EventHandler<M> observer) {
+    public void unsubscribe(B3EventHandler<M> observer) {
         subscribers.remove(observer);
     }
     

@@ -26,6 +26,7 @@ import io.tinga.b3.core.shadowing.operation.OperationFactory;
 import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.TopicNameValidationException;
+import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.b3.protocol.topic.TestB3TopicFactory;
 import it.netgrid.bauer.Topic;
@@ -49,6 +50,8 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     OperationFactory operationFactory;
     @Mock
     OperationGrantsChecker<GenericB3Message> checker;
+    @Mock
+    B3TopicFactory topicFactory;
     @Spy
     B3TopicRoot topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
@@ -60,7 +63,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
                 GenericB3Message.class,
                 executor,
                 driver,
-                factoryProxy, operationFactory, checker);
+                factoryProxy, operationFactory, topicFactory, checker);
     }
 
     @Test
@@ -100,6 +103,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     public void writesAConflictFreeMessage() throws TopicNameValidationException, Exception {
         int currentVersion = faker.random().nextInt(1, 1000);
 
+        doAnswer(invocation -> true).when(checker).isAllowed(any());
         doAnswer(invocation -> {
             CriticalSection section = invocation.getArgument(0);
             section.apply(flag -> currentVersion);
@@ -108,7 +112,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(message).getVersion();
 
-        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build().toString(), message);
+        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), message);
         verify(driver, times(1)).write(message);
         assertTrue(result);
     }
@@ -125,7 +129,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
         }).when(executor).safeExecute(any());
 
         doAnswer(invocation -> Integer.valueOf(messageVersion)).when(message).getVersion();
-        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build().toString(), message);
+        boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), message);
         verify(driver, times(0)).write(message);
         assertTrue(result);
     }

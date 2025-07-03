@@ -23,11 +23,11 @@ public record Token(Name name, String value) {
             entry(Name.DESIRED));
 
     private static Map.Entry<Token.Name, Token> entry(Token.Name name) {
-        return new AbstractMap.SimpleEntry<>(name, new Token(name, name.name()));
+        return new AbstractMap.SimpleEntry<>(name, new Token(name, name.name().toLowerCase()));
     }
 
     public static Token from(Name name) {
-        return from(name, name.name());
+        return from(name, name.name().toLowerCase());
     }
 
     public static Token from(Name name, String value) {

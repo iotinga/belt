@@ -15,10 +15,10 @@ import io.tinga.b3.core.shadowing.operation.Operation;
 import io.tinga.b3.core.shadowing.operation.OperationFactory;
 import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
 import io.tinga.b3.protocol.B3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
-import io.tinga.belt.helpers.AEventHandler;
 
-public class PassthroughShadowDesiredPolicy<M extends B3Message<?>> extends AEventHandler<M>
+public class PassthroughShadowDesiredPolicy<M extends B3Message<?>>
         implements Agent.ShadowDesiredPolicy<M> {
     private static final Logger log = LoggerFactory.getLogger(PassthroughShadowDesiredPolicy.class);
 
@@ -29,10 +29,9 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>> extends AEve
     protected final OperationGrantsChecker<M> grantsChecker;
 
     @Inject
-    public PassthroughShadowDesiredPolicy(Class<M> eventClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
+    public PassthroughShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
             ITopicFactoryProxy topicFactory, OperationFactory operationFactory,
             OperationGrantsChecker<M> grantsChecker) {
-        super(eventClass);
         this.executor = executor;
         this.edgeDriver = edgeDriver;
         this.topicFactory = topicFactory;
@@ -46,7 +45,7 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>> extends AEve
     }
 
     @Override
-    public boolean handle(String topicRoot, M event) throws Exception {
+    public boolean handle(B3Topic topicRoot, M event) throws Exception {
         this.executor.safeExecute(version -> {
             try {
                 Operation<M> operation = operationFactory.buildFrom(topicRoot, event);

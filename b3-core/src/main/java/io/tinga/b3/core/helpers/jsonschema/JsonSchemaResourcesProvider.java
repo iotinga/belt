@@ -15,7 +15,6 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 
 import io.tinga.b3.protocol.topic.B3Topic;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
 
 public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
 
@@ -35,17 +34,16 @@ public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
     private final Map<B3Topic, JsonSchema> cache = new HashMap<>();
 
     @Override
-    public JsonSchema getSchemaFor(B3TopicRoot.Name topic) {
-        B3Topic topicPath = topic.build();
-        JsonSchema schema = this.config.isJsonSchemaCacheEnabled() ? this.cache.get(topicPath) : null;
+    public JsonSchema getSchemaFor(B3Topic topic) {
+        JsonSchema schema = this.config.isJsonSchemaCacheEnabled() ? this.cache.get(topic) : null;
 
         if (schema == null) {
             try {
-                String resourcePath = String.format(PATH_FORMAT, config.getJsonSchemaBasePath(), topicPath);
+                String resourcePath = String.format(PATH_FORMAT, config.getJsonSchemaBasePath(), topic);
                 InputStream schemaInputStream = JsonSchemaResourcesProvider.class.getResourceAsStream(resourcePath);
                 JsonNode jsonSchemaNode = this.om.readTree(schemaInputStream);
                 schema = this.factory.getSchema(jsonSchemaNode);
-                this.cache.put(topicPath, schema);
+                this.cache.put(topic, schema);
             } catch (IOException e) {
                 log.error(String.format("%s: unable to load schema", topic));
             }

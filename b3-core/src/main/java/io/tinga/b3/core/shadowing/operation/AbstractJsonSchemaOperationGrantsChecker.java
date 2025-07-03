@@ -47,22 +47,22 @@ public class AbstractJsonSchemaOperationGrantsChecker<M extends B3Message<? exte
             JsonNode diff = json.diff(reported == null ? null : reported.getBody(),
                     operation.message() == null ? null : operation.message().getBody());
             out.put(diff.toPrettyString());
-            JsonSchema schema = this.schemaProvider.getSchemaFor(operation.sourceTopicName());
+            JsonSchema schema = this.schemaProvider.getSchemaFor(operation.sourceTopic());
 
             if (schema != null) {
                 Set<ValidationMessage> validationResult = schema.validate(diff);
                 if (validationResult.size() == 0) {
-                    log.debug(String.format("[ALLOWED] %s", operation.sourceTopicName()));
+                    log.debug(String.format("[ALLOWED] %s", operation.sourceTopic()));
                     return true;
                 } else {
-                    log.warn(String.format("%s: blocked %s", operation.sourceTopicName(), diff));
+                    log.warn(String.format("%s: blocked %s", operation.sourceTopic(), diff));
                     for (ValidationMessage message : validationResult) {
                         log.info(String.format("REASON %s: %s", message.getMessageKey(), message.getError()));
                     }
                 }
             }
 
-            log.debug(String.format("[NO SCHEMA] %s", operation.sourceTopicName()));
+            log.debug(String.format("[NO SCHEMA] %s", operation.sourceTopic()));
             return false;
 
         // } catch (InterruptedException | ExecutionException e) {

@@ -2,6 +2,7 @@ package io.tinga.b3.core.shadowing.operation;
 
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicFactory;
 
 public class OperationTopicBasedFactory implements OperationFactory {
@@ -13,18 +14,27 @@ public class OperationTopicBasedFactory implements OperationFactory {
     }
 
     @Override
-    public <M extends B3Message<?>> Operation<M> buildFrom(B3TopicRoot.Name topicRoot, M message)
+    public <M extends B3Message<?>> Operation<M> buildFrom(B3TopicRoot.Name topicName, M message)
             throws InvalidOperationException {
-        if (topicRoot == null || message == null) {
+        if (topicName == null || message == null) {
             throw new InvalidOperationException();
         }
-        return new Operation<M>(topicRoot, message);
+        return new Operation<M>(topicName.build(), message);
     }
 
     @Override
-    public <M extends B3Message<?>> Operation<M> buildFrom(String topicPath, M message) throws InvalidOperationException {
+    public <M extends B3Message<?>> Operation<M> buildFrom(String topicPath, M message)
+            throws InvalidOperationException {
         B3TopicRoot.Name topicRoot = this.topicFactory.parse(topicPath);
         return this.buildFrom(topicRoot, message);
+    }
+
+    @Override
+    public <M extends B3Message<?>> Operation<M> buildFrom(B3Topic topic, M message) throws InvalidOperationException {
+        if (topic == null || message == null) {
+            throw new InvalidOperationException();
+        }
+        return new Operation<M>(topic, message);
     }
 
 }

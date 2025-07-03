@@ -39,7 +39,6 @@ public class SinkShadowReportedPolicyTest {
     @BeforeEach
     void setup() {
         testee = new SinkShadowReportedPolicy<>(
-                GenericB3Message.class,
                 out,
                 edgeDriver);
     }
@@ -52,13 +51,13 @@ public class SinkShadowReportedPolicyTest {
 
     @Test
     public void writeToSinkOnIncomingEvent() throws Exception {
-        testee.handle(faker.lorem().word(), message);
+        testee.handle(TestB3TopicFactory.instance().agent(faker.lorem().word()).shadow().reported().build(), message);
         verify(out, times(1)).put(anyString());
     }
 
     @Test
     public void returnsTrueOnIncomingEvent() throws Exception {
-        boolean result = testee.handle(faker.lorem().word(), message);
+        boolean result = testee.handle(TestB3TopicFactory.instance().agent(faker.lorem().word()).shadow().reported().build(), message);
         assertTrue(result);
     }
 }

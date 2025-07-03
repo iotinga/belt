@@ -1,14 +1,17 @@
 package io.tinga.b3.core.driver;
 
-import it.netgrid.bauer.EventHandler;
 import it.netgrid.bauer.Topic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.AgentProxy;
+import io.tinga.b3.core.B3EventHandler;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.belt.helpers.AEventHandler;
 
@@ -22,14 +25,16 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     private String roleName;
     private Topic<M> desiredTopic;
     private Topic<M> reportedTopic;
-    private final List<EventHandler<M>> subscribers;
+    private final List<B3EventHandler<M>> subscribers;
     private final ITopicFactoryProxy topicFactoryProxy;
+    private final B3TopicFactory topicFactory;
 
     private M lastShadowReported;
 
     public AgentProxyImpl(
-            Class<M> messageClass, ITopicFactoryProxy topicFactoryProxy) {
+            Class<M> messageClass, ITopicFactoryProxy topicFactoryProxy, B3TopicFactory topicFactory) {
         super(messageClass);
+        this.topicFactory = topicFactory;
         this.topicFactoryProxy = topicFactoryProxy;
         this.subscribers = new CopyOnWriteArrayList<>();
         this.reportedTopic.addHandler(this);
@@ -53,17 +58,9 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public boolean handle(String topic, M newShadowReported) {
-        if (this.safeUpdateLastShadowReported(newShadowReported)) {
-            for (EventHandler<M> listener : subscribers) {
-                try {
-                    listener.handle(topic, newShadowReported);
-                } catch (Exception e) {
-                    log.error(e.getMessage());
-                }
-            }
-        }
-        return true;
+    public boolean handle(String topicPath, M newShadowReported) throws Exception {
+        B3Topic topic = this.topicFactory.parse(topicPath).build();
+        return this.handle(topic, newShadowReported);
     }
 
     private synchronized boolean safeUpdateLastShadowReported(M newShadowReported) {
@@ -85,12 +82,12 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public void subscribe(EventHandler<M> observer) {
+    public void subscribe(B3EventHandler<M> observer) {
         subscribers.add(observer);
     }
 
     @Override
-    public void unsubscribe(EventHandler<M> observer) {
+    public void unsubscribe(B3EventHandler<M> observer) {
         subscribers.remove(observer);
     }
 
@@ -104,6 +101,20 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
                 : this.lastShadowReported.getVersion();
         desiredMessage.setVersion(currentVersion);
         this.desiredTopic.post(desiredMessage);
+    }
+
+    @Override
+    public boolean handle(B3Topic topic, M newShadowReported) throws Exception {
+        if (this.safeUpdateLastShadowReported(newShadowReported)) {
+            for (B3EventHandler<M> listener : subscribers) {
+                try {
+                    listener.handle(topic, newShadowReported);
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+            }
+        }
+        return true;
     }
 
 }

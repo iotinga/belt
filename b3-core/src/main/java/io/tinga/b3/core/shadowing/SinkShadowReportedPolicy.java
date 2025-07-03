@@ -5,12 +5,12 @@ import com.google.inject.Inject;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.protocol.B3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
-import io.tinga.belt.helpers.AEventHandler;
 import io.tinga.belt.output.GadgetSink;
 import it.netgrid.bauer.Topic;
 
-public class SinkShadowReportedPolicy<M extends B3Message<?>> extends AEventHandler<M> implements Agent.ShadowReportedPolicy<M> {
+public class SinkShadowReportedPolicy<M extends B3Message<?>> implements Agent.ShadowReportedPolicy<M> {
 
     private final GadgetSink out;
     protected Topic<M> topic;
@@ -19,8 +19,7 @@ public class SinkShadowReportedPolicy<M extends B3Message<?>> extends AEventHand
     protected final EdgeDriver<M> edgeDriver;
 
     @Inject
-    public SinkShadowReportedPolicy(Class<M> eventClass, GadgetSink out, EdgeDriver<M> edgeDriver) {
-        super(eventClass);
+    public SinkShadowReportedPolicy(GadgetSink out, EdgeDriver<M> edgeDriver) {
         this.edgeDriver = edgeDriver;
         this.out = out;
     }
@@ -31,7 +30,7 @@ public class SinkShadowReportedPolicy<M extends B3Message<?>> extends AEventHand
     }
 
     @Override
-    public boolean handle(String topic, M event) throws Exception {
+    public boolean handle(B3Topic topic, M event) throws Exception {
         this.out.put(String.format("%s -> %s", topic, event));
         return true;
     }

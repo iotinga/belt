@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import io.tinga.b3.core.AgentProxy;
+import io.tinga.b3.core.B3EventHandler;
 import io.tinga.b3.core.driver.AbstractFsmEdgeDriver;
 import io.tinga.b3.core.driver.ConnectionState;
 import io.tinga.b3.core.driver.AbstractFsmEdgeDriver.Context;
@@ -22,9 +23,9 @@ import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.belt.output.Status;
-import it.netgrid.bauer.EventHandler;
 
 @Singleton
 public class EdgeDriverFsmConnected
@@ -107,7 +108,7 @@ public class EdgeDriverFsmConnected
                 final B3TopicRoot member = topicFactory.agent(memberAgentId);
                 AgentProxy<GenericB3Message> memberProxy = factory.getProxy(member,
                         config.roleInMembers());
-                memberProxy.subscribe(new EventHandler<GenericB3Message>() {
+                memberProxy.subscribe(new B3EventHandler<GenericB3Message>() {
 
                     @Override
                     public String getName() {
@@ -115,12 +116,7 @@ public class EdgeDriverFsmConnected
                     }
 
                     @Override
-                    public Class<GenericB3Message> getEventClass() {
-                        return GenericB3Message.class;
-                    }
-
-                    @Override
-                    public boolean handle(String topic, GenericB3Message event) throws Exception {
+                    public boolean handle(B3Topic topic, GenericB3Message event) throws Exception {
                         fsmState.updateShadowReported(member, event);
                         return true;
                     }
@@ -170,7 +166,8 @@ public class EdgeDriverFsmConnected
             if (member != null) {
                 ObjectNode memberFragment = newShadowDesired.get(key).deepCopy();
                 GenericB3Message memberDesiredMessage = new GenericB3Message(desiredMessage.getTimestamp(),
-                        desiredMessage.getVersion(), desiredMessage.getProtocolVersion(), desiredMessage.getCorrelationId(),
+                        desiredMessage.getVersion(), desiredMessage.getProtocolVersion(),
+                        desiredMessage.getCorrelationId(),
                         desiredMessage.getStatus(),
                         memberFragment);
                 this.membersProxies.get(member).write(memberDesiredMessage);

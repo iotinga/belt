@@ -17,33 +17,38 @@ import io.tinga.b3.core.shadowing.operation.Operation;
 import io.tinga.b3.core.shadowing.operation.OperationFactory;
 import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
 import io.tinga.b3.protocol.B3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
-import io.tinga.belt.helpers.AEventHandler;
+import it.netgrid.bauer.EventHandler;
 import it.netgrid.bauer.Topic;
 
-public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEventHandler<M>
-        implements Agent.ShadowDesiredPolicy<M> {
+public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
+        implements Agent.ShadowDesiredPolicy<M>, EventHandler<M> {
 
     private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowDesiredPolicy.class);
 
     protected final VersionSafeExecutor executor;
     protected final EdgeDriver<M> edgeDriver;
-    protected final ITopicFactoryProxy topicFactory;
+    protected final ITopicFactoryProxy topicFactoryProxy;
     protected final OperationFactory operationFactory;
     protected final OperationGrantsChecker<M> grantsChecker;
+    protected final Class<M> messageClass;
+    protected final B3TopicFactory topicFactory;
 
     protected Topic<M> topic;
 
     @Inject
-    public EdgeFirstShadowDesiredPolicy(Class<M> eventClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
-            ITopicFactoryProxy topicFactory, OperationFactory operationFactory,
+    public EdgeFirstShadowDesiredPolicy(Class<M> messageClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
+            ITopicFactoryProxy topicFactoryProxy, OperationFactory operationFactory, B3TopicFactory topicFactory,
             OperationGrantsChecker<M> grantsChecker) {
-        super(eventClass);
+        this.messageClass = messageClass;
         this.executor = executor;
         this.edgeDriver = edgeDriver;
-        this.topicFactory = topicFactory;
+        this.topicFactoryProxy = topicFactoryProxy;
         this.operationFactory = operationFactory;
         this.grantsChecker = grantsChecker;
+        this.topicFactory = topicFactory;
     }
 
     @Override
@@ -52,7 +57,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
     }
 
     @Override
-    public boolean handle(String topicRoot, M event) throws Exception {
+    public boolean handle(B3Topic topic, M event) throws Exception {
         this.executor.safeExecute(version -> {
             if (hasConflicts(version, event)) {
                 log.info(String.format("Refusing desired update: wildcard(%d) desired(%d) current(%d)",
@@ -61,7 +66,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
             }
 
             try {
-                Operation<M> operation = operationFactory.buildFrom(topicRoot, event);
+                Operation<M> operation = operationFactory.buildFrom(topic, event);
                 if (grantsChecker.isAllowed(operation)) {
                     this.edgeDriver.write(event);
                 }
@@ -81,8 +86,19 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
 
     @Override
     public void bindTo(B3TopicRoot topicRoot, String roleName) {
-        this.topic = this.topicFactory.getTopic(topicRoot.shadow().desired("#"), false);
+        this.topic = this.topicFactoryProxy.getTopic(topicRoot.shadow().desired("#"), false);
         this.topic.addHandler(this);
+    }
+
+    @Override
+    public Class<M> getEventClass() {
+        return messageClass;
+    }
+
+    @Override
+    public boolean handle(String topicPath, M event) throws Exception {
+        B3Topic topic = topicFactory.parse(topicPath).build();
+        return this.handle(topic, event);
     }
 
 }

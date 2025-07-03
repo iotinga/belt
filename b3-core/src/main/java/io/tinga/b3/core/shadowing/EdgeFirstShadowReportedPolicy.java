@@ -10,11 +10,11 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
+import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
-import io.tinga.belt.helpers.AEventHandler;
 import it.netgrid.bauer.Topic;
 
-public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>> extends AEventHandler<M>
+public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
         implements Agent.ShadowReportedPolicy<M> {
 
     private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowReportedPolicy.class);
@@ -28,9 +28,8 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>> extends AEven
     private M lastSentMessage;
 
     @Inject
-    public EdgeFirstShadowReportedPolicy(Class<M> eventClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
+    public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
             ITopicFactoryProxy topicFactory) {
-        super(eventClass);
         this.executor = executor;
         this.edgeDriver = edgeDriver;
         this.topicFactory = topicFactory;
@@ -48,7 +47,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>> extends AEven
     }
 
     @Override
-    public boolean handle(String topicRoot, M event) throws Exception {
+    public boolean handle(B3Topic topic, M event) throws Exception {
         this.executor.safeExecute(version -> {
             if (lastSentMessage == null || !lastSentMessage.equals(event)) {
                 int messageVersion = event.getVersion();
