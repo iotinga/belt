@@ -12,7 +12,7 @@ import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.agent.AbstractAgentCommandExecutor;
 import io.tinga.b3.core.helpers.B3MessageProvider;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 
 public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
 
@@ -21,7 +21,7 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     @Inject
     private B3MessageProvider<GenericB3Message> provider;
 
-    public EntityAgentCommandExecutorOnce(B3Topic topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public EntityAgentCommandExecutorOnce(B3TopicRoot topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> driver) {
         super(topicRoot, reportedPolicy, desiredPolicy, executor, driver);

@@ -21,7 +21,7 @@ import io.tinga.b3.core.shadowing.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.belt.output.Status;
 import it.netgrid.bauer.EventHandler;
@@ -39,8 +39,8 @@ public class EdgeDriverFsmConnected
     private final B3TopicFactory topicFactory;
     private final ObjectNode currentShadowReported;
 
-    private final Map<B3Topic, AgentProxy<GenericB3Message>> membersProxies = new HashMap<>();
-    private final Map<String, B3Topic> fragNameMember = new HashMap<>();
+    private final Map<B3TopicRoot, AgentProxy<GenericB3Message>> membersProxies = new HashMap<>();
+    private final Map<String, B3TopicRoot> fragNameMember = new HashMap<>();
 
     private ConnectionState connectionState;
     private Context<GenericB3Message> contextOnEnterState;
@@ -104,7 +104,7 @@ public class EdgeDriverFsmConnected
         if (membersProxies.size() < 1)
             for (String memberAgentId : config.members()) {
                 final EdgeDriverFsmConnected fsmState = this;
-                final B3Topic member = topicFactory.agent(memberAgentId);
+                final B3TopicRoot member = topicFactory.agent(memberAgentId);
                 AgentProxy<GenericB3Message> memberProxy = factory.getProxy(member,
                         config.roleInMembers());
                 memberProxy.subscribe(new EventHandler<GenericB3Message>() {
@@ -140,7 +140,7 @@ public class EdgeDriverFsmConnected
         this.connectionState = ConnectionState.DISCONNECTED;
     }
 
-    private synchronized void updateShadowReported(B3Topic topicRoot, GenericB3Message message) {
+    private synchronized void updateShadowReported(B3TopicRoot topicRoot, GenericB3Message message) {
         Context<GenericB3Message> context = this.contextOnEnterState;
         if (context != null) {
             String shadowSectionName = this.getFragmentNameFor(topicRoot);
@@ -166,7 +166,7 @@ public class EdgeDriverFsmConnected
         while (keys.hasNext()) {
             String key = keys.next();
 
-            B3Topic member = this.fragNameMember.get(key);
+            B3TopicRoot member = this.fragNameMember.get(key);
             if (member != null) {
                 ObjectNode memberFragment = newShadowDesired.get(key).deepCopy();
                 GenericB3Message memberDesiredMessage = new GenericB3Message(desiredMessage.getTimestamp(),
@@ -179,7 +179,7 @@ public class EdgeDriverFsmConnected
     }
 
     /** Support Methods */
-    private String getFragmentNameFor(B3Topic topicRoot) {
+    private String getFragmentNameFor(B3TopicRoot topicRoot) {
         return topicRoot.getId();
     }
 

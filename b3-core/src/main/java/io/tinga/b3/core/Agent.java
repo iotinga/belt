@@ -1,18 +1,18 @@
 package io.tinga.b3.core;
 
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import it.netgrid.bauer.EventHandler;
 
 public interface Agent<M extends B3Message<?>> {
     int VERSION_WILDCARD = 0;
 
     interface ShadowDesiredPolicy<M> extends EventHandler<M> {
-        void bindTo(B3Topic topicRoot, String roleName);
+        void bindTo(B3TopicRoot topicRoot, String roleName);
     }
 
     interface ShadowReportedPolicy<M> extends EventHandler<M> {
-        void bindTo(B3Topic topicRoot, String roleName);
+        void bindTo(B3TopicRoot topicRoot, String roleName);
     }
 
     interface Config {
@@ -23,9 +23,9 @@ public interface Agent<M extends B3Message<?>> {
         String getReportedStoreRef();
     }
 
-    void bindTo(B3Topic topicRoot, String roleName);
+    void bindTo(B3TopicRoot topicRoot, String roleName);
 
-    B3Topic getBoundTopicName();
+    B3TopicRoot getBoundTopicName();
 
     String getBoundRoleName();
 }

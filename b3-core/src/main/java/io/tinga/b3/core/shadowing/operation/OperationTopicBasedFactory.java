@@ -1,7 +1,7 @@
 package io.tinga.b3.core.shadowing.operation;
 
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.b3.protocol.topic.B3TopicFactory;
 
 public class OperationTopicBasedFactory implements OperationFactory {
@@ -13,7 +13,7 @@ public class OperationTopicBasedFactory implements OperationFactory {
     }
 
     @Override
-    public <M extends B3Message<?>> Operation<M> buildFrom(B3Topic.Name topicRoot, M message)
+    public <M extends B3Message<?>> Operation<M> buildFrom(B3TopicRoot.Name topicRoot, M message)
             throws InvalidOperationException {
         if (topicRoot == null || message == null) {
             throw new InvalidOperationException();
@@ -23,7 +23,7 @@ public class OperationTopicBasedFactory implements OperationFactory {
 
     @Override
     public <M extends B3Message<?>> Operation<M> buildFrom(String topicPath, M message) throws InvalidOperationException {
-        B3Topic.Name topicRoot = this.topicFactory.parse(topicPath);
+        B3TopicRoot.Name topicRoot = this.topicFactory.parse(topicPath);
         return this.buildFrom(topicRoot, message);
     }
 

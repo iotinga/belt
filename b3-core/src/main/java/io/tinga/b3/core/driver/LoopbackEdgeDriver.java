@@ -8,17 +8,17 @@ import com.google.inject.Inject;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.EdgeDriverException;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import it.netgrid.bauer.EventHandler;
 
 public class LoopbackEdgeDriver<M extends B3Message<?>> implements EdgeDriver<M> {
 
     private final List<EventHandler<M>> subscribers;
-    private final B3Topic topicRoot;
+    private final B3TopicRoot topicRoot;
     private final String shadowReportedTopic;
 
     @Inject
-    public LoopbackEdgeDriver(B3Topic topicRoot) {
+    public LoopbackEdgeDriver(B3TopicRoot topicRoot) {
         this.subscribers = new CopyOnWriteArrayList<>();
         this.topicRoot = topicRoot;
         this.shadowReportedTopic = this.topicRoot.shadow().reported().build();

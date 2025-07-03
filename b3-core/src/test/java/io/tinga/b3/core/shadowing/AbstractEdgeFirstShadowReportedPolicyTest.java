@@ -23,7 +23,7 @@ import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.b3.protocol.topic.TestB3TopicFactory;
 import it.netgrid.bauer.Topic;
 
@@ -46,7 +46,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     Topic<GenericB3Message> topic;
 
     @Spy
-    B3Topic topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
+    B3TopicRoot topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
     EdgeFirstShadowReportedPolicy<GenericB3Message> testee;
 
@@ -61,14 +61,14 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
 
     @Test
     public void initTopicOnBind() {
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3TopicRoot.Name.class), eq(true));
         testee.bindTo(topicRoot, faker.lorem().word());
-        verify(factoryProxy, times(1)).getTopic(any(B3Topic.Name.class), eq(true));
+        verify(factoryProxy, times(1)).getTopic(any(B3TopicRoot.Name.class), eq(true));
     }
 
     @Test
     public void subscribesToDriverOnBind() {
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3TopicRoot.Name.class), eq(true));
         testee.bindTo(topicRoot, faker.lorem().word());
         verify(driver, times(1)).subscribe(testee);
     }
@@ -87,7 +87,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3TopicRoot.Name.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         testee.bindTo(topicRoot, faker.lorem().word());
         testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), firstMessage);
@@ -110,7 +110,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3TopicRoot.Name.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
         testee.bindTo(topicRoot, faker.lorem().word());
@@ -134,7 +134,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.Name.class), eq(true));
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3TopicRoot.Name.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         testee.bindTo(topicRoot, faker.lorem().word());
         boolean result = testee.handle(topicRoot.shadow().desired(faker.lorem().word()).build(), firstMessage);

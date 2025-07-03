@@ -15,7 +15,7 @@ import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 
 public class OperationJsonSchemaChecker<M extends B3Message<? extends JsonNode>> extends AbstractJsonSchemaOperationGrantsChecker<M> {
 
@@ -66,7 +66,7 @@ public class OperationJsonSchemaChecker<M extends B3Message<? extends JsonNode>>
     }
 
     @Override
-    public void bindTo(B3Topic.Name topicRoot) {
+    public void bindTo(B3TopicRoot.Name topicRoot) {
         
     }
 

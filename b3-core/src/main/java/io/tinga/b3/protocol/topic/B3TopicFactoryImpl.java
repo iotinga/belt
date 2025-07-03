@@ -2,8 +2,8 @@ package io.tinga.b3.protocol.topic;
 
 import com.google.inject.Inject;
 
-import static io.tinga.b3.protocol.topic.B3Topic.DEFAULT_ROOT;
-import static io.tinga.b3.protocol.topic.B3Topic.GLUE;
+import static io.tinga.b3.protocol.topic.B3TopicRoot.DEFAULT_ROOT;
+import static io.tinga.b3.protocol.topic.B3TopicRoot.GLUE;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import io.tinga.b3.protocol.TopicNameValidationException;
-import io.tinga.b3.protocol.topic.B3Topic.Category;
+import io.tinga.b3.protocol.topic.B3TopicRoot.Category;
 
 public class B3TopicFactoryImpl implements B3TopicFactory {
 
@@ -48,10 +48,10 @@ public class B3TopicFactoryImpl implements B3TopicFactory {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
 
-    private class B3TopicImpl implements B3Topic, B3Topic.Command, B3Topic.Command.Role,
-            B3Topic.Shadow.Desired, B3Topic.Shadow.Desired.Role, B3Topic.Shadow.Desired.Batch,
-            B3Topic.Shadow.Desired.Batch.Role, B3Topic.Shadow, B3Topic.Shadow.Reported,
-            B3Topic.Shadow.Reported.Batch, B3Topic.Shadow.Reported.Live {
+    private class B3TopicImpl implements B3TopicRoot, B3TopicRoot.Command, B3TopicRoot.Command.Role,
+            B3TopicRoot.Shadow.Desired, B3TopicRoot.Shadow.Desired.Role, B3TopicRoot.Shadow.Desired.Batch,
+            B3TopicRoot.Shadow.Desired.Batch.Role, B3TopicRoot.Shadow, B3TopicRoot.Shadow.Reported,
+            B3TopicRoot.Shadow.Reported.Batch, B3TopicRoot.Shadow.Reported.Live {
 
         private final String id;
         protected final List<Token> stack;
@@ -152,7 +152,7 @@ public class B3TopicFactoryImpl implements B3TopicFactory {
         }
 
         @Override
-        public boolean isAnchestorOf(B3Topic.Name topic) {
+        public boolean isAnchestorOf(B3TopicRoot.Name topic) {
             return topic != null && topic.build().startsWith(this.build());
         }
 
@@ -160,6 +160,7 @@ public class B3TopicFactoryImpl implements B3TopicFactory {
         public Category getCategory() {
             return this.category;
         }
+
     }
 
     @Inject
@@ -173,7 +174,7 @@ public class B3TopicFactoryImpl implements B3TopicFactory {
     }
 
     @Override
-    public B3Topic agent(String id) {
+    public B3TopicRoot agent(String id) {
         if (id.contains(GLUE)) {
             throw new TopicNameValidationException("invalid char");
         }
@@ -181,7 +182,7 @@ public class B3TopicFactoryImpl implements B3TopicFactory {
     }
 
     @Override
-    public B3Topic entity(String id) {
+    public B3TopicRoot entity(String id) {
         if (id.contains(GLUE)) {
             throw new TopicNameValidationException("invalid char");
         }
@@ -189,7 +190,7 @@ public class B3TopicFactoryImpl implements B3TopicFactory {
     }
 
     @Override
-    public B3Topic.Name parse(String topicPath) throws TopicNameValidationException {
+    public B3TopicRoot.Name parse(String topicPath) throws TopicNameValidationException {
         if (topicPath == null || topicPath.trim().isEmpty())
             throw new TopicNameValidationException("The given topicPath is null or empty");
 

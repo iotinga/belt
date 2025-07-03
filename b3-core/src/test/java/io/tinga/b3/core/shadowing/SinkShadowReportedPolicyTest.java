@@ -16,7 +16,7 @@ import com.github.javafaker.Faker;
 
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.b3.protocol.topic.TestB3TopicFactory;
 import io.tinga.belt.output.GadgetSink;
 
@@ -32,7 +32,7 @@ public class SinkShadowReportedPolicyTest {
     @Mock
     GenericB3Message message;
     @Spy
-    B3Topic topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
+    B3TopicRoot topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
     SinkShadowReportedPolicy<GenericB3Message> testee;
 

@@ -3,15 +3,16 @@ package io.tinga.b3.protocol.topic;
 import java.util.AbstractMap;
 import java.util.Map;
 
-import io.tinga.b3.protocol.topic.B3Topic.Category;
+import io.tinga.b3.protocol.topic.B3TopicRoot.Category;
 
 class Token {
 
     enum Name {
-        ROOT, AGENT, ENTITY, COMMAND, SHADOW, BATCH, LIVE, REPORTED, DESIRED, AGENT_ID, ENTITY_ID, ROLE_NAME;
+        RETAIN, ROOT, AGENT, ENTITY, COMMAND, SHADOW, BATCH, LIVE, REPORTED, DESIRED, AGENT_ID, ENTITY_ID, ROLE_NAME;
     }
 
     private final static Map<Token.Name, Token> staticTokens = Map.ofEntries(
+            entry(Name.RETAIN),
             entry(Name.AGENT),
             entry(Name.ENTITY),
             entry(Name.COMMAND),

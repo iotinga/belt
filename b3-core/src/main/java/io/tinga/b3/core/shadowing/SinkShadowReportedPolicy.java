@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.belt.helpers.AEventHandler;
 import io.tinga.belt.output.GadgetSink;
 import it.netgrid.bauer.Topic;
@@ -37,7 +37,7 @@ public class SinkShadowReportedPolicy<M extends B3Message<?>> extends AEventHand
     }
 
     @Override
-    public void bindTo(B3Topic topicRoot, String roleName) {
+    public void bindTo(B3TopicRoot topicRoot, String roleName) {
         this.edgeDriver.subscribe(this);
     }
     

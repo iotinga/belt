@@ -1,7 +1,7 @@
 package io.tinga.b3.protocol.topic;
 
-import static io.tinga.b3.protocol.topic.B3Topic.DEFAULT_ROOT;
-import static io.tinga.b3.protocol.topic.B3Topic.GLUE;
+import static io.tinga.b3.protocol.topic.B3TopicRoot.DEFAULT_ROOT;
+import static io.tinga.b3.protocol.topic.B3TopicRoot.GLUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -33,7 +33,7 @@ public class B3TopicFactoryImplBuildTest {
     public void customBuilderWithLastGlueWordTest() {
         factory = new B3TopicFactoryImpl(customRoot + GLUE);
         String expectedResult = customRoot + "/agent/" + fakeId + "/shadow/reported";
-        B3Topic.Name topic = factory.agent(fakeId).shadow().reported();
+        B3TopicRoot.Name topic = factory.agent(fakeId).shadow().reported();
         String result = topic.build();
         assertEquals(expectedResult, result);
     }

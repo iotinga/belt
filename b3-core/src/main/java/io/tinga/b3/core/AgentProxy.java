@@ -1,7 +1,7 @@
 package io.tinga.b3.core;
 
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import it.netgrid.bauer.EventHandler;
 
 /**
@@ -9,7 +9,7 @@ import it.netgrid.bauer.EventHandler;
  */
 public interface AgentProxy<M extends B3Message<?>> extends EventHandler<M>, Agent<M> {
     interface Factory {
-        <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic topicRoot, String roleName);
+        <M extends B3Message<?>> AgentProxy<M> getProxy(B3TopicRoot topicRoot, String roleName);
     }
 
     void write(M desiredMessage);

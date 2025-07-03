@@ -15,7 +15,7 @@ import io.tinga.b3.core.shadowing.operation.Operation;
 import io.tinga.b3.core.shadowing.operation.OperationFactory;
 import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.belt.helpers.AEventHandler;
 
 public class PassthroughShadowDesiredPolicy<M extends B3Message<?>> extends AEventHandler<M>
@@ -64,7 +64,7 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>> extends AEve
     }
 
     @Override
-    public void bindTo(B3Topic topicRoot, String roleName) {
+    public void bindTo(B3TopicRoot topicRoot, String roleName) {
         // NOTHING TO DO
     }
 

@@ -10,14 +10,14 @@ import io.tinga.b3.core.EdgeDriver;
 import io.tinga.b3.core.VersionSafeExecutor;
 import io.tinga.b3.core.agent.AbstractAgentCommandExecutor;
 import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 
 public class EntityAgentCommandExecutorDaemon extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
 
     private static final Logger log = LoggerFactory.getLogger(EntityAgentCommandExecutorDaemon.class);
 
     @Inject
-    public EntityAgentCommandExecutorDaemon(B3Topic topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public EntityAgentCommandExecutorDaemon(B3TopicRoot topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             EdgeDriver<GenericB3Message> driver) {
         super(topicRoot, reportedPolicy, desiredPolicy, executor, driver);

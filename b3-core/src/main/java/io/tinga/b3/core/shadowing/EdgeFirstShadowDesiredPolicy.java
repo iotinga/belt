@@ -17,7 +17,7 @@ import io.tinga.b3.core.shadowing.operation.Operation;
 import io.tinga.b3.core.shadowing.operation.OperationFactory;
 import io.tinga.b3.core.shadowing.operation.OperationGrantsChecker;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.belt.helpers.AEventHandler;
 import it.netgrid.bauer.Topic;
 
@@ -80,7 +80,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>> extends AEvent
     }
 
     @Override
-    public void bindTo(B3Topic topicRoot, String roleName) {
+    public void bindTo(B3TopicRoot topicRoot, String roleName) {
         this.topic = this.topicFactory.getTopic(topicRoot.shadow().desired("#"), false);
         this.topic.addHandler(this);
     }

@@ -9,7 +9,7 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.AgentProxy;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.belt.helpers.AEventHandler;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> implements AgentProxy<M> {
     private static final Logger log = LoggerFactory.getLogger(AgentProxyImpl.class);
 
-    private B3Topic topicRoot;
+    private B3TopicRoot topicRoot;
     private String roleName;
     private Topic<M> desiredTopic;
     private Topic<M> reportedTopic;
@@ -41,7 +41,7 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public synchronized void bindTo(B3Topic topicRoot, String roleName) {
+    public synchronized void bindTo(B3TopicRoot topicRoot, String roleName) {
         if (desiredTopic == null && this.reportedTopic == null) {
             this.topicRoot = topicRoot;
             this.roleName = roleName;
@@ -75,7 +75,7 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public B3Topic getBoundTopicName() {
+    public B3TopicRoot getBoundTopicName() {
         return this.topicRoot;
     }
 

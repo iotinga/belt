@@ -2,7 +2,7 @@ package io.tinga.b3.protocol.topic;
 
 import io.tinga.b3.protocol.TopicNameValidationException;
 
-public interface B3Topic {
+public interface B3TopicRoot {
 
     String DEFAULT_ROOT = "b3";
     String GLUE = "/";
@@ -59,7 +59,7 @@ public interface B3Topic {
         }
     }
 
-    boolean isAnchestorOf(B3Topic.Name topic);
+    boolean isAnchestorOf(B3TopicRoot.Name topic);
 
     String getId();
 

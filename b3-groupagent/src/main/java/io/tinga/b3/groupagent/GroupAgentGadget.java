@@ -16,7 +16,7 @@ import io.tinga.b3.core.driver.AgentProxyFactoryImpl;
 import io.tinga.b3.core.driver.SingletonsITopicFactoryProxy;
 // import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowDesiredPolicy;
 // import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowReportedPolicy;
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
 import io.tinga.b3.protocol.topic.B3TopicFactory;
 import io.tinga.belt.AbstractGadget;
@@ -60,7 +60,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
 
 
     @Provides
-    public B3Topic buildAgentTopic(B3TopicFactory topicRootFactory, GroupAgentConfig config) {
+    public B3TopicRoot buildAgentTopic(B3TopicFactory topicRootFactory, GroupAgentConfig config) {
         return topicRootFactory.agent(config.agentId());
     }
 
