@@ -1,5 +1,6 @@
 package io.tinga.b3.agent.shadowing.policy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -34,30 +35,31 @@ public class SinkShadowReportedPolicyTest {
     @Spy
     B3Topic.Base topicBase = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
-    SinkShadowReportedPolicy<GenericB3Message> testee;
+    SinkShadowReportedPolicy<GenericB3Message> sut;
 
     @BeforeEach
     void setup() {
-        testee = new SinkShadowReportedPolicy<>(
+        sut = new SinkShadowReportedPolicy<>(
                 out,
                 edgeDriver);
     }
 
     @Test
     public void subscribeToDriverOnBind() {
-        testee.bindTo(topicBase, faker.lorem().word());
-        verify(edgeDriver, times(1)).subscribe(testee);
+        sut.bindTo(topicBase, faker.lorem().word());
+        verify(edgeDriver, times(1)).subscribe(sut);
+        assertEquals(edgeDriver.getClass().getName(), sut.getName());
     }
 
     @Test
     public void writeToSinkOnIncomingEvent() throws Exception {
-        testee.handle(TestB3TopicFactory.instance().agent(faker.lorem().word()).shadow().reported().build(), message);
+        sut.handle(TestB3TopicFactory.instance().agent(faker.lorem().word()).shadow().reported().build(), message);
         verify(out, times(1)).put(anyString());
     }
 
     @Test
     public void returnsTrueOnIncomingEvent() throws Exception {
-        boolean result = testee.handle(TestB3TopicFactory.instance().agent(faker.lorem().word()).shadow().reported().build(), message);
+        boolean result = sut.handle(TestB3TopicFactory.instance().agent(faker.lorem().word()).shadow().reported().build(), message);
         assertTrue(result);
     }
 }
