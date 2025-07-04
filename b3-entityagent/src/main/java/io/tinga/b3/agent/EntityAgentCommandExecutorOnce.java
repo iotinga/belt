@@ -20,10 +20,10 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     @Inject
     private B3MessageProvider<GenericB3Message> provider;
 
-    public EntityAgentCommandExecutorOnce(B3Topic.Root topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public EntityAgentCommandExecutorOnce(B3Topic.Base topicBase, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             Agent.EdgeDriver<GenericB3Message> driver) {
-        super(topicRoot, reportedPolicy, desiredPolicy, executor, driver);
+        super(topicBase, reportedPolicy, desiredPolicy, executor, driver);
     }
 
     @Override

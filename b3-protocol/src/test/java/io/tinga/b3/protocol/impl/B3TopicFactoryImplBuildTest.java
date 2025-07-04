@@ -34,41 +34,41 @@ public class B3TopicFactoryImplBuildTest {
     }
 
     @Test
-    public void rootAgentCreationTest() {
-        B3Topic.Root root = factory.agent(fakeId);
-        assertEquals(Category.AGENT, root.category());
-        assertEquals(DEFAULT_ROOT, root.root());
-        assertEquals(fakeId, root.id());
+    public void baseAgentCreationTest() {
+        B3Topic.Base base = factory.agent(fakeId);
+        assertEquals(Category.AGENT, base.category());
+        assertEquals(DEFAULT_ROOT, base.root());
+        assertEquals(fakeId, base.id());
     }
 
     @Test
-    public void rootEntityCreationTest() {
-        B3Topic.Root root = factory.entity(fakeId);
-        assertEquals(Category.ENTITY, root.category());
-        assertEquals(DEFAULT_ROOT, root.root());
-        assertEquals(fakeId, root.id());
+    public void baseEntityCreationTest() {
+        B3Topic.Base base = factory.entity(fakeId);
+        assertEquals(Category.ENTITY, base.category());
+        assertEquals(DEFAULT_ROOT, base.root());
+        assertEquals(fakeId, base.id());
     }
 
     @Test
     public void isRootOfTrueOnValid() {
         B3Topic basic = factory.agent(fakeId).command().build();
-        B3Topic.Root root = factory.agent(fakeId);
-        boolean result = root.isRootOf(basic);
+        B3Topic.Base base = factory.agent(fakeId);
+        boolean result = base.isBaseOf(basic);
         assertTrue(result);
     }
 
     @Test
     public void isRootOfFalseOnNotValid() {
         B3Topic basic = factory.agent(faker.lorem().word()).command().build();
-        B3Topic.Root root = factory.agent(fakeId);
-        boolean result = root.isRootOf(basic);
+        B3Topic.Base base = factory.agent(fakeId);
+        boolean result = base.isBaseOf(basic);
         assertFalse(result);
     }
 
     @Test
     public void isRootOfFalseOnNull() {
-        B3Topic.Root root = factory.agent(fakeId);
-        boolean result = root.isRootOf(null);
+        B3Topic.Base base = factory.agent(fakeId);
+        boolean result = base.isBaseOf(null);
         assertFalse(result);
     }
 

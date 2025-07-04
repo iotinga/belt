@@ -42,16 +42,16 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
     }
 
     private final List<B3EventHandler<M>> subscribers;
-    private final B3Topic.Root topicRoot;
+    private final B3Topic.Base topicBase;
     private final B3Topic shadowReportedTopic;
 
     private Context<M> currentContext;
     private State<E, M> state;
 
-    public AbstractFsmEdgeDriver(B3Topic.Root topicRoot) {
+    public AbstractFsmEdgeDriver(B3Topic.Base topicBase) {
         this.subscribers = new CopyOnWriteArrayList<>();
-        this.topicRoot = topicRoot;
-        this.shadowReportedTopic = this.topicRoot.shadow().reported().build();
+        this.topicBase = topicBase;
+        this.shadowReportedTopic = this.topicBase.shadow().reported().build();
     }
 
     protected abstract State<E, M> buildInitialState();

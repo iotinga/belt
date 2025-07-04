@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> implements AgentProxy<M> {
     private static final Logger log = LoggerFactory.getLogger(AgentProxyImpl.class);
 
-    private B3Topic.Root topicRoot;
+    private B3Topic.Base topicBase;
     private String roleName;
     private Topic<M> desiredTopic;
     private Topic<M> reportedTopic;
@@ -43,13 +43,13 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public synchronized void bindTo(B3Topic.Root topicRoot, String roleName) {
+    public synchronized void bindTo(B3Topic.Base topicBase, String roleName) {
         if (desiredTopic == null && this.reportedTopic == null) {
-            this.topicRoot = topicRoot;
+            this.topicBase = topicBase;
             this.roleName = roleName;
             this.desiredTopic = topicFactoryProxy
-                    .getTopic(topicRoot.shadow().desired(roleName).build(), true);
-            this.reportedTopic = topicFactoryProxy.getTopic(topicRoot.shadow().reported().build(), false);
+                    .getTopic(topicBase.shadow().desired(roleName).build(), true);
+            this.reportedTopic = topicFactoryProxy.getTopic(topicBase.shadow().reported().build(), false);
             this.reportedTopic.addHandler(this);
         }
     }
@@ -69,8 +69,8 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public B3Topic.Root getBoundTopicName() {
-        return this.topicRoot;
+    public B3Topic.Base getBoundTopicName() {
+        return this.topicBase;
     }
 
     @Override

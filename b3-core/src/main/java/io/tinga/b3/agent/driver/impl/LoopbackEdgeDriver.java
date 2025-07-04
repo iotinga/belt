@@ -15,14 +15,14 @@ import io.tinga.b3.protocol.B3Topic;
 public class LoopbackEdgeDriver<M extends B3Message<?>> implements Agent.EdgeDriver<M> {
 
     private final List<B3EventHandler<M>> subscribers;
-    private final B3Topic.Root topicRoot;
+    private final B3Topic.Base topicBase;
     private final B3Topic shadowReportedTopic;
 
     @Inject
-    public LoopbackEdgeDriver(B3Topic.Root topicRoot) {
+    public LoopbackEdgeDriver(B3Topic.Base topicBase) {
         this.subscribers = new CopyOnWriteArrayList<>();
-        this.topicRoot = topicRoot;
-        this.shadowReportedTopic = this.topicRoot.shadow().reported().build();
+        this.topicBase = topicBase;
+        this.shadowReportedTopic = this.topicBase.shadow().reported().build();
     }
 
     @Override

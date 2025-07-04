@@ -19,7 +19,7 @@ public record Operation<M extends B3Message<?>>(B3Topic sourceTopic, M message) 
     }
 
     public interface GrantsChecker<M extends B3Message<?>> {
-        void bindTo(B3Topic.Root topicRoot);
+        void bindTo(B3Topic.Base topicBase);
 
         boolean isAllowed(Operation<M> operation);
     }

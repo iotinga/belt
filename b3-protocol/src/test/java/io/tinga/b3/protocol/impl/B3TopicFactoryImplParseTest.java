@@ -20,33 +20,33 @@ public class B3TopicFactoryImplParseTest {
     @Test
     void customRoot() {
         sut = new B3TopicFactoryImpl("test");
-        B3Topic.Root agent = sut.agent("item1");
+        B3Topic.Base agent = sut.agent("item1");
         assertEquals("test/agent/item1/shadow/reported", agent.shadow().reported().build().toString());
     }
 
     @Test
     void removesLeadingGlueFromCustomRoot() {
         sut = new B3TopicFactoryImpl("test/");
-        B3Topic.Root agent = sut.agent("item1");
+        B3Topic.Base agent = sut.agent("item1");
         assertEquals("test/agent/item1/shadow/reported", agent.shadow().reported().build().toString());
     }
 
     @Test
     void defaultsOnNullCustomRoot() {
         sut = new B3TopicFactoryImpl(null);
-        B3Topic.Root agent = sut.agent("item1");
+        B3Topic.Base agent = sut.agent("item1");
         assertEquals("b3/agent/item1/shadow/reported", agent.shadow().reported().build().toString());
     }
 
     @Test
     void buildValidAgentName() {
-        B3Topic.Root agent = sut.agent("item1");
+        B3Topic.Base agent = sut.agent("item1");
         assertEquals("b3/agent/item1/shadow/reported", agent.shadow().reported().build().toString());
     }
 
     @Test
     void buildValidEntityName() {
-        B3Topic.Root entity = sut.entity("item2");
+        B3Topic.Base entity = sut.entity("item2");
         assertEquals("b3/entity/item2/shadow/reported", entity.shadow().reported().build().toString());
     }
 

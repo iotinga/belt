@@ -69,10 +69,10 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
 
-    private class B3TopicImpl implements B3Topic.Root, B3Topic.Root.Command, B3Topic.Root.Command.Role,
-            B3Topic.Root.Shadow.Desired, B3Topic.Root.Shadow.Desired.Role, B3Topic.Root.Shadow.Desired.Batch,
-            B3Topic.Root.Shadow.Desired.Batch.Role, B3Topic.Root.Shadow, B3Topic.Root.Shadow.Reported,
-            B3Topic.Root.Shadow.Reported.Batch, B3Topic.Root.Shadow.Reported.Live {
+    private class B3TopicImpl implements B3Topic.Base, B3Topic.Base.Command, B3Topic.Base.Command.Role,
+            B3Topic.Base.Shadow.Desired, B3Topic.Base.Shadow.Desired.Role, B3Topic.Base.Shadow.Desired.Batch,
+            B3Topic.Base.Shadow.Desired.Batch.Role, B3Topic.Base.Shadow, B3Topic.Base.Shadow.Reported,
+            B3Topic.Base.Shadow.Reported.Batch, B3Topic.Base.Shadow.Reported.Live {
 
         protected final List<B3TopicToken> stack;
 
@@ -165,7 +165,7 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
         }
 
         @Override
-        public boolean isRootOf(B3Topic topic) {
+        public boolean isBaseOf(B3Topic topic) {
             return topic != null && topic.toString().startsWith(this.build().toString());
         }
 
@@ -197,7 +197,7 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
     }
 
     @Override
-    public B3Topic.Root agent(String id) {
+    public B3Topic.Base agent(String id) {
         if (id.contains(GLUE)) {
             throw new B3TopicValidationException("invalid char");
         }
@@ -205,7 +205,7 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
     }
 
     @Override
-    public B3Topic.Root entity(String id) {
+    public B3Topic.Base entity(String id) {
         if (id.contains(GLUE)) {
             throw new B3TopicValidationException("invalid char");
         }

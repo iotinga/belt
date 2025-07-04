@@ -25,21 +25,21 @@ public class AgentProxyFactoryImpl implements AgentProxy.Factory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic.Root topicRoot, String roleName) {
-        String cacheKey = this.buildCacheEntryKey(topicRoot, roleName);
+    public <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName) {
+        String cacheKey = this.buildCacheEntryKey(topicBase, roleName);
         AgentProxy<M> cacheItem = (AgentProxy<M>) this.cache.get(cacheKey);
         if (cacheItem == null) {
             cacheItem = this.injector.getInstance(Key.get(new TypeLiteral<AgentProxy<M>>() {
             }));
-            cacheItem.bindTo(topicRoot, roleName);
+            cacheItem.bindTo(topicBase, roleName);
             this.cache.put(cacheKey, (AgentProxy<B3Message<?>>) cacheItem);
         }
 
         return cacheItem;
     }
 
-    private String buildCacheEntryKey(B3Topic.Root topicRoot, String desiredRole) {
-        return topicRoot.toString() + "_" + desiredRole;
+    private String buildCacheEntryKey(B3Topic.Base topicBase, String desiredRole) {
+        return topicBase.toString() + "_" + desiredRole;
     }
 
 }

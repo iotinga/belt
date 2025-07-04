@@ -34,8 +34,8 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
     }
 
     @Override
-    public void bindTo(B3Topic.Root topicRoot, String roleName) {
-        this.topic = this.topicFactory.getTopic(topicRoot.shadow().reported().build(), true);
+    public void bindTo(B3Topic.Base topicBase, String roleName) {
+        this.topic = this.topicFactory.getTopic(topicBase.shadow().reported().build(), true);
         this.edgeDriver.subscribe(this);
     }
 

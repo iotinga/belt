@@ -19,7 +19,7 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
 
     private final ITopicFactory topicFactory;
     private final Class<M> eventClass;
-    private B3Topic.Root topicRoot;
+    private B3Topic.Base topicBase;
     private Topic<M> reportedTopic;
 
     @Inject
@@ -29,10 +29,10 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
     }
 
     @Override
-    public void initVersion(B3Topic.Root topicRoot) throws InitializationException {
+    public void initVersion(B3Topic.Base topicBase) throws InitializationException {
         try {
-            this.topicRoot = topicRoot;
-            this.reportedTopic = this.topicFactory.getTopic(this.topicRoot.shadow().reported().build().toString());
+            this.topicBase = topicBase;
+            this.reportedTopic = this.topicFactory.getTopic(this.topicBase.shadow().reported().build().toString());
             this.reportedTopic.addHandler(this);
         } catch (Exception e) {
             throw new InitializationException(e.getMessage());
@@ -50,7 +50,7 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
     }
 
     @Override
-    public boolean handle(String topicRoot, M event) throws Exception {
+    public boolean handle(String topicBase, M event) throws Exception {
         if (!this.isInitialized()) {
             this.initCurrentReportedVersion(event.getVersion());
         }

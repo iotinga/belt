@@ -55,8 +55,8 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
 
 
     @Provides
-    public B3Topic.Root buildAgentTopic(B3Topic.Factory topicRootFactory, GroupAgentConfig config) {
-        return topicRootFactory.agent(config.agentId());
+    public B3Topic.Base buildAgentTopic(B3Topic.Factory topicBaseFactory, GroupAgentConfig config) {
+        return topicBaseFactory.agent(config.agentId());
     }
 
     @Provides

@@ -23,16 +23,16 @@ public interface B3Topic {
     public interface Factory {
         Valid parse(String topicPath) throws B3TopicValidationException;
 
-        Root agent(String id) throws B3TopicValidationException;
+        Base agent(String id) throws B3TopicValidationException;
 
-        Root entity(String id) throws B3TopicValidationException;
+        Base entity(String id) throws B3TopicValidationException;
     }
 
     public interface Valid {
         B3Topic build();
     }
 
-    public interface Root {
+    public interface Base {
 
         interface Shadow {
             interface Reported extends Valid {
@@ -73,7 +73,7 @@ public interface B3Topic {
             }
         }
 
-        boolean isRootOf(B3Topic topic);
+        boolean isBaseOf(B3Topic topic);
 
         Shadow shadow();
 

@@ -80,8 +80,8 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
     }
 
     @Override
-    public void bindTo(B3Topic.Root topicRoot, String roleName) {
-        this.topic = this.topicFactoryProxy.getTopic(topicRoot.shadow().desired("#").build(), false);
+    public void bindTo(B3Topic.Base topicBase, String roleName) {
+        this.topic = this.topicFactoryProxy.getTopic(topicBase.shadow().desired("#").build(), false);
         this.topic.addHandler(this);
     }
 

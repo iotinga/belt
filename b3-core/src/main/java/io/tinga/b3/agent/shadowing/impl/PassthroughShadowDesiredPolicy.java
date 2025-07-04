@@ -41,10 +41,10 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>>
     }
 
     @Override
-    public boolean handle(B3Topic topicRoot, M event) throws Exception {
+    public boolean handle(B3Topic topicBase, M event) throws Exception {
         this.executor.safeExecute(version -> {
             try {
-                Operation<M> operation = operationFactory.buildFrom(topicRoot, event);
+                Operation<M> operation = operationFactory.buildFrom(topicBase, event);
                 if (grantsChecker.isAllowed(operation)) {
                     this.edgeDriver.write(event);
                 }
@@ -59,7 +59,7 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>>
     }
 
     @Override
-    public void bindTo(B3Topic.Root topicRoot, String roleName) {
+    public void bindTo(B3Topic.Base topicBase, String roleName) {
         // NOTHING TO DO
     }
 
