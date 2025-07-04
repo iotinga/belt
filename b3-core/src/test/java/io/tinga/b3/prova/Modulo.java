@@ -8,7 +8,7 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class Modulo extends AbstractModule {
 

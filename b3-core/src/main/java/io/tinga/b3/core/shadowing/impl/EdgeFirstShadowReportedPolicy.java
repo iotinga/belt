@@ -9,8 +9,7 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 import it.netgrid.bauer.Topic;
 
 public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
@@ -35,8 +34,8 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
     }
 
     @Override
-    public void bindTo(B3TopicRoot topicRoot, String roleName) {
-        this.topic = this.topicFactory.getTopic(topicRoot.shadow().reported(), true);
+    public void bindTo(B3Topic.Root topicRoot, String roleName) {
+        this.topic = this.topicFactory.getTopic(topicRoot.shadow().reported().build(), true);
         this.edgeDriver.subscribe(this);
     }
 

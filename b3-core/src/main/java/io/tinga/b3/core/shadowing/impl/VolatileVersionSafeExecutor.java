@@ -1,7 +1,7 @@
 package io.tinga.b3.core.shadowing.impl;
 
 import io.tinga.b3.core.InitializationException;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 
 /**
  * This VersionSafeExecutor requires always a fresh topic creation from the ITopicFactory without the retain
@@ -10,7 +10,7 @@ import io.tinga.b3.protocol.topic.B3TopicRoot;
 public class VolatileVersionSafeExecutor extends AbstracVersionSafeExecutor {
 
     @Override
-    public void initVersion(B3TopicRoot topicRoot) throws InitializationException {
+    public void initVersion(B3Topic.Root topicRoot) throws InitializationException {
         if (!this.isInitialized()) {
             this.initCurrentReportedVersion(1);
         }

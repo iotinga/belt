@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.driver.ShadowDesiredPreProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
-import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class EdgeGroupAgentDesiredPreProcessor implements ShadowDesiredPreProcessor<GenericB3Message> {
 

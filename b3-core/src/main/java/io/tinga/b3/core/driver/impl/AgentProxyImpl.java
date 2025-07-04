@@ -10,9 +10,7 @@ import io.tinga.b3.core.B3EventHandler;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.driver.AgentProxy;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
-import io.tinga.b3.protocol.topic.B3TopicFactory;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.helpers.AEventHandler;
 
 import java.util.List;
@@ -21,18 +19,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> implements AgentProxy<M> {
     private static final Logger log = LoggerFactory.getLogger(AgentProxyImpl.class);
 
-    private B3TopicRoot topicRoot;
+    private B3Topic.Root topicRoot;
     private String roleName;
     private Topic<M> desiredTopic;
     private Topic<M> reportedTopic;
     private final List<B3EventHandler<M>> subscribers;
     private final ITopicFactoryProxy topicFactoryProxy;
-    private final B3TopicFactory topicFactory;
+    private final B3Topic.Factory topicFactory;
 
     private M lastShadowReported;
 
     public AgentProxyImpl(
-            Class<M> messageClass, ITopicFactoryProxy topicFactoryProxy, B3TopicFactory topicFactory) {
+            Class<M> messageClass, ITopicFactoryProxy topicFactoryProxy, B3Topic.Factory topicFactory) {
         super(messageClass);
         this.topicFactory = topicFactory;
         this.topicFactoryProxy = topicFactoryProxy;
@@ -46,13 +44,13 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public synchronized void bindTo(B3TopicRoot topicRoot, String roleName) {
+    public synchronized void bindTo(B3Topic.Root topicRoot, String roleName) {
         if (desiredTopic == null && this.reportedTopic == null) {
             this.topicRoot = topicRoot;
             this.roleName = roleName;
             this.desiredTopic = topicFactoryProxy
-                    .getTopic(topicRoot.shadow().desired(roleName), true);
-            this.reportedTopic = topicFactoryProxy.getTopic(topicRoot.shadow().reported(), false);
+                    .getTopic(topicRoot.shadow().desired(roleName).build(), true);
+            this.reportedTopic = topicFactoryProxy.getTopic(topicRoot.shadow().reported().build(), false);
             this.reportedTopic.addHandler(this);
         }
     }
@@ -72,7 +70,7 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public B3TopicRoot getBoundTopicName() {
+    public B3Topic.Root getBoundTopicName() {
         return this.topicRoot;
     }
 

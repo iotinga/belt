@@ -3,32 +3,30 @@ package io.tinga.b3.core.shadowing.impl;
 import io.tinga.b3.core.InvalidOperationException;
 import io.tinga.b3.core.shadowing.Operation;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
-import io.tinga.b3.protocol.topic.B3Topic;
-import io.tinga.b3.protocol.topic.B3TopicFactory;
+import io.tinga.b3.protocol.B3Topic;
 
 public class OperationTopicBasedFactory implements Operation.Factory {
 
-    private final B3TopicFactory topicFactory;
+    private final B3Topic.Factory topicFactory;
 
-    public OperationTopicBasedFactory(B3TopicFactory topicFactory) {
+    public OperationTopicBasedFactory(B3Topic.Factory topicFactory) {
         this.topicFactory = topicFactory;
     }
 
-    @Override
-    public <M extends B3Message<?>> Operation<M> buildFrom(B3TopicRoot.Name topicName, M message)
-            throws InvalidOperationException {
-        if (topicName == null || message == null) {
-            throw new InvalidOperationException();
-        }
-        return new Operation<M>(topicName.build(), message);
-    }
+    // @Override
+    // public <M extends B3Message<?>> Operation<M> buildFrom(B3TopicRoot.Name topicName, M message)
+    //         throws InvalidOperationException {
+    //     if (topicName == null || message == null) {
+    //         throw new InvalidOperationException();
+    //     }
+    //     return new Operation<M>(topicName.build(), message);
+    // }
 
     @Override
     public <M extends B3Message<?>> Operation<M> buildFrom(String topicPath, M message)
             throws InvalidOperationException {
-        B3TopicRoot.Name topicRoot = this.topicFactory.parse(topicPath);
-        return this.buildFrom(topicRoot, message);
+        B3Topic.Valid topic = this.topicFactory.parse(topicPath);
+        return this.buildFrom(topic.build(), message);
     }
 
     @Override

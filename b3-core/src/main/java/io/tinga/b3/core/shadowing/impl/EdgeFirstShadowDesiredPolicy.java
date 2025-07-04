@@ -14,9 +14,7 @@ import io.tinga.b3.core.driver.EdgeDriverException;
 import io.tinga.b3.core.shadowing.Operation;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
-import io.tinga.b3.protocol.topic.B3TopicFactory;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 import it.netgrid.bauer.EventHandler;
 import it.netgrid.bauer.Topic;
 
@@ -31,13 +29,13 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
     protected final Operation.Factory operationFactory;
     protected final Operation.GrantsChecker<M> grantsChecker;
     protected final Class<M> messageClass;
-    protected final B3TopicFactory topicFactory;
+    protected final B3Topic.Factory topicFactory;
 
     protected Topic<M> topic;
 
     @Inject
     public EdgeFirstShadowDesiredPolicy(Class<M> messageClass, VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
-            ITopicFactoryProxy topicFactoryProxy, Operation.Factory operationFactory, B3TopicFactory topicFactory,
+            ITopicFactoryProxy topicFactoryProxy, Operation.Factory operationFactory, B3Topic.Factory topicFactory,
             Operation.GrantsChecker<M> grantsChecker) {
         this.messageClass = messageClass;
         this.executor = executor;
@@ -82,8 +80,8 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
     }
 
     @Override
-    public void bindTo(B3TopicRoot topicRoot, String roleName) {
-        this.topic = this.topicFactoryProxy.getTopic(topicRoot.shadow().desired("#"), false);
+    public void bindTo(B3Topic.Root topicRoot, String roleName) {
+        this.topic = this.topicFactoryProxy.getTopic(topicRoot.shadow().desired("#").build(), false);
         this.topic.addHandler(this);
     }
 

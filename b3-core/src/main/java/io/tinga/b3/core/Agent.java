@@ -3,17 +3,17 @@ package io.tinga.b3.core;
 import io.tinga.b3.core.driver.ConnectionState;
 import io.tinga.b3.core.driver.EdgeDriverException;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 
 public interface Agent<M extends B3Message<?>> {
     int VERSION_WILDCARD = 0;
 
     interface ShadowDesiredPolicy<M extends B3Message<?>> extends B3EventHandler<M> {
-        void bindTo(B3TopicRoot topicRoot, String roleName);
+        void bindTo(B3Topic.Root topicRoot, String roleName);
     }
 
     interface ShadowReportedPolicy<M extends B3Message<?>> extends B3EventHandler<M> {
-        void bindTo(B3TopicRoot topicRoot, String roleName);
+        void bindTo(B3Topic.Root topicRoot, String roleName);
     }
 
     interface Config {
@@ -40,9 +40,9 @@ public interface Agent<M extends B3Message<?>> {
         String getReportedStoreRef();
     }
 
-    void bindTo(B3TopicRoot topicRoot, String roleName);
+    void bindTo(B3Topic.Root topicRoot, String roleName);
 
-    B3TopicRoot getBoundTopicName();
+    B3Topic.Root getBoundTopicName();
 
     String getBoundRoleName();
 }

@@ -13,7 +13,7 @@ import com.networknt.schema.ValidationMessage;
 import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.core.shadowing.Operation;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.helpers.JsonUtils;
 import io.tinga.belt.output.GadgetSink;
 
@@ -72,7 +72,7 @@ public class AbstractJsonSchemaOperationGrantsChecker<M extends B3Message<? exte
     }
 
     @Override
-    public void bindTo(B3TopicRoot.Name topicRoot) {
+    public void bindTo(B3Topic.Root topicRoot) {
         
     }
 }

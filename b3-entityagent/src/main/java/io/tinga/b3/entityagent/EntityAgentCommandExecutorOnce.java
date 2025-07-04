@@ -11,9 +11,8 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.helpers.B3MessageProvider;
 import io.tinga.b3.core.impl.AbstractAgentCommandExecutor;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
-import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
 
@@ -22,7 +21,7 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     @Inject
     private B3MessageProvider<GenericB3Message> provider;
 
-    public EntityAgentCommandExecutorOnce(B3TopicRoot topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public EntityAgentCommandExecutorOnce(B3Topic.Root topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             Agent.EdgeDriver<GenericB3Message> driver) {
         super(topicRoot, reportedPolicy, desiredPolicy, executor, driver);

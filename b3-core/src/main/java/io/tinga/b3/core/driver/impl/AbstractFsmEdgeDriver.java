@@ -12,8 +12,7 @@ import io.tinga.b3.core.B3EventHandler;
 import io.tinga.b3.core.driver.ConnectionState;
 import io.tinga.b3.core.driver.EdgeDriverException;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3Topic;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 
 public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
         implements Agent.EdgeDriver<M> {
@@ -43,13 +42,13 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
     }
 
     private final List<B3EventHandler<M>> subscribers;
-    private final B3TopicRoot topicRoot;
+    private final B3Topic.Root topicRoot;
     private final B3Topic shadowReportedTopic;
 
     private Context<M> currentContext;
     private State<E, M> state;
 
-    public AbstractFsmEdgeDriver(B3TopicRoot topicRoot) {
+    public AbstractFsmEdgeDriver(B3Topic.Root topicRoot) {
         this.subscribers = new CopyOnWriteArrayList<>();
         this.topicRoot = topicRoot;
         this.shadowReportedTopic = this.topicRoot.shadow().reported().build();

@@ -6,7 +6,7 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.InitializationException;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.output.Status;
 
@@ -32,12 +32,12 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
 
     protected final VersionSafeExecutor executor;
 
-    private B3TopicRoot topicRoot;
+    private B3Topic.Root topicRoot;
     private String roleName;
 
     @Inject
     public AbstractAgentCommandExecutor(
-            B3TopicRoot topicRoot,
+            B3Topic.Root topicRoot,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
             Agent.ShadowDesiredPolicy<M> desiredPolicy, VersionSafeExecutor executor,
             Agent.EdgeDriver<M> driver) {
@@ -50,7 +50,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     public abstract Status execute(C command);
 
     @Override
-    public synchronized void bindTo(B3TopicRoot topicRoot, String roleName) {
+    public synchronized void bindTo(B3Topic.Root topicRoot, String roleName) {
         this.topicRoot = topicRoot;
         this.roleName = roleName;
         this.executor.initVersion(topicRoot);
@@ -118,7 +118,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     }
 
     @Override
-    public B3TopicRoot getBoundTopicName() {
+    public B3Topic.Root getBoundTopicName() {
         return this.topicRoot;
     }
 
@@ -127,7 +127,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
         return this.roleName;
     }
 
-    protected B3TopicRoot getTopicName() {
+    protected B3Topic.Root getTopicName() {
         return topicRoot;
     }
 

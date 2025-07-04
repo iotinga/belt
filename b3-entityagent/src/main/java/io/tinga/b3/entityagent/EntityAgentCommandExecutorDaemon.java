@@ -9,15 +9,15 @@ import io.tinga.belt.output.Status;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.impl.AbstractAgentCommandExecutor;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
-import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class EntityAgentCommandExecutorDaemon extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
 
     private static final Logger log = LoggerFactory.getLogger(EntityAgentCommandExecutorDaemon.class);
 
     @Inject
-    public EntityAgentCommandExecutorDaemon(B3TopicRoot topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
+    public EntityAgentCommandExecutorDaemon(B3Topic.Root topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
             Agent.EdgeDriver<GenericB3Message> driver) {
         super(topicRoot, reportedPolicy, desiredPolicy, executor, driver);

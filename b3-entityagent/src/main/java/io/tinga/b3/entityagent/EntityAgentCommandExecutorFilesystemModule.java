@@ -15,7 +15,7 @@ import io.tinga.b3.core.shadowing.Operation;
 import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowReportedPolicy;
 import io.tinga.b3.core.shadowing.impl.OperationJsonSchemaChecker;
 import io.tinga.b3.core.shadowing.impl.PassthroughShadowDesiredPolicy;
-import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class EntityAgentCommandExecutorFilesystemModule extends AbstractModule {
 

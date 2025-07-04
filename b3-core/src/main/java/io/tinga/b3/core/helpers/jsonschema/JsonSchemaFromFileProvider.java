@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 
-import io.tinga.b3.protocol.topic.B3Topic;
+import io.tinga.b3.protocol.B3Topic;
 
 public class JsonSchemaFromFileProvider implements JsonSchemaProvider {
 

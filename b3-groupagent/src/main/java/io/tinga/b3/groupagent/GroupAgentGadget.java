@@ -10,14 +10,11 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.driver.AgentProxy;
 import io.tinga.b3.core.driver.impl.AgentProxyFactoryImpl;
-import io.tinga.b3.core.driver.impl.SingletonsITopicFactoryProxy;
+import io.tinga.b3.core.driver.impl.PassthroughITopicFactoryProxy;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.core.shadowing.impl.InitFromReportedTopicVersionSafeExecutor;
-// import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowDesiredPolicy;
-// import io.tinga.b3.core.shadowing.GenericEdgeFirstShadowReportedPolicy;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
-import io.tinga.b3.protocol.topic.B3TopicFactoryImpl;
-import io.tinga.b3.protocol.topic.B3TopicFactory;
+import io.tinga.b3.protocol.impl.B3TopicFactoryImpl;
+import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.AbstractGadget;
 import io.tinga.belt.config.ConfigurationProvider;
 import io.tinga.belt.input.GadgetCommandOption;
@@ -44,12 +41,12 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
         bind(VersionSafeExecutor.class).to(InitFromReportedTopicVersionSafeExecutor.class).in(Singleton.class);
 
         // FIELD PROXIES
-        bind(ITopicFactoryProxy.class).to(SingletonsITopicFactoryProxy.class).in(Singleton.class);
+        bind(ITopicFactoryProxy.class).to(PassthroughITopicFactoryProxy.class).in(Singleton.class);
         // bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
         // })).to(GenericAgentProxy.class);
         bind(Key.get(new TypeLiteral<AgentProxy.Factory>() {
         })).to(AgentProxyFactoryImpl.class);
-        bind(B3TopicFactory.class).to(B3TopicFactoryImpl.class);
+        bind(B3Topic.Factory.class).to(B3TopicFactoryImpl.class);
 
         // bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {
         // })).to(GenericEdgeFirstShadowDesiredPolicy.class);
@@ -59,7 +56,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
 
 
     @Provides
-    public B3TopicRoot buildAgentTopic(B3TopicFactory topicRootFactory, GroupAgentConfig config) {
+    public B3Topic.Root buildAgentTopic(B3Topic.Factory topicRootFactory, GroupAgentConfig config) {
         return topicRootFactory.agent(config.agentId());
     }
 

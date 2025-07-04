@@ -21,10 +21,9 @@ import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowDesiredPolicy;
-import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.TopicNameValidationException;
-import io.tinga.b3.protocol.topic.B3TopicFactory;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 import io.tinga.b3.protocol.topic.TestB3TopicFactory;
 import it.netgrid.bauer.Topic;
 
@@ -48,9 +47,9 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     @Mock
     Operation.GrantsChecker<GenericB3Message> checker;
     @Mock
-    B3TopicFactory topicFactory;
+    B3Topic.Factory topicFactory;
     @Spy
-    B3TopicRoot topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
+    B3Topic.Root topicRoot = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
     EdgeFirstShadowDesiredPolicy<GenericB3Message> testee;
 
@@ -65,9 +64,9 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
 
     @Test
     public void addTopicHandlerOnBind() {
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3TopicRoot.Name.class), eq(false));
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(false));
         testee.bindTo(topicRoot, faker.lorem().word());
-        verify(factoryProxy, times(1)).getTopic(any(B3TopicRoot.Name.class), eq(false));
+        verify(factoryProxy, times(1)).getTopic(any(B3Topic.class), eq(false));
         verify(topic, times(1)).addHandler(testee);
     }
 

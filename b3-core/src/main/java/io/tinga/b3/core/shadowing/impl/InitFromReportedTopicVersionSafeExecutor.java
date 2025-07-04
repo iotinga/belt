@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.InitializationException;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 import it.netgrid.bauer.EventHandler;
 import it.netgrid.bauer.ITopicFactory;
 import it.netgrid.bauer.Topic;
@@ -19,7 +19,7 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
 
     private final ITopicFactory topicFactory;
     private final Class<M> eventClass;
-    private B3TopicRoot topicRoot;
+    private B3Topic.Root topicRoot;
     private Topic<M> reportedTopic;
 
     @Inject
@@ -29,7 +29,7 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
     }
 
     @Override
-    public void initVersion(B3TopicRoot topicRoot) throws InitializationException {
+    public void initVersion(B3Topic.Root topicRoot) throws InitializationException {
         try {
             this.topicRoot = topicRoot;
             this.reportedTopic = this.topicFactory.getTopic(this.topicRoot.shadow().reported().build().toString());

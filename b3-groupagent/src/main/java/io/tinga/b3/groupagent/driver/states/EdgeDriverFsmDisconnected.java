@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import io.tinga.b3.core.driver.ConnectionState;
 import io.tinga.b3.core.driver.impl.AbstractFsmEdgeDriver;
 import io.tinga.b3.core.driver.impl.AbstractFsmEdgeDriver.Context;
-import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 
 @Singleton
 public class EdgeDriverFsmDisconnected implements AbstractFsmEdgeDriver.State<EdgeDriverFsmState, GenericB3Message> {

@@ -3,14 +3,14 @@ package io.tinga.b3.core.driver;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
-import io.tinga.b3.protocol.topic.B3TopicRoot;
+import io.tinga.b3.protocol.B3Topic;
 
 /**
  * An Agent Proxy is
  */
 public interface AgentProxy<M extends B3Message<?>> extends B3EventHandler<M>, Agent<M> {
     interface Factory {
-        <M extends B3Message<?>> AgentProxy<M> getProxy(B3TopicRoot topicRoot, String roleName);
+        <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic.Root topicRoot, String roleName);
     }
 
     void write(M desiredMessage);

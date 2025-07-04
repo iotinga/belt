@@ -1,17 +1,17 @@
-package io.tinga.b3.protocol.topic;
+package io.tinga.b3.protocol.impl;
 
 import java.util.AbstractMap;
 import java.util.Map;
 
-import io.tinga.b3.protocol.topic.B3TopicRoot.Category;
+import io.tinga.b3.protocol.B3Topic.Category;
 
-public record Token(Name name, String value) {
+public record B3TopicToken(Name name, String value) {
 
     enum Name {
         RETAIN, ROOT, AGENT, ENTITY, COMMAND, SHADOW, BATCH, LIVE, REPORTED, DESIRED, AGENT_ID, ENTITY_ID, ROLE_NAME;
     }
 
-    private final static Map<Token.Name, Token> staticTokens = Map.ofEntries(
+    private final static Map<B3TopicToken.Name, B3TopicToken> staticTokens = Map.ofEntries(
             entry(Name.RETAIN),
             entry(Name.AGENT),
             entry(Name.ENTITY),
@@ -22,28 +22,28 @@ public record Token(Name name, String value) {
             entry(Name.REPORTED),
             entry(Name.DESIRED));
 
-    private static Map.Entry<Token.Name, Token> entry(Token.Name name) {
-        return new AbstractMap.SimpleEntry<>(name, new Token(name, name.name().toLowerCase()));
+    private static Map.Entry<B3TopicToken.Name, B3TopicToken> entry(B3TopicToken.Name name) {
+        return new AbstractMap.SimpleEntry<>(name, new B3TopicToken(name, name.name().toLowerCase()));
     }
 
-    public static Token from(Name name) {
+    public static B3TopicToken from(Name name) {
         return from(name, name.name().toLowerCase());
     }
 
-    public static Token from(Name name, String value) {
-        Token retval = staticTokens.get(name);
+    public static B3TopicToken from(Name name, String value) {
+        B3TopicToken retval = staticTokens.get(name);
         if (retval == null) {
             if (value == null) {
-                new Token(name, name.name().toLowerCase());
+                new B3TopicToken(name, name.name().toLowerCase());
             } else {
-                retval = new Token(name, value);
+                retval = new B3TopicToken(name, value);
             }
         }
 
         return retval;
     }
 
-    public static Token from(Category category) {
+    public static B3TopicToken from(Category category) {
         switch (category) {
             case ENTITY:
                 return from(Name.ENTITY, category.name());
@@ -53,7 +53,7 @@ public record Token(Name name, String value) {
         }
     }
 
-    public static Token from(Category category, String value) {
+    public static B3TopicToken from(Category category, String value) {
         switch (category) {
             case ENTITY:
                 return from(Name.ENTITY_ID, value);

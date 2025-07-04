@@ -8,8 +8,8 @@ import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.groupagent.driver.states.EdgeDriverFsmConnected;
 import io.tinga.b3.groupagent.driver.states.EdgeDriverFsmDisconnected;
 import io.tinga.b3.groupagent.driver.states.EdgeDriverFsmState;
-import io.tinga.b3.protocol.GenericB3Message;
-import io.tinga.b3.protocol.topic.B3TopicFactory;
+import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class GroupAgentEdgeDriver
         extends AbstractFsmEdgeDriver<EdgeDriverFsmState, GenericB3Message> {
@@ -17,7 +17,7 @@ public class GroupAgentEdgeDriver
     private final Map<EdgeDriverFsmState, State<EdgeDriverFsmState, GenericB3Message>> stateMap;
 
     @Inject
-    public GroupAgentEdgeDriver(GroupAgentConfig config, B3TopicFactory topicFactory, EdgeDriverFsmConnected connected,
+    public GroupAgentEdgeDriver(GroupAgentConfig config, B3Topic.Factory topicFactory, EdgeDriverFsmConnected connected,
             EdgeDriverFsmDisconnected disconnected) {
         super(topicFactory.agent(config.agentId()));
         this.stateMap = Map.of(

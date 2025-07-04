@@ -13,8 +13,8 @@ import io.tinga.b3.core.shadowing.Operation;
 import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowReportedPolicy;
 import io.tinga.b3.core.shadowing.impl.OperationJsonSchemaChecker;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 import io.tinga.b3.core.helpers.B3MessageProvider;
-import io.tinga.b3.protocol.GenericB3Message;
 
 public class EntityAgentCommandExecutorMQTTModule extends AbstractModule {
 

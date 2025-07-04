@@ -1,8 +1,11 @@
-package io.tinga.b3.protocol;
+package io.tinga.b3.protocol.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.tinga.b3.protocol.B3Message;
+import io.tinga.b3.protocol.B3MessageValidationException;
+import io.tinga.b3.protocol.B3MessageValidator;
 import io.tinga.belt.output.Status;
 
 public class B3MessageVersionBasedValidator implements B3MessageValidator {

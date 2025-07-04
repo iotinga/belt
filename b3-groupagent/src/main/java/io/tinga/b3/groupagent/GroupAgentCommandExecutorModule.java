@@ -11,7 +11,7 @@ import io.tinga.b3.core.driver.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.groupagent.driver.processors.EdgeGroupAgentDesiredPreProcessor;
 import io.tinga.b3.groupagent.driver.processors.EdgeGroupAgentReportedPostProcessor;
-import io.tinga.b3.protocol.GenericB3Message;
+import io.tinga.b3.protocol.impl.GenericB3Message;
 import io.tinga.belt.input.GadgetCommandExecutor;
 
 public class GroupAgentCommandExecutorModule extends AbstractModule {
