@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.TopicNameValidationException;
+import io.tinga.b3.protocol.B3TopicValidationException;
 import io.tinga.b3.protocol.impl.B3TopicFactoryImpl;
 
 
@@ -53,14 +53,14 @@ public class B3TopicFactoryImplParseTest {
 
     @Test
     void invalidAgentIdShouldThrow() {
-        assertThrows(TopicNameValidationException.class, () -> {
+        assertThrows(B3TopicValidationException.class, () -> {
             sut.agent("id/part");
         });
     }
 
     @Test
     void invalidEntityIdShouldThrow() {
-        assertThrows(TopicNameValidationException.class, () -> {
+        assertThrows(B3TopicValidationException.class, () -> {
             sut.entity("id/part");
         });
     }
@@ -133,28 +133,28 @@ public class B3TopicFactoryImplParseTest {
 
     @Test
     void invalidTransitionShouldThrowOnMissplaced() {
-        assertThrows(TopicNameValidationException.class, () -> {
+        assertThrows(B3TopicValidationException.class, () -> {
             sut.parse("b3/entity/device5/shadow/entity");
         });
     }
 
     @Test
     void invalidTransitionShouldThrowOnUnknown() {
-        assertThrows(TopicNameValidationException.class, () -> {
+        assertThrows(B3TopicValidationException.class, () -> {
             sut.parse("b3/entity/device5/shadow/unknown");
         });
     }
 
     @Test
     void invalidCategoryShouldThrow() {
-        assertThrows(TopicNameValidationException.class, () -> {
+        assertThrows(B3TopicValidationException.class, () -> {
             sut.parse("b3/invalid/device6/shadow/reported/live");
         });
     }
 
     @Test
     void tooShortTopicShouldThrow() {
-        assertThrows(TopicNameValidationException.class, () -> {
+        assertThrows(B3TopicValidationException.class, () -> {
             sut.parse("b3/entity/device7");
         });
     }

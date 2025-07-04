@@ -22,7 +22,7 @@ import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.TopicNameValidationException;
+import io.tinga.b3.protocol.B3TopicValidationException;
 import io.tinga.b3.protocol.impl.GenericB3Message;
 import io.tinga.b3.protocol.topic.TestB3TopicFactory;
 import it.netgrid.bauer.Topic;
@@ -96,7 +96,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     }
 
     @Test
-    public void writesAConflictFreeMessage() throws TopicNameValidationException, Exception {
+    public void writesAConflictFreeMessage() throws B3TopicValidationException, Exception {
         int currentVersion = faker.random().nextInt(1, 1000);
 
         doAnswer(invocation -> true).when(checker).isAllowed(any());
@@ -114,7 +114,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     }
 
     @Test
-    public void doesntWriteAConflictingMessage() throws TopicNameValidationException, Exception {
+    public void doesntWriteAConflictingMessage() throws B3TopicValidationException, Exception {
         int currentVersion = faker.random().nextInt(1, 1000);
         int messageVersion = faker.random().nextInt(1001, 2000);
 

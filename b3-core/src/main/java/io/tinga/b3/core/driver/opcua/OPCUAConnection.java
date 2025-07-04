@@ -1,4 +1,4 @@
-package io.tinga.b3.core.driver.connection.opcua;
+package io.tinga.b3.core.driver.opcua;
 
 import io.tinga.b3.core.driver.Connection;
 

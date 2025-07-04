@@ -21,11 +21,11 @@ public interface B3Topic {
     public List<B3TopicToken> tokens();
 
     public interface Factory {
-        Valid parse(String topicPath) throws TopicNameValidationException;
+        Valid parse(String topicPath) throws B3TopicValidationException;
 
-        Root agent(String id) throws TopicNameValidationException;
+        Root agent(String id) throws B3TopicValidationException;
 
-        Root entity(String id) throws TopicNameValidationException;
+        Root entity(String id) throws B3TopicValidationException;
     }
 
     public interface Valid {
@@ -59,12 +59,12 @@ public interface B3Topic {
                     }
                 }
 
-                Batch.Role batch(String role) throws TopicNameValidationException;
+                Batch.Role batch(String role) throws B3TopicValidationException;
             }
 
             Desired desired();
 
-            Desired.Role desired(String role) throws TopicNameValidationException;
+            Desired.Role desired(String role) throws B3TopicValidationException;
 
         }
 
@@ -83,7 +83,7 @@ public interface B3Topic {
 
         Command command();
 
-        Command.Role command(String role) throws TopicNameValidationException;
+        Command.Role command(String role) throws B3TopicValidationException;
 
     }
 }

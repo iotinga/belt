@@ -13,7 +13,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.TopicNameValidationException;
+import io.tinga.b3.protocol.B3TopicValidationException;
 import io.tinga.b3.protocol.B3Topic.Category;
 
 public class B3TopicFactoryImpl implements B3Topic.Factory {
@@ -151,9 +151,9 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
             return this.stack.removeLast();
         }
 
-        private void validate(String value) throws TopicNameValidationException {
+        private void validate(String value) throws B3TopicValidationException {
             if (value.contains(B3Topic.GLUE))
-                throw new TopicNameValidationException("invalid char");
+                throw new B3TopicValidationException("invalid char");
         }
 
         @Override
@@ -191,7 +191,7 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
     @Override
     public B3Topic.Root agent(String id) {
         if (id.contains(GLUE)) {
-            throw new TopicNameValidationException("invalid char");
+            throw new B3TopicValidationException("invalid char");
         }
         return new B3TopicImpl(this.root, Category.AGENT, id);
     }
@@ -199,25 +199,25 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
     @Override
     public B3Topic.Root entity(String id) {
         if (id.contains(GLUE)) {
-            throw new TopicNameValidationException("invalid char");
+            throw new B3TopicValidationException("invalid char");
         }
         return new B3TopicImpl(this.root, Category.ENTITY, id);
     }
 
     @Override
-    public B3Topic.Valid parse(String topicPath) throws TopicNameValidationException {
+    public B3Topic.Valid parse(String topicPath) throws B3TopicValidationException {
         if (topicPath == null || topicPath.trim().isEmpty())
-            throw new TopicNameValidationException("The given topicPath is null or empty");
+            throw new B3TopicValidationException("The given topicPath is null or empty");
 
         String[] parts = topicPath.split(GLUE);
         if (parts.length < 4)
-            throw new TopicNameValidationException("The given topicPath is too short: " + topicPath);
+            throw new B3TopicValidationException("The given topicPath is too short: " + topicPath);
 
         Category category;
         try {
             category = Category.valueOf(parts[1].toUpperCase());
         } catch (Exception e) {
-            throw new TopicNameValidationException("Invalid category in topicPath: " + topicPath);
+            throw new B3TopicValidationException("Invalid category in topicPath: " + topicPath);
         }
 
         B3TopicImpl retval = new B3TopicImpl(parts[0], category, parts[2]);
@@ -236,7 +236,7 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
             BiFunction<B3TopicImpl, String, B3TopicImpl> action = transitions.get(key);
 
             if (action == null)
-                throw new TopicNameValidationException("Invalid transition: " + prevToken + " -> " + raw);
+                throw new B3TopicValidationException("Invalid transition: " + prevToken + " -> " + raw);
 
             String param = (token == B3TopicToken.Name.ROLE_NAME) ? raw : null;
             retval = action.apply(retval, param);
