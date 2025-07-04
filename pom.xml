@@ -78,6 +78,7 @@
         <module>b3-core</module>
         <module>b3-groupagent</module>
         <module>b3-entityagent</module>
+        <module>b3-protocol</module>
     </modules>
 
     <properties>
