@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 
-import io.tinga.b3.core.driver.ShadowReportedPostProcessor;
+import io.tinga.b3.agent.driver.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.GroupAgentConfig;
 import io.tinga.b3.protocol.impl.GenericB3Message;
 

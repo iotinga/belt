@@ -5,16 +5,16 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.input.GadgetCommandExecutor;
-import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.helpers.FromFileB3MessageProvider;
-import io.tinga.b3.core.helpers.B3MessageProvider;
-import io.tinga.b3.core.helpers.StdinB3MessageProvider;
-import io.tinga.b3.core.helpers.jsonschema.JsonSchemaFromFileProvider;
-import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
-import io.tinga.b3.core.shadowing.Operation;
-import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowReportedPolicy;
-import io.tinga.b3.core.shadowing.impl.OperationJsonSchemaChecker;
-import io.tinga.b3.core.shadowing.impl.PassthroughShadowDesiredPolicy;
+import io.tinga.b3.agent.Agent;
+import io.tinga.b3.agent.shadowing.Operation;
+import io.tinga.b3.agent.shadowing.impl.EdgeFirstShadowReportedPolicy;
+import io.tinga.b3.agent.shadowing.impl.OperationJsonSchemaChecker;
+import io.tinga.b3.agent.shadowing.impl.PassthroughShadowDesiredPolicy;
+import io.tinga.b3.helpers.B3MessageProvider;
+import io.tinga.b3.helpers.FromFileB3MessageProvider;
+import io.tinga.b3.helpers.StdinB3MessageProvider;
+import io.tinga.b3.helpers.jsonschema.JsonSchemaFromFileProvider;
+import io.tinga.b3.helpers.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class EntityAgentCommandExecutorFilesystemModule extends AbstractModule {

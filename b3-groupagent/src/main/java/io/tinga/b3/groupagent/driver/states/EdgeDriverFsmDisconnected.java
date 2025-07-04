@@ -2,9 +2,9 @@ package io.tinga.b3.groupagent.driver.states;
 
 import com.google.inject.Singleton;
 
-import io.tinga.b3.core.driver.ConnectionState;
-import io.tinga.b3.core.driver.impl.AbstractFsmEdgeDriver;
-import io.tinga.b3.core.driver.impl.AbstractFsmEdgeDriver.Context;
+import io.tinga.b3.agent.driver.ConnectionState;
+import io.tinga.b3.agent.driver.impl.AbstractFsmEdgeDriver;
+import io.tinga.b3.agent.driver.impl.AbstractFsmEdgeDriver.Context;
 import io.tinga.b3.protocol.impl.GenericB3Message;
 
 @Singleton

@@ -2,7 +2,7 @@ package io.tinga.b3.groupagent;
 
 import java.util.List;
 
-import io.tinga.b3.core.Agent;
+import io.tinga.b3.agent.Agent;
 
 public interface GroupAgentConfig extends Agent.Config {
 

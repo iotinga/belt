@@ -1,6 +1,6 @@
 package io.tinga.b3.entityagent;
 
-import io.tinga.b3.core.Agent;
+import io.tinga.b3.agent.Agent;
 
 public interface EntityAgentConfig extends Agent.LocalShadowingConfig {
 

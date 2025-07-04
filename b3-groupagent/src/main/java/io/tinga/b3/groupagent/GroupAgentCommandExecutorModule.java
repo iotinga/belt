@@ -5,9 +5,9 @@ import com.google.inject.Key;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 
-import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.driver.ShadowDesiredPreProcessor;
-import io.tinga.b3.core.driver.ShadowReportedPostProcessor;
+import io.tinga.b3.agent.Agent;
+import io.tinga.b3.agent.driver.ShadowDesiredPreProcessor;
+import io.tinga.b3.agent.driver.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.groupagent.driver.processors.EdgeGroupAgentDesiredPreProcessor;
 import io.tinga.b3.groupagent.driver.processors.EdgeGroupAgentReportedPostProcessor;

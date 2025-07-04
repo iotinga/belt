@@ -17,10 +17,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.javafaker.Faker;
 
-import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.core.shadowing.VersionSafeExecutor.CriticalSection;
-import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowDesiredPolicy;
+import io.tinga.b3.agent.Agent;
+import io.tinga.b3.agent.ITopicFactoryProxy;
+import io.tinga.b3.agent.shadowing.Operation;
+import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
+import io.tinga.b3.agent.shadowing.VersionSafeExecutor.CriticalSection;
+import io.tinga.b3.agent.shadowing.impl.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.B3TopicValidationException;
 import io.tinga.b3.protocol.impl.GenericB3Message;

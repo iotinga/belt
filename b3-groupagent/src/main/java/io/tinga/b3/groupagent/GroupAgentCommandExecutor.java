@@ -2,9 +2,9 @@ package io.tinga.b3.groupagent;
 
 import com.google.inject.Inject;
 
-import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.impl.AbstractAgentCommandExecutor;
-import io.tinga.b3.core.shadowing.VersionSafeExecutor;
+import io.tinga.b3.agent.Agent;
+import io.tinga.b3.agent.impl.AbstractAgentCommandExecutor;
+import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.impl.GenericB3Message;
 import io.tinga.belt.output.Status;
