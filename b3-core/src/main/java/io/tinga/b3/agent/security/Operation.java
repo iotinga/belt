@@ -1,4 +1,4 @@
-package io.tinga.b3.agent.shadowing;
+package io.tinga.b3.agent.security;
 
 import io.tinga.b3.agent.InvalidOperationException;
 import io.tinga.b3.protocol.B3Message;

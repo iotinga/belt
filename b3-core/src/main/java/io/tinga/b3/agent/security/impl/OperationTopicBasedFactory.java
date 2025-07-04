@@ -1,7 +1,8 @@
-package io.tinga.b3.agent.shadowing.impl;
+
+package io.tinga.b3.agent.security.impl;
 
 import io.tinga.b3.agent.InvalidOperationException;
-import io.tinga.b3.agent.shadowing.Operation;
+import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 

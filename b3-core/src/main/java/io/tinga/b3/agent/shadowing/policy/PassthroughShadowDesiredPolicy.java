@@ -1,4 +1,4 @@
-package io.tinga.b3.agent.shadowing.impl;
+package io.tinga.b3.agent.shadowing.policy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import io.tinga.b3.agent.Agent;
 import io.tinga.b3.agent.InvalidOperationException;
 import io.tinga.b3.agent.driver.EdgeDriverException;
-import io.tinga.b3.agent.shadowing.Operation;
+import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;

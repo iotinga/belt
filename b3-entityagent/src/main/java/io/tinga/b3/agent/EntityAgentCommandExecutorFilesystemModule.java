@@ -5,10 +5,10 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.input.GadgetCommandExecutor;
-import io.tinga.b3.agent.shadowing.Operation;
-import io.tinga.b3.agent.shadowing.impl.EdgeFirstShadowReportedPolicy;
-import io.tinga.b3.agent.shadowing.impl.OperationJsonSchemaChecker;
-import io.tinga.b3.agent.shadowing.impl.PassthroughShadowDesiredPolicy;
+import io.tinga.b3.agent.security.Operation;
+import io.tinga.b3.agent.security.impl.OperationJsonSchemaChecker;
+import io.tinga.b3.agent.shadowing.policy.EdgeFirstShadowReportedPolicy;
+import io.tinga.b3.agent.shadowing.policy.PassthroughShadowDesiredPolicy;
 import io.tinga.b3.helpers.B3MessageProvider;
 import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.helpers.JsonSchemaProvider;
