@@ -1,6 +1,6 @@
 package io.tinga.b3.core.shadowing.impl;
 
-import io.tinga.b3.core.AgentInitException;
+import io.tinga.b3.core.InitializationException;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 
 /**
@@ -10,7 +10,7 @@ import io.tinga.b3.protocol.topic.B3TopicRoot;
 public class VolatileVersionSafeExecutor extends AbstracVersionSafeExecutor {
 
     @Override
-    public void initVersion(B3TopicRoot topicRoot) throws AgentInitException {
+    public void initVersion(B3TopicRoot topicRoot) throws InitializationException {
         if (!this.isInitialized()) {
             this.initCurrentReportedVersion(1);
         }

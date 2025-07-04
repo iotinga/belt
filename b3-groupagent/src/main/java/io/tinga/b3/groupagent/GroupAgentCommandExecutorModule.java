@@ -5,7 +5,7 @@ import com.google.inject.Key;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 
-import io.tinga.b3.core.driver.EdgeDriver;
+import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.driver.ShadowDesiredPreProcessor;
 import io.tinga.b3.core.driver.ShadowReportedPostProcessor;
 import io.tinga.b3.groupagent.driver.GroupAgentEdgeDriver;
@@ -30,7 +30,7 @@ public class GroupAgentCommandExecutorModule extends AbstractModule {
         })).to(EdgeGroupAgentDesiredPreProcessor.class);
         bind(Key.get(new TypeLiteral<ShadowReportedPostProcessor<GenericB3Message>>() {
         })).to(EdgeGroupAgentReportedPostProcessor.class);
-        bind(Key.get(new TypeLiteral<EdgeDriver<GenericB3Message>>() {
+        bind(Key.get(new TypeLiteral<Agent.EdgeDriver<GenericB3Message>>() {
         })).to(GroupAgentEdgeDriver.class).in(Singleton.class);
 
         bind(Key.get(new TypeLiteral<GadgetCommandExecutor<GroupAgentCommand>>() {

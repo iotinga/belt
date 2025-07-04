@@ -19,9 +19,6 @@ import com.github.javafaker.Faker;
 
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.core.OperationFactory;
-import io.tinga.b3.core.OperationGrantsChecker;
-import io.tinga.b3.core.driver.EdgeDriver;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
@@ -41,15 +38,15 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     @Mock
     VersionSafeExecutor executor;
     @Mock
-    EdgeDriver<GenericB3Message> driver;
+    Agent.EdgeDriver<GenericB3Message> driver;
     @Mock
     ITopicFactoryProxy factoryProxy;
     @Mock
     Topic<GenericB3Message> topic;
     @Mock
-    OperationFactory operationFactory;
+    Operation.Factory operationFactory;
     @Mock
-    OperationGrantsChecker<GenericB3Message> checker;
+    Operation.GrantsChecker<GenericB3Message> checker;
     @Mock
     B3TopicFactory topicFactory;
     @Spy

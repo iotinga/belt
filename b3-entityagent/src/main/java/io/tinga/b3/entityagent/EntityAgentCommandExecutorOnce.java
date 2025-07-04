@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import io.tinga.b3.core.driver.EdgeDriver;
+import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.helpers.B3MessageProvider;
 import io.tinga.b3.core.impl.AbstractAgentCommandExecutor;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
@@ -24,7 +24,7 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
 
     public EntityAgentCommandExecutorOnce(B3TopicRoot topicRoot, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
             ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
-            EdgeDriver<GenericB3Message> driver) {
+            Agent.EdgeDriver<GenericB3Message> driver) {
         super(topicRoot, reportedPolicy, desiredPolicy, executor, driver);
     }
 

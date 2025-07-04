@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.core.driver.EdgeDriver;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
@@ -20,7 +19,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
     private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowReportedPolicy.class);
 
     protected final VersionSafeExecutor executor;
-    protected final EdgeDriver<M> edgeDriver;
+    protected final Agent.EdgeDriver<M> edgeDriver;
     protected final ITopicFactoryProxy topicFactory;
 
     private Topic<M> topic;
@@ -28,7 +27,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
     private M lastSentMessage;
 
     @Inject
-    public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
+    public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
             ITopicFactoryProxy topicFactory) {
         this.executor = executor;
         this.edgeDriver = edgeDriver;

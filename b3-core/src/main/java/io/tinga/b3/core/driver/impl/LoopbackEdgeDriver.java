@@ -5,15 +5,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.google.inject.Inject;
 
+import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.B3EventHandler;
 import io.tinga.b3.core.driver.ConnectionState;
-import io.tinga.b3.core.driver.EdgeDriver;
 import io.tinga.b3.core.driver.EdgeDriverException;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 
-public class LoopbackEdgeDriver<M extends B3Message<?>> implements EdgeDriver<M> {
+public class LoopbackEdgeDriver<M extends B3Message<?>> implements Agent.EdgeDriver<M> {
 
     private final List<B3EventHandler<M>> subscribers;
     private final B3TopicRoot topicRoot;

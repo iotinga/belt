@@ -18,8 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.javafaker.Faker;
 
+import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.ITopicFactoryProxy;
-import io.tinga.b3.core.driver.EdgeDriver;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.core.shadowing.impl.EdgeFirstShadowReportedPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
@@ -39,7 +39,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     @Mock
     VersionSafeExecutor executor;
     @Mock
-    EdgeDriver<GenericB3Message> driver;
+    Agent.EdgeDriver<GenericB3Message> driver;
     @Mock
     ITopicFactoryProxy factoryProxy;
     @Mock

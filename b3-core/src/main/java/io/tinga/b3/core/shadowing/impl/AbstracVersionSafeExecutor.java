@@ -1,6 +1,6 @@
 package io.tinga.b3.core.shadowing.impl;
 
-import io.tinga.b3.core.AgentInitException;
+import io.tinga.b3.core.InitializationException;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 
 public abstract class AbstracVersionSafeExecutor implements VersionSafeExecutor {
@@ -26,9 +26,9 @@ public abstract class AbstracVersionSafeExecutor implements VersionSafeExecutor 
         versionCriticalSection.apply(this::getVersion);
     }
 
-    private final Integer getVersion(boolean next) throws AgentInitException {
+    private final Integer getVersion(boolean next) throws InitializationException {
         if (this.currentReportedVersion == null) {
-            throw new AgentInitException(
+            throw new InitializationException(
                     "Trying to execute critical version before version initialization: currentReportedVersion is null");
         }
         return next ? ++this.currentReportedVersion : this.currentReportedVersion;

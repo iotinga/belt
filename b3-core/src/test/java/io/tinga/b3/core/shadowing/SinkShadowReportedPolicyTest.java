@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.javafaker.Faker;
 
-import io.tinga.b3.core.driver.EdgeDriver;
+import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.shadowing.impl.SinkShadowReportedPolicy;
 import io.tinga.b3.protocol.GenericB3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
@@ -29,7 +29,7 @@ public class SinkShadowReportedPolicyTest {
     @Mock
     GadgetSink out;
     @Mock
-    EdgeDriver<GenericB3Message> edgeDriver;
+    Agent.EdgeDriver<GenericB3Message> edgeDriver;
     @Mock
     GenericB3Message message;
     @Spy

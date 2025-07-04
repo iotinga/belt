@@ -10,11 +10,8 @@ import com.google.inject.Inject;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.InvalidOperationException;
-import io.tinga.b3.core.Operation;
-import io.tinga.b3.core.OperationFactory;
-import io.tinga.b3.core.OperationGrantsChecker;
-import io.tinga.b3.core.driver.EdgeDriver;
 import io.tinga.b3.core.driver.EdgeDriverException;
+import io.tinga.b3.core.shadowing.Operation;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
@@ -29,19 +26,19 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
     private static final Logger log = LoggerFactory.getLogger(EdgeFirstShadowDesiredPolicy.class);
 
     protected final VersionSafeExecutor executor;
-    protected final EdgeDriver<M> edgeDriver;
+    protected final Agent.EdgeDriver<M> edgeDriver;
     protected final ITopicFactoryProxy topicFactoryProxy;
-    protected final OperationFactory operationFactory;
-    protected final OperationGrantsChecker<M> grantsChecker;
+    protected final Operation.Factory operationFactory;
+    protected final Operation.GrantsChecker<M> grantsChecker;
     protected final Class<M> messageClass;
     protected final B3TopicFactory topicFactory;
 
     protected Topic<M> topic;
 
     @Inject
-    public EdgeFirstShadowDesiredPolicy(Class<M> messageClass, VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
-            ITopicFactoryProxy topicFactoryProxy, OperationFactory operationFactory, B3TopicFactory topicFactory,
-            OperationGrantsChecker<M> grantsChecker) {
+    public EdgeFirstShadowDesiredPolicy(Class<M> messageClass, VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
+            ITopicFactoryProxy topicFactoryProxy, Operation.Factory operationFactory, B3TopicFactory topicFactory,
+            Operation.GrantsChecker<M> grantsChecker) {
         this.messageClass = messageClass;
         this.executor = executor;
         this.edgeDriver = edgeDriver;

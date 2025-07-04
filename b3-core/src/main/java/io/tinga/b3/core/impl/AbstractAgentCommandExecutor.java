@@ -3,8 +3,7 @@ package io.tinga.b3.core.impl;
 import com.google.inject.Inject;
 
 import io.tinga.b3.core.Agent;
-import io.tinga.b3.core.AgentInitException;
-import io.tinga.b3.core.driver.EdgeDriver;
+import io.tinga.b3.core.InitializationException;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
@@ -29,7 +28,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
 
     protected final Agent.ShadowReportedPolicy<M> reportedPolicy;
     protected final Agent.ShadowDesiredPolicy<M> desiredPolicy;
-    protected final EdgeDriver<M> driver;
+    protected final Agent.EdgeDriver<M> driver;
 
     protected final VersionSafeExecutor executor;
 
@@ -41,7 +40,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
             B3TopicRoot topicRoot,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
             Agent.ShadowDesiredPolicy<M> desiredPolicy, VersionSafeExecutor executor,
-            EdgeDriver<M> driver) {
+            Agent.EdgeDriver<M> driver) {
         this.executor = executor;
         this.reportedPolicy = reportedPolicy;
         this.desiredPolicy = desiredPolicy;
@@ -67,7 +66,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
                     log.info("Waiting for version initialization: " + sleepMillis + "ms");
                     Thread.sleep(sleepMillis);
                     currentVersion = version.apply(false);
-                } catch (AgentInitException exception) {
+                } catch (InitializationException exception) {
                     sleepMillis += this.getInitSleepStep();
                     sleepMillis = sleepMillis > this.getInitSleepMax() ? this.getInitSleepMax() : sleepMillis;
                     log.warn(exception.getMessage());

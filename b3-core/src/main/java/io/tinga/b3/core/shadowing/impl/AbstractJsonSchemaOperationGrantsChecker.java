@@ -1,4 +1,4 @@
-package io.tinga.b3.core.impl;
+package io.tinga.b3.core.shadowing.impl;
 
 import java.util.Set;
 
@@ -10,15 +10,14 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.ValidationMessage;
 
-import io.tinga.b3.core.Operation;
-import io.tinga.b3.core.OperationGrantsChecker;
 import io.tinga.b3.core.helpers.jsonschema.JsonSchemaProvider;
+import io.tinga.b3.core.shadowing.Operation;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 import io.tinga.belt.helpers.JsonUtils;
 import io.tinga.belt.output.GadgetSink;
 
-public class AbstractJsonSchemaOperationGrantsChecker<M extends B3Message<? extends JsonNode>> implements OperationGrantsChecker<M> {
+public class AbstractJsonSchemaOperationGrantsChecker<M extends B3Message<? extends JsonNode>> implements Operation.GrantsChecker<M> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractJsonSchemaOperationGrantsChecker.class);
 

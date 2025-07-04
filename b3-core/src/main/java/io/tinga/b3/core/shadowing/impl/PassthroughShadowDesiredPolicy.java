@@ -8,11 +8,8 @@ import com.google.inject.Inject;
 import io.tinga.b3.core.Agent;
 import io.tinga.b3.core.ITopicFactoryProxy;
 import io.tinga.b3.core.InvalidOperationException;
-import io.tinga.b3.core.Operation;
-import io.tinga.b3.core.OperationFactory;
-import io.tinga.b3.core.OperationGrantsChecker;
-import io.tinga.b3.core.driver.EdgeDriver;
 import io.tinga.b3.core.driver.EdgeDriverException;
+import io.tinga.b3.core.shadowing.Operation;
 import io.tinga.b3.core.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3Topic;
@@ -23,15 +20,15 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>>
     private static final Logger log = LoggerFactory.getLogger(PassthroughShadowDesiredPolicy.class);
 
     protected final VersionSafeExecutor executor;
-    protected final EdgeDriver<M> edgeDriver;
+    protected final Agent.EdgeDriver<M> edgeDriver;
     protected final ITopicFactoryProxy topicFactory;
-    protected final OperationFactory operationFactory;
-    protected final OperationGrantsChecker<M> grantsChecker;
+    protected final Operation.Factory operationFactory;
+    protected final Operation.GrantsChecker<M> grantsChecker;
 
     @Inject
-    public PassthroughShadowDesiredPolicy(VersionSafeExecutor executor, EdgeDriver<M> edgeDriver,
-            ITopicFactoryProxy topicFactory, OperationFactory operationFactory,
-            OperationGrantsChecker<M> grantsChecker) {
+    public PassthroughShadowDesiredPolicy(VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
+            ITopicFactoryProxy topicFactory, Operation.Factory operationFactory,
+            Operation.GrantsChecker<M> grantsChecker) {
         this.executor = executor;
         this.edgeDriver = edgeDriver;
         this.topicFactory = topicFactory;

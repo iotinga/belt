@@ -2,7 +2,7 @@ package io.tinga.b3.core.shadowing.impl;
 
 import com.google.inject.Inject;
 
-import io.tinga.b3.core.AgentInitException;
+import io.tinga.b3.core.InitializationException;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.topic.B3TopicRoot;
 import it.netgrid.bauer.EventHandler;
@@ -29,13 +29,13 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
     }
 
     @Override
-    public void initVersion(B3TopicRoot topicRoot) throws AgentInitException {
+    public void initVersion(B3TopicRoot topicRoot) throws InitializationException {
         try {
             this.topicRoot = topicRoot;
             this.reportedTopic = this.topicFactory.getTopic(this.topicRoot.shadow().reported().build().toString());
             this.reportedTopic.addHandler(this);
         } catch (Exception e) {
-            throw new AgentInitException(e.getMessage());
+            throw new InitializationException(e.getMessage());
         }
     }
 
