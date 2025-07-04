@@ -1,5 +1,6 @@
 package io.tinga.b3.agent.shadowing.policy;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -48,28 +49,36 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     @Spy
     B3Topic.Base topicBase = TestB3TopicFactory.instance().agent(faker.lorem().word());
 
-    EdgeFirstShadowReportedPolicy<GenericB3Message> testee;
+    EdgeFirstShadowReportedPolicy<GenericB3Message> sut;
 
     @BeforeEach
     void setup() {
-        testee = new EdgeFirstShadowReportedPolicy<>(
+        sut = new EdgeFirstShadowReportedPolicy<>(
                 executor,
                 driver,
                 factoryProxy);
     }
 
     @Test
+    public void checkBasicGetters() {
+        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
+        sut.bindTo(topicBase, faker.lorem().word());
+        assertEquals(sut.getClass().getName(), sut.getName());
+        assertEquals(topic, sut.getTopic());
+    }
+
+    @Test
     public void initTopicOnBind() {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
-        testee.bindTo(topicBase, faker.lorem().word());
+        sut.bindTo(topicBase, faker.lorem().word());
         verify(factoryProxy, times(1)).getTopic(any(B3Topic.class), eq(true));
     }
 
     @Test
     public void subscribesToDriverOnBind() {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
-        testee.bindTo(topicBase, faker.lorem().word());
-        verify(driver, times(1)).subscribe(testee);
+        sut.bindTo(topicBase, faker.lorem().word());
+        verify(driver, times(1)).subscribe(sut);
     }
 
     @Test
@@ -88,11 +97,12 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
 
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
-        testee.bindTo(topicBase, faker.lorem().word());
-        testee.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
-        boolean result = testee.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        sut.bindTo(topicBase, faker.lorem().word());
+        sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
         verify(topic, times(1)).post(firstMessage);
         assertTrue(result);
+        assertEquals(firstMessage, sut.getLastSentMessage());
     }
 
     @Test
@@ -112,9 +122,9 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
-        testee.bindTo(topicBase, faker.lorem().word());
-        testee.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
-        boolean result = testee.handle(topicBase.shadow().desired(faker.lorem().word()).build(), secondMessage);
+        sut.bindTo(topicBase, faker.lorem().word());
+        sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), secondMessage);
         verify(topic, times(1)).post(secondMessage);
         assertTrue(result);
     }
@@ -135,8 +145,8 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
 
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
-        testee.bindTo(topicBase, faker.lorem().word());
-        boolean result = testee.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
+        sut.bindTo(topicBase, faker.lorem().word());
+        boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
         verify(firstMessage, times(1)).setVersion(nextVersion);
         assertTrue(result);
     }
