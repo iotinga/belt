@@ -6,13 +6,13 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.ITopicFactoryProxy;
 import io.tinga.b3.agent.InvalidOperationException;
 import io.tinga.b3.agent.driver.EdgeDriverException;
 import io.tinga.b3.agent.shadowing.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 
 public class PassthroughShadowDesiredPolicy<M extends B3Message<?>>
         implements Agent.ShadowDesiredPolicy<M> {
@@ -20,13 +20,13 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>>
 
     protected final VersionSafeExecutor executor;
     protected final Agent.EdgeDriver<M> edgeDriver;
-    protected final ITopicFactoryProxy topicFactory;
+    protected final B3ITopicFactoryProxy topicFactory;
     protected final Operation.Factory operationFactory;
     protected final Operation.GrantsChecker<M> grantsChecker;
 
     @Inject
     public PassthroughShadowDesiredPolicy(VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
-            ITopicFactoryProxy topicFactory, Operation.Factory operationFactory,
+            B3ITopicFactoryProxy topicFactory, Operation.Factory operationFactory,
             Operation.GrantsChecker<M> grantsChecker) {
         this.executor = executor;
         this.edgeDriver = edgeDriver;

@@ -5,11 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.B3EventHandler;
-import io.tinga.b3.agent.ITopicFactoryProxy;
 import io.tinga.b3.agent.driver.AgentProxy;
+import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.belt.helpers.AEventHandler;
 
 import java.util.List;
@@ -23,13 +23,13 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     private Topic<M> desiredTopic;
     private Topic<M> reportedTopic;
     private final List<B3EventHandler<M>> subscribers;
-    private final ITopicFactoryProxy topicFactoryProxy;
+    private final B3ITopicFactoryProxy topicFactoryProxy;
     private final B3Topic.Factory topicFactory;
 
     private M lastShadowReported;
 
     public AgentProxyImpl(
-            Class<M> messageClass, ITopicFactoryProxy topicFactoryProxy, B3Topic.Factory topicFactory) {
+            Class<M> messageClass, B3ITopicFactoryProxy topicFactoryProxy, B3Topic.Factory topicFactory) {
         super(messageClass);
         this.topicFactory = topicFactory;
         this.topicFactoryProxy = topicFactoryProxy;

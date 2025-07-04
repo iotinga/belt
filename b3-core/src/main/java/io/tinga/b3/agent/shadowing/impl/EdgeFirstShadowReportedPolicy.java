@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.ITopicFactoryProxy;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import it.netgrid.bauer.Topic;
 
 public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
@@ -19,7 +19,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
 
     protected final VersionSafeExecutor executor;
     protected final Agent.EdgeDriver<M> edgeDriver;
-    protected final ITopicFactoryProxy topicFactory;
+    protected final B3ITopicFactoryProxy topicFactory;
 
     private Topic<M> topic;
 
@@ -27,7 +27,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
 
     @Inject
     public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
-            ITopicFactoryProxy topicFactory) {
+            B3ITopicFactoryProxy topicFactory) {
         this.executor = executor;
         this.edgeDriver = edgeDriver;
         this.topicFactory = topicFactory;

@@ -8,13 +8,13 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.ITopicFactoryProxy;
 import io.tinga.b3.agent.InvalidOperationException;
 import io.tinga.b3.agent.driver.EdgeDriverException;
 import io.tinga.b3.agent.shadowing.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import it.netgrid.bauer.EventHandler;
 import it.netgrid.bauer.Topic;
 
@@ -25,7 +25,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
 
     protected final VersionSafeExecutor executor;
     protected final Agent.EdgeDriver<M> edgeDriver;
-    protected final ITopicFactoryProxy topicFactoryProxy;
+    protected final B3ITopicFactoryProxy topicFactoryProxy;
     protected final Operation.Factory operationFactory;
     protected final Operation.GrantsChecker<M> grantsChecker;
     protected final Class<M> messageClass;
@@ -35,7 +35,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
 
     @Inject
     public EdgeFirstShadowDesiredPolicy(Class<M> messageClass, VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
-            ITopicFactoryProxy topicFactoryProxy, Operation.Factory operationFactory, B3Topic.Factory topicFactory,
+            B3ITopicFactoryProxy topicFactoryProxy, Operation.Factory operationFactory, B3Topic.Factory topicFactory,
             Operation.GrantsChecker<M> grantsChecker) {
         this.messageClass = messageClass;
         this.executor = executor;

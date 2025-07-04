@@ -2,6 +2,7 @@ package io.tinga.b3.agent;
 
 import io.tinga.b3.agent.driver.ConnectionState;
 import io.tinga.b3.agent.driver.EdgeDriverException;
+import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 

@@ -1,7 +1,7 @@
 package io.tinga.b3.agent.driver;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.B3EventHandler;
+import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 
