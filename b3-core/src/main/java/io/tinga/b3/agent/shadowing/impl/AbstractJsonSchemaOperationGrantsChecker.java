@@ -11,7 +11,7 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.ValidationMessage;
 
 import io.tinga.b3.agent.shadowing.Operation;
-import io.tinga.b3.helpers.jsonschema.JsonSchemaProvider;
+import io.tinga.b3.helpers.JsonSchemaProvider;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.helpers.JsonUtils;

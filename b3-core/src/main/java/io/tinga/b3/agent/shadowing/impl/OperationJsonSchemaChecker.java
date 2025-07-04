@@ -14,7 +14,7 @@ import io.tinga.belt.helpers.JsonUtils;
 import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.agent.shadowing.Operation;
 import io.tinga.b3.helpers.GenericB3Message;
-import io.tinga.b3.helpers.jsonschema.JsonSchemaProvider;
+import io.tinga.b3.helpers.JsonSchemaProvider;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 

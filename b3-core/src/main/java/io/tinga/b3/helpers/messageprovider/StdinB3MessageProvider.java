@@ -1,4 +1,4 @@
-package io.tinga.b3.helpers;
+package io.tinga.b3.helpers.messageprovider;
 
 import java.io.IOException;
 
@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
+import io.tinga.b3.helpers.B3MessageProvider;
 import io.tinga.b3.protocol.B3Message;
 
 public class StdinB3MessageProvider<M extends B3Message<?>> implements B3MessageProvider<M> {
@@ -24,11 +25,11 @@ public class StdinB3MessageProvider<M extends B3Message<?>> implements B3Message
     }
 
     @Override
-    public M load(String desiredRef) {
+    public M load(String messagePath) {
         try {
             return om.readValue(System.in, this.messageClass);
         } catch (IOException e) {
-            log.error(String.format("unable to load %s: %s", desiredRef, e.getMessage()));
+            log.error(String.format("unable to load %s: %s", messagePath, e.getMessage()));
             return null;
         }
     }

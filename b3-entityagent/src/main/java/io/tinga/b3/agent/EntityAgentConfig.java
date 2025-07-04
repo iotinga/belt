@@ -1,6 +1,8 @@
 package io.tinga.b3.agent;
 
-public interface EntityAgentConfig extends Agent.LocalShadowingConfig {
+import io.tinga.b3.helpers.JsonSchemaProvider;
+
+public interface EntityAgentConfig extends Agent.LocalShadowingConfig, JsonSchemaProvider.Config {
 
     public static String ENTITY_REPORTED_TOPIC_FILTER = "REPORTED_TOPIC_FILTER";
     public static String ENTITY_MQTT_PAYLOAD_SHADOW_KEY = "MQTT_PAYLOAD_SHADOW_KEY";
@@ -11,8 +13,6 @@ public interface EntityAgentConfig extends Agent.LocalShadowingConfig {
     public static String ENTITY_STDOUT_ENABLED = "STDOUT_ENABLED";
     public static String ENTITY_REPORTED_STORE_REF = "REPORTED_STORE_REF";
 
-    public boolean isJsonSchemaCacheEnabled();
-    public String getJsonSchemaBasePath();
     public String getReportedTopicFilter();
     public String getDesiredTopicFilter();
 

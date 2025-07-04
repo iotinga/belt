@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 
+import io.tinga.b3.helpers.JsonSchemaProvider;
 import io.tinga.b3.protocol.B3Topic;
 
 public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
@@ -22,16 +23,20 @@ public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
 
     private static final String PATH_FORMAT = "%s/%s.json";
 
-    @Inject
-    private JsonSchemaConfig config;
+    private final Config config;
+
+    private final ObjectMapper om;
+
+    private final JsonSchemaFactory factory;
+
+    protected final Map<B3Topic, JsonSchema> cache = new HashMap<>();
 
     @Inject
-    private ObjectMapper om;
-
-    @Inject
-    private JsonSchemaFactory factory;
-
-    private final Map<B3Topic, JsonSchema> cache = new HashMap<>();
+    public JsonSchemaResourcesProvider(Config config, ObjectMapper om, JsonSchemaFactory factory) {
+        this.config = config;
+        this.om = om;
+        this.factory = factory;
+    }
 
     @Override
     public JsonSchema getSchemaFor(B3Topic topic) {
@@ -39,16 +44,33 @@ public class JsonSchemaResourcesProvider implements JsonSchemaProvider {
 
         if (schema == null) {
             try {
-                String resourcePath = String.format(PATH_FORMAT, config.getJsonSchemaBasePath(), topic);
-                InputStream schemaInputStream = JsonSchemaResourcesProvider.class.getResourceAsStream(resourcePath);
-                JsonNode jsonSchemaNode = this.om.readTree(schemaInputStream);
+                JsonNode jsonSchemaNode = getJsonSchemaNode(topic);
                 schema = this.factory.getSchema(jsonSchemaNode);
-                this.cache.put(topic, schema);
+                if (this.config.isJsonSchemaCacheEnabled()) {
+                    this.updateCache(topic, schema);
+                }
             } catch (IOException e) {
                 log.error(String.format("%s: unable to load schema", topic));
             }
         }
 
         return schema;
+    }
+
+    public JsonNode getJsonSchemaNode(B3Topic topic) throws IOException {
+        InputStream inputStream = getSchemaInputStream(getSchemaPath(topic));
+        return this.om.readTree(inputStream);
+    }
+
+    public String getSchemaPath(B3Topic topic) {
+        return String.format(PATH_FORMAT, this.config.getJsonSchemaBasePath(), topic);
+    }
+
+    public InputStream getSchemaInputStream(String resourcePath) throws IOException {
+        return JsonSchemaResourcesProvider.class.getResourceAsStream(resourcePath);
+    }
+
+    public void updateCache(B3Topic topic, JsonSchema schema) {
+        this.cache.put(topic, schema);
     }
 }

@@ -9,10 +9,8 @@ import io.tinga.b3.agent.shadowing.Operation;
 import io.tinga.b3.agent.shadowing.impl.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.agent.shadowing.impl.EdgeFirstShadowReportedPolicy;
 import io.tinga.b3.agent.shadowing.impl.OperationJsonSchemaChecker;
-import io.tinga.b3.helpers.B3MessageProvider;
-import io.tinga.b3.helpers.DummyB3MessageProvider;
 import io.tinga.b3.helpers.GenericB3Message;
-import io.tinga.b3.helpers.jsonschema.JsonSchemaProvider;
+import io.tinga.b3.helpers.JsonSchemaProvider;
 import io.tinga.b3.helpers.jsonschema.JsonSchemaResourcesProvider;
 
 public class EntityAgentCommandExecutorMQTTModule extends AbstractModule {
@@ -21,7 +19,7 @@ public class EntityAgentCommandExecutorMQTTModule extends AbstractModule {
     protected void configure() {
         bind(Operation.GrantsChecker.class).to(OperationJsonSchemaChecker.class);
         bind(JsonSchemaProvider.class).to(JsonSchemaResourcesProvider.class);
-        bind(B3MessageProvider.class).to(DummyB3MessageProvider.class);
+        // bind(B3MessageProvider.class).to(DummyB3MessageProvider.class);
         bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {
         })).to(Key.get(new TypeLiteral<EdgeFirstShadowDesiredPolicy<GenericB3Message>>() {
         }));
