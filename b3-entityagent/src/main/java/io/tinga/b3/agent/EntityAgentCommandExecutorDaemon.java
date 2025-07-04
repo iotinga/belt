@@ -8,8 +8,8 @@ import com.google.inject.Inject;
 import io.tinga.belt.output.Status;
 import io.tinga.b3.agent.impl.AbstractAgentCommandExecutor;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class EntityAgentCommandExecutorDaemon extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
 

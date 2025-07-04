@@ -21,10 +21,10 @@ import com.github.javafaker.Faker;
 import io.tinga.b3.agent.Agent;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.agent.shadowing.impl.EdgeFirstShadowReportedPolicy;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.TestB3TopicFactory;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
-import io.tinga.b3.protocol.impl.GenericB3Message;
-import io.tinga.b3.protocol.topic.TestB3TopicFactory;
 import it.netgrid.bauer.Topic;
 
 @ExtendWith(MockitoExtension.class)

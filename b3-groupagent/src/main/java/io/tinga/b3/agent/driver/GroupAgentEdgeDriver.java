@@ -8,8 +8,8 @@ import io.tinga.b3.agent.driver.impl.AbstractFsmEdgeDriver;
 import io.tinga.b3.agent.driver.states.EdgeDriverFsmConnected;
 import io.tinga.b3.agent.driver.states.EdgeDriverFsmDisconnected;
 import io.tinga.b3.agent.driver.states.EdgeDriverFsmState;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class GroupAgentEdgeDriver
         extends AbstractFsmEdgeDriver<EdgeDriverFsmState, GenericB3Message> {

@@ -16,9 +16,9 @@ import com.github.javafaker.Faker;
 
 import io.tinga.b3.agent.Agent;
 import io.tinga.b3.agent.shadowing.impl.SinkShadowReportedPolicy;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.impl.GenericB3Message;
-import io.tinga.b3.protocol.topic.TestB3TopicFactory;
+import io.tinga.b3.protocol.TestB3TopicFactory;
 import io.tinga.belt.output.GadgetSink;
 
 @ExtendWith(MockitoExtension.class)

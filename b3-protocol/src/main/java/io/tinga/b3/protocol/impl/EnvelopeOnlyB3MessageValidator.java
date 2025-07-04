@@ -8,7 +8,7 @@ import io.tinga.b3.protocol.B3MessageValidationException;
 import io.tinga.b3.protocol.B3MessageValidator;
 import io.tinga.belt.output.Status;
 
-public class B3MessageVersionBasedValidator implements B3MessageValidator {
+public class EnvelopeOnlyB3MessageValidator implements B3MessageValidator {
 
     public void validate(B3Message<?> message) throws B3MessageValidationException {
         List<String> errors = this.detectErrors(message, new ArrayList<>());

@@ -1,4 +1,4 @@
-package io.tinga.b3.protocol.impl;
+package io.tinga.b3.helpers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

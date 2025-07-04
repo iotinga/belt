@@ -20,9 +20,9 @@ import io.tinga.b3.agent.driver.ShadowDesiredPreProcessor;
 import io.tinga.b3.agent.driver.ShadowReportedPostProcessor;
 import io.tinga.b3.agent.driver.impl.AbstractFsmEdgeDriver;
 import io.tinga.b3.agent.driver.impl.AbstractFsmEdgeDriver.Context;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.impl.GenericB3Message;
 import io.tinga.belt.output.Status;
 
 @Singleton

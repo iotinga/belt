@@ -1,4 +1,4 @@
-package io.tinga.b3.protocol.topic.impl;
+package io.tinga.b3.protocol.impl;
 
 import static io.tinga.b3.protocol.B3Topic.GLUE;
 import static io.tinga.b3.protocol.B3Topic.DEFAULT_ROOT;
@@ -12,7 +12,6 @@ import com.github.javafaker.Faker;
 
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.B3TopicValidationException;
-import io.tinga.b3.protocol.impl.B3TopicFactoryImpl;
 
 public class B3TopicFactoryImplBuildTest {
     String fakeId;

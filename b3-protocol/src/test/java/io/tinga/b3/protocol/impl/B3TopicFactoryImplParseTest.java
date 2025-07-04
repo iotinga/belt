@@ -1,4 +1,4 @@
-package io.tinga.b3.protocol.topic.impl;
+package io.tinga.b3.protocol.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.B3TopicValidationException;
-import io.tinga.b3.protocol.impl.B3TopicFactoryImpl;
 
 
 @ExtendWith(MockitoExtension.class)

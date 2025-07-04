@@ -20,7 +20,7 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
 
     private final String root;
 
-    private record B3TopicRecord(List<B3TopicToken> tokens) implements B3Topic {
+    protected record B3TopicRecord(List<B3TopicToken> tokens) implements B3Topic {
         public String toString() {
             return tokens.stream().map(B3TopicToken::value).collect(Collectors.joining(GLUE));
         }

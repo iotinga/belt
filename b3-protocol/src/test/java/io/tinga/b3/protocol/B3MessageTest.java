@@ -1,5 +1,7 @@
 package io.tinga.b3.protocol;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.javafaker.Faker;
@@ -37,21 +39,143 @@ public class B3MessageTest {
     }
 
     @Test
+    void testSetters() {
+        B3Message<String> message = new B3Message<>();
+
+        message.setTimestamp(1700000000000L);
+        message.setVersion(3);
+        message.setProtocolVersion(2);
+        message.setMethod("corr-id-999");
+        message.setStatus(Status.OK);
+        message.setBody("payload");
+
+        assertThat(message.getTimestamp()).isEqualTo(1700000000000L);
+        assertThat(message.getVersion()).isEqualTo(3);
+        assertThat(message.getProtocolVersion()).isEqualTo(2);
+        assertThat(message.getCorrelationId()).isEqualTo("corr-id-999");
+        assertThat(message.getStatus()).isEqualTo(Status.OK);
+        assertThat(message.getBody()).isEqualTo("payload");
+    }
+
+    @Test
+    void testResponseCreatesNewMessageWithCorrectFields() {
+        B3Message<String> original = new B3Message<>(
+            1600000000000L,
+            1,
+            7,
+            "corr-id-001",
+            Status.OK,
+            "original-body"
+        );
+
+        B3Message<String> response = original.response(
+            1800000000000L,
+            Status.BAD_GATEWAY,
+            9,
+            "response-body"
+        );
+
+        // Il response deve mantenere protocolVersion e correlationId dell'originale
+        assertThat(response.getProtocolVersion()).isEqualTo(7);
+        assertThat(response.getCorrelationId()).isEqualTo("corr-id-001");
+
+        // Ma sostituire timestamp, version, status e body
+        assertThat(response.getTimestamp()).isEqualTo(1800000000000L);
+        assertThat(response.getVersion()).isEqualTo(9);
+        assertThat(response.getStatus()).isEqualTo(Status.BAD_GATEWAY);
+        assertThat(response.getBody()).isEqualTo("response-body");
+    }
+
+    @Test
+    void testToStringWithAllFields() {
+        B3Message<String> message = new B3Message<>(
+            1690000000000L,
+            2,
+            1,
+            "abc123",
+            Status.OK,
+            "body content"
+        );
+
+        String result = message.toString();
+
+        assertThat(result)
+            .startsWith("1690000000000[1]:abc123 - OK - v2")
+            .endsWith("[...]");
+    }
+
+    @Test
+    void testToStringWithNullBody() {
+        B3Message<String> message = new B3Message<>(
+            1690000000000L,
+            2,
+            1,
+            "abc123",
+            Status.BAD_GATEWAY,
+            null
+        );
+
+        String result = message.toString();
+
+        assertThat(result)
+            .startsWith("1690000000000[1]:abc123 - BAD_GATEWAY - v2")
+            .endsWith("[NULL]");
+    }
+
+    @Test
+    void testToStringWithNullVersion() {
+        B3Message<String> message = new B3Message<>(
+            1690000000000L,
+            null,
+            1,
+            "abc123",
+            Status.OK,
+            "some body"
+        );
+
+        String result = message.toString();
+
+        assertThat(result)
+            .startsWith("1690000000000[1]:abc123 - OK - v[NULL]")
+            .endsWith("[...]");
+    }
+
+    @Test
+    void testToStringWithNullBodyAndNullVersion() {
+        B3Message<String> message = new B3Message<>(
+            1690000000000L,
+            null,
+            1,
+            "abc123",
+            Status.BAD_GATEWAY,
+            null
+        );
+
+        String result = message.toString();
+
+        assertThat(result)
+            .isEqualTo("1690000000000[1]:abc123 - BAD_GATEWAY - v[NULL] [NULL]");
+    }
+
+    @Test
     void equals_sameInstance_shouldBeTrue() {
         B3Message<ObjectNode> msg = createRandomMessage();
-        assertEquals(msg, msg);
+        boolean result = msg.equals(msg);
+        assertTrue(result);
     }
 
     @Test
     void equals_null_shouldBeFalse() {
         B3Message<ObjectNode> msg = createRandomMessage();
-        assertNotEquals(null, msg);
+        boolean result = msg.equals(null);
+        assertFalse(result);
     }
 
     @Test
     void equals_differentType_shouldBeFalse() {
         B3Message<ObjectNode> msg = createRandomMessage();
-        assertNotEquals("a string", msg);
+        boolean result = msg.equals("pippo");
+        assertFalse(result);
     }
 
     @Test

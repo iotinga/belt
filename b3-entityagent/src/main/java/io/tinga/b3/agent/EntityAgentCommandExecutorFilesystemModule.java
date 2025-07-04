@@ -11,10 +11,10 @@ import io.tinga.b3.agent.shadowing.impl.OperationJsonSchemaChecker;
 import io.tinga.b3.agent.shadowing.impl.PassthroughShadowDesiredPolicy;
 import io.tinga.b3.helpers.B3MessageProvider;
 import io.tinga.b3.helpers.FromFileB3MessageProvider;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.helpers.StdinB3MessageProvider;
 import io.tinga.b3.helpers.jsonschema.JsonSchemaFromFileProvider;
 import io.tinga.b3.helpers.jsonschema.JsonSchemaProvider;
-import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class EntityAgentCommandExecutorFilesystemModule extends AbstractModule {
 

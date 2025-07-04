@@ -22,11 +22,11 @@ import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
 import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.agent.shadowing.Operation;
 import io.tinga.b3.agent.shadowing.impl.OperationTopicBasedFactory;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3MessageValidator;
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.impl.B3MessageVersionBasedValidator;
+import io.tinga.b3.protocol.impl.EnvelopeOnlyB3MessageValidator;
 import io.tinga.b3.protocol.impl.B3TopicFactoryImpl;
-import io.tinga.b3.protocol.impl.GenericB3Message;
 import it.netgrid.bauer.TopicFactory;
 
 public class EntityAgentGadget extends AbstractGadget<EntityAgentCommand> {
@@ -46,7 +46,7 @@ public class EntityAgentGadget extends AbstractGadget<EntityAgentCommand> {
         bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
         bind(JsonSchemaFactory.class).toInstance(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7));
         bind(Operation.Factory.class).to(OperationTopicBasedFactory.class);
-        bind(B3MessageValidator.class).to(B3MessageVersionBasedValidator.class);
+        bind(B3MessageValidator.class).to(EnvelopeOnlyB3MessageValidator.class);
         bind(B3Topic.Factory.class).to(B3TopicFactoryImpl.class);
 
     }

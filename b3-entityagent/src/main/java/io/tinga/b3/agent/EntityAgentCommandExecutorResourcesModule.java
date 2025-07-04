@@ -9,11 +9,11 @@ import io.tinga.b3.agent.shadowing.Operation;
 import io.tinga.b3.agent.shadowing.impl.OperationJsonSchemaChecker;
 import io.tinga.b3.agent.shadowing.impl.SinkShadowReportedPolicy;
 import io.tinga.b3.helpers.B3MessageProvider;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.helpers.ResourcesB3MessageProvider;
 import io.tinga.b3.helpers.StdinB3MessageProvider;
 import io.tinga.b3.helpers.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.helpers.jsonschema.JsonSchemaResourcesProvider;
-import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class EntityAgentCommandExecutorResourcesModule extends AbstractModule {
 

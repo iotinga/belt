@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.agent.GroupAgentConfig;
 import io.tinga.b3.agent.driver.ShadowReportedPostProcessor;
-import io.tinga.b3.protocol.impl.GenericB3Message;
+import io.tinga.b3.helpers.GenericB3Message;
 
 public class EdgeGroupAgentReportedPostProcessor implements ShadowReportedPostProcessor<GenericB3Message> {
 

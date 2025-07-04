@@ -92,7 +92,7 @@ public class B3Message<B> {
     public String toString() {
         String bodyString = this.body == null ? "[NULL]" : "[...]";
         String version = this.version == null ? "[NULL]" : this.version.toString();
-        return String.format("%d[%d]:%s - %s - v%d %s", this.timestamp,
+        return String.format("%d[%d]:%s - %s - v%s %s", this.timestamp,
                 this.protocolVersion,
                 this.correlationId,
                 this.status.name(),

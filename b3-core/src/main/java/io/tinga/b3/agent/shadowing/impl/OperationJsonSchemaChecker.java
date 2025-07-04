@@ -13,10 +13,10 @@ import com.networknt.schema.ValidationMessage;
 import io.tinga.belt.helpers.JsonUtils;
 import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.agent.shadowing.Operation;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.helpers.jsonschema.JsonSchemaProvider;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.impl.GenericB3Message;
 
 public class OperationJsonSchemaChecker<M extends B3Message<? extends JsonNode>> extends AbstractJsonSchemaOperationGrantsChecker<M> {
 
