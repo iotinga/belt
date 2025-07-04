@@ -3,7 +3,9 @@ package io.tinga.b3.protocol.impl;
 import static io.tinga.b3.protocol.B3Topic.GLUE;
 import static io.tinga.b3.protocol.B3Topic.DEFAULT_ROOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +14,10 @@ import com.github.javafaker.Faker;
 
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.B3TopicValidationException;
+import io.tinga.b3.protocol.B3Topic.Category;
 
 public class B3TopicFactoryImplBuildTest {
+    private static final Faker faker = new Faker();
     String fakeId;
     B3Topic.Factory factory;
     String roleString;
@@ -22,12 +26,50 @@ public class B3TopicFactoryImplBuildTest {
 
     @BeforeEach
     void setUp() {
-        Faker faker = new Faker();
         defaultRoot = DEFAULT_ROOT;
         factory = new B3TopicFactoryImpl();
         fakeId = faker.lorem().word();
         customRoot = faker.lorem().word();
         roleString = faker.lorem().word();
+    }
+
+    @Test
+    public void rootAgentCreationTest() {
+        B3Topic.Root root = factory.agent(fakeId);
+        assertEquals(Category.AGENT, root.category());
+        assertEquals(DEFAULT_ROOT, root.root());
+        assertEquals(fakeId, root.id());
+    }
+
+    @Test
+    public void rootEntityCreationTest() {
+        B3Topic.Root root = factory.entity(fakeId);
+        assertEquals(Category.ENTITY, root.category());
+        assertEquals(DEFAULT_ROOT, root.root());
+        assertEquals(fakeId, root.id());
+    }
+
+    @Test
+    public void isRootOfTrueOnValid() {
+        B3Topic basic = factory.agent(fakeId).command().build();
+        B3Topic.Root root = factory.agent(fakeId);
+        boolean result = root.isRootOf(basic);
+        assertTrue(result);
+    }
+
+    @Test
+    public void isRootOfFalseOnNotValid() {
+        B3Topic basic = factory.agent(faker.lorem().word()).command().build();
+        B3Topic.Root root = factory.agent(fakeId);
+        boolean result = root.isRootOf(basic);
+        assertFalse(result);
+    }
+
+    @Test
+    public void isRootOfFalseOnNull() {
+        B3Topic.Root root = factory.agent(fakeId);
+        boolean result = root.isRootOf(null);
+        assertFalse(result);
     }
 
     @Test

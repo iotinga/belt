@@ -74,13 +74,16 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
             B3Topic.Root.Shadow.Desired.Batch.Role, B3Topic.Root.Shadow, B3Topic.Root.Shadow.Reported,
             B3Topic.Root.Shadow.Reported.Batch, B3Topic.Root.Shadow.Reported.Live {
 
-        private final String id;
         protected final List<B3TopicToken> stack;
+
+        private final String id;
         private final Category category;
+        private final String root;
 
         public B3TopicImpl(String root, Category category, String id) {
-            this.id = id;
+            this.root = root;
             this.category = category;
+            this.id = id;
             this.stack = new ArrayList<>();
             this.stack.add(B3TopicToken.from(B3TopicToken.Name.ROOT, root));
             this.stack.add(B3TopicToken.from(category));
@@ -162,18 +165,23 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
         }
 
         @Override
-        public String getId() {
-            return this.id;
-        }
-
-        @Override
         public boolean isRootOf(B3Topic topic) {
             return topic != null && topic.toString().startsWith(this.build().toString());
         }
 
         @Override
-        public Category getCategory() {
-            return this.category;
+        public String id() {
+            return id;
+        }
+
+        @Override
+        public Category category() {
+            return category;
+        }
+
+        @Override
+        public String root() {
+            return root;
         }
 
     }

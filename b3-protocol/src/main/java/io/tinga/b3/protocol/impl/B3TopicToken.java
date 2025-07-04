@@ -11,7 +11,7 @@ public record B3TopicToken(Name name, String value) {
         RETAIN, ROOT, AGENT, ENTITY, COMMAND, SHADOW, BATCH, LIVE, REPORTED, DESIRED, AGENT_ID, ENTITY_ID, ROLE_NAME;
     }
 
-    private final static Map<B3TopicToken.Name, B3TopicToken> staticTokens = Map.ofEntries(
+    private final static Map<B3TopicToken.Name, B3TopicToken> STATIC_TOKENS = Map.ofEntries(
             entry(Name.RETAIN),
             entry(Name.AGENT),
             entry(Name.ENTITY),
@@ -23,7 +23,7 @@ public record B3TopicToken(Name name, String value) {
             entry(Name.DESIRED));
 
     private static Map.Entry<B3TopicToken.Name, B3TopicToken> entry(B3TopicToken.Name name) {
-        return new AbstractMap.SimpleEntry<>(name, new B3TopicToken(name, name.name().toLowerCase()));
+        return new AbstractMap.SimpleEntry<>(name, B3TopicToken.from(name, null));
     }
 
     public static B3TopicToken from(Name name) {
@@ -31,10 +31,13 @@ public record B3TopicToken(Name name, String value) {
     }
 
     public static B3TopicToken from(Name name, String value) {
-        B3TopicToken retval = staticTokens.get(name);
+        B3TopicToken retval = null;
+        if(STATIC_TOKENS != null) {
+            retval = STATIC_TOKENS.get(name);
+        }
         if (retval == null) {
             if (value == null) {
-                new B3TopicToken(name, name.name().toLowerCase());
+                retval = new B3TopicToken(name, name.name().toLowerCase());
             } else {
                 retval = new B3TopicToken(name, value);
             }

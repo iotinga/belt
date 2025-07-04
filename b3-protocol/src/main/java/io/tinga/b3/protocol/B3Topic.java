@@ -75,13 +75,15 @@ public interface B3Topic {
 
         boolean isRootOf(B3Topic topic);
 
-        String getId();
-
-        Category getCategory();
-
         Shadow shadow();
 
         Command command();
+
+        String id();
+
+        Category category();
+
+        String root();
 
         Command.Role command(String role) throws B3TopicValidationException;
 

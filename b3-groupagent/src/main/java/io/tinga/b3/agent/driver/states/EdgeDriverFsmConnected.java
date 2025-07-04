@@ -175,7 +175,7 @@ public class EdgeDriverFsmConnected
 
     /** Support Methods */
     private String getFragmentNameFor(B3Topic.Root topicRoot) {
-        return topicRoot.getId();
+        return topicRoot.id();
     }
 
     @Override

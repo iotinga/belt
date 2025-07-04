@@ -11,11 +11,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.B3TopicValidationException;
 
-
 @ExtendWith(MockitoExtension.class)
 public class B3TopicFactoryImplParseTest {
 
-    @InjectMocks B3TopicFactoryImpl sut;
+    @InjectMocks
+    B3TopicFactoryImpl sut;
 
     @Test
     void customRoot() {
@@ -30,13 +30,13 @@ public class B3TopicFactoryImplParseTest {
         B3Topic.Root agent = sut.agent("item1");
         assertEquals("test/agent/item1/shadow/reported", agent.shadow().reported().build().toString());
     }
+
     @Test
     void defaultsOnNullCustomRoot() {
         sut = new B3TopicFactoryImpl(null);
         B3Topic.Root agent = sut.agent("item1");
         assertEquals("b3/agent/item1/shadow/reported", agent.shadow().reported().build().toString());
     }
-
 
     @Test
     void buildValidAgentName() {
@@ -155,6 +155,20 @@ public class B3TopicFactoryImplParseTest {
     void tooShortTopicShouldThrow() {
         assertThrows(B3TopicValidationException.class, () -> {
             sut.parse("b3/entity/device7");
+        });
+    }
+
+    @Test
+    void emptyTopicShouldThrow() {
+        assertThrows(B3TopicValidationException.class, () -> {
+            sut.parse("  ");
+        });
+    }
+
+    @Test
+    void nullTopicShouldThrow() {
+        assertThrows(B3TopicValidationException.class, () -> {
+            sut.parse(null);
         });
     }
 }
