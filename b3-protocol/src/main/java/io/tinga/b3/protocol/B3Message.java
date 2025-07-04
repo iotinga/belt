@@ -14,7 +14,7 @@ public class B3Message<B> {
     @JsonProperty("PROT")
     private Integer protocolVersion;
 
-    @JsonProperty("CORRELATION_ID")
+    @JsonProperty("CID")
     private String correlationId;
 
     @JsonProperty("STATUS")

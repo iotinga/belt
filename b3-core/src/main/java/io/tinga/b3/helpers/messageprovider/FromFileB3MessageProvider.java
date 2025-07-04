@@ -29,7 +29,7 @@ public class FromFileB3MessageProvider<M extends B3Message<?>> implements B3Mess
     @Override
     public M load(String messagePath) {
         try {
-            InputStream fis = new FileInputStream(messagePath);
+            InputStream fis = this.getMessageInputStream(messagePath);
             return om.readValue(fis, messageClass);
         } catch (IOException e) {
             log.error(String.format("unable to load %s: %s", messagePath, e.getMessage()));
@@ -37,4 +37,7 @@ public class FromFileB3MessageProvider<M extends B3Message<?>> implements B3Mess
         }
     }
     
+    protected InputStream getMessageInputStream(String messagePath) throws IOException {
+        return new FileInputStream(messagePath);
+    }
 }

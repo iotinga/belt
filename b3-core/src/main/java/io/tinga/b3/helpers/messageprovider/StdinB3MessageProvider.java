@@ -1,6 +1,7 @@
 package io.tinga.b3.helpers.messageprovider;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,16 @@ public class StdinB3MessageProvider<M extends B3Message<?>> implements B3Message
     @Override
     public M load(String messagePath) {
         try {
-            return om.readValue(System.in, this.messageClass);
+            InputStream fis = this.getMessageInputStream(messagePath);
+            return om.readValue(fis, this.messageClass);
         } catch (IOException e) {
             log.error(String.format("unable to load %s: %s", messagePath, e.getMessage()));
             return null;
         }
+    }
+    
+    protected InputStream getMessageInputStream(String messagePath) throws IOException {
+        return System.in;
     }
     
 }

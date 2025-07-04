@@ -28,12 +28,16 @@ public class ResourcesB3MessageProvider<M extends B3Message<?>> implements B3Mes
     @Override
     public M load(String messagePath) {
         try {
-            InputStream fis = ResourcesB3MessageProvider.class.getResourceAsStream(messagePath);
+            InputStream fis = this.getMessageInputStream(messagePath);
             return om.readValue(fis, messageClass);
         } catch (IOException e) {
             log.error(String.format("unable to load %s: %s", messagePath, e.getMessage()));
             return null;
         }
+    }
+    
+    protected InputStream getMessageInputStream(String messagePath) throws IOException {
+        return ResourcesB3MessageProvider.class.getResourceAsStream(messagePath);
     }
 
 }
