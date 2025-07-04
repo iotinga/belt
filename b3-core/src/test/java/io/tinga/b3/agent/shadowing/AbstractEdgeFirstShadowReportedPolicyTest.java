@@ -1,4 +1,4 @@
-package io.tinga.b3.core.shadowing;
+package io.tinga.b3.agent.shadowing;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,7 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.javafaker.Faker;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.agent.shadowing.impl.EdgeFirstShadowReportedPolicy;
 import io.tinga.b3.protocol.B3Topic;

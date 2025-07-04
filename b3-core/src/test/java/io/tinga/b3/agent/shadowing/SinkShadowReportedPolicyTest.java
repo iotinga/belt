@@ -1,4 +1,4 @@
-package io.tinga.b3.core.shadowing;
+package io.tinga.b3.agent.shadowing;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;

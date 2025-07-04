@@ -1,4 +1,4 @@
-package io.tinga.b3.protocol.topic;
+package io.tinga.b3.protocol.topic.impl;
 
 import static io.tinga.b3.protocol.B3Topic.GLUE;
 import static io.tinga.b3.protocol.B3Topic.DEFAULT_ROOT;

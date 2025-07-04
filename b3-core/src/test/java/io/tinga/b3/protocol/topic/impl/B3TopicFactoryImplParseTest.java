@@ -1,4 +1,4 @@
-package io.tinga.b3.protocol.topic;
+package io.tinga.b3.protocol.topic.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
