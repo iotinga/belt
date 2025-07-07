@@ -104,14 +104,16 @@ public class B3TopicFactoryImpl implements B3Topic.Factory {
 
         @Override
         public Shadow shadow() {
-            this.stack.add(B3TopicToken.from(B3TopicToken.Name.SHADOW));
-            return this;
+            B3TopicImpl retval = new B3TopicImpl(this.root, this.category, this.id);
+            retval.stack.add(B3TopicToken.from(B3TopicToken.Name.SHADOW));
+            return retval;
         }
 
         @Override
         public Command command() {
-            this.stack.add(B3TopicToken.from(B3TopicToken.Name.COMMAND));
-            return this;
+            B3TopicImpl retval = new B3TopicImpl(this.root, this.category, this.id);
+            retval.stack.add(B3TopicToken.from(B3TopicToken.Name.COMMAND));
+            return retval;
         }
 
         @Override

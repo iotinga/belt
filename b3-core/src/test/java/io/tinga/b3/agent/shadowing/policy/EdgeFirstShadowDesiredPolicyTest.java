@@ -32,7 +32,7 @@ import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import it.netgrid.bauer.Topic;
 
 @ExtendWith(MockitoExtension.class)
-public class AbstractEdgeFirstShadowDesiredPolicyTest {
+public class EdgeFirstShadowDesiredPolicyTest {
 
     private static final Faker faker = new Faker();
 

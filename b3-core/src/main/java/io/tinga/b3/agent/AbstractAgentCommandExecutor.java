@@ -1,9 +1,7 @@
-package io.tinga.b3.agent.impl;
+package io.tinga.b3.agent;
 
 import com.google.inject.Inject;
 
-import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.InitializationException;
 import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.helpers.AgentProxy;

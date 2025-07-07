@@ -53,7 +53,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
 
     @Override
     public boolean handle(B3Topic topic, M event) throws Exception {
-        if (lastSentMessage == null) {
+        if (getLastSentMessage() == null) {
             lastSentMessage = event;
             this.agentProxy.unsubscribe(this);
             this.topic = this.topicFactory.getTopic(this.boundTopicBase.shadow().reported().build(), true);

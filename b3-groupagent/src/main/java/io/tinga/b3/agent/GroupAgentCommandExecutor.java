@@ -2,7 +2,6 @@ package io.tinga.b3.agent;
 
 import com.google.inject.Inject;
 
-import io.tinga.b3.agent.impl.AbstractAgentCommandExecutor;
 import io.tinga.b3.agent.security.Operation.GrantsChecker;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.helpers.GenericB3Message;

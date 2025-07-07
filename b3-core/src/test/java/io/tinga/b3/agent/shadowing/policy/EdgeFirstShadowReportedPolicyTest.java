@@ -3,6 +3,7 @@ package io.tinga.b3.agent.shadowing.policy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
@@ -30,7 +31,7 @@ import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import it.netgrid.bauer.Topic;
 
 @ExtendWith(MockitoExtension.class)
-public class AbstractEdgeFirstShadowReportedPolicyTest {
+public class EdgeFirstShadowReportedPolicyTest {
 
     private static final Faker faker = new Faker();
 
@@ -38,6 +39,8 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     GenericB3Message firstMessage;
     @Mock
     GenericB3Message secondMessage;
+    @Mock
+    GenericB3Message thirdMessage;
     @Mock
     VersionSafeExecutor executor;
     @Mock
@@ -48,6 +51,8 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     Topic<GenericB3Message> topic;
     @Mock
     AgentProxy.Factory agentProxyFactory;
+    @Mock
+    AgentProxy<GenericB3Message> agentProxy;
 
     @Spy
     B3Topic.Base topicBase = TestB3TopicFactory.instance().agent(faker.lorem().word());
@@ -65,30 +70,43 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
 
     @Test
     public void checkBasicGetters() {
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
+        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
+        // doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class),
+        // eq(true));
         sut.bind(topicBase, faker.lorem().word());
         assertEquals(sut.getClass().getName(), sut.getName());
-        assertEquals(topic, sut.getTopic());
+        assertEquals(null, sut.getTopic());
     }
 
     @Test
-    public void initTopicOnBind() {
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
+    public void initProxyOnBind() {
+        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
+        // doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class),
+        // eq(true));
         sut.bind(topicBase, faker.lorem().word());
-        verify(factoryProxy, times(1)).getTopic(any(B3Topic.class), eq(true));
+        verify(agentProxyFactory, times(1)).getProxy(eq(topicBase), anyString());
+        verify(agentProxy, times(1)).subscribe(sut);
     }
 
     @Test
-    public void subscribesToDriverOnBind() {
-        doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
+    public void subscribesToDriverAfterInitialization() throws Exception {
+        B3Topic reportedTopic = topicBase.shadow().reported().build();
+        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
         sut.bind(topicBase, faker.lorem().word());
+        sut.handle(reportedTopic, firstMessage);
+        verify(agentProxy, times(1)).unsubscribe(sut);
         verify(driver, times(1)).subscribe(sut);
+        verify(factoryProxy, times(1)).getTopic(reportedTopic, true);
     }
 
     @Test
     public void doesntPostAMessageEqualToThePreviouslySent() throws Exception {
         final int currentVersion = faker.random().nextInt(1, 1000);
         final int nextVersion = currentVersion + 1;
+
+        B3Topic reportedTopic = topicBase.shadow().reported().build();
+        B3Topic desiredTopic = topicBase.shadow().reported().build();
+
         Function<Boolean, Integer> version = (Boolean next) -> {
             return next ? nextVersion : currentVersion;
         };
@@ -99,20 +117,29 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
+        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
-        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
+        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
         sut.bind(topicBase, faker.lorem().word());
-        sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
-        boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
-        verify(topic, times(1)).post(firstMessage);
+
+        // the firstone is the initialization message
+        sut.handle(reportedTopic, firstMessage);
+
+        sut.handle(desiredTopic, secondMessage);
+        boolean result = sut.handle(reportedTopic, secondMessage);
+        verify(topic, times(1)).post(secondMessage);
         assertTrue(result);
-        assertEquals(firstMessage, sut.getLastSentMessage());
+        assertEquals(secondMessage, sut.getLastSentMessage());
     }
 
     @Test
     public void postsAMessageNotEqualToThePreviouslySent() throws Exception {
         final int currentVersion = faker.random().nextInt(1, 1000);
         final int nextVersion = currentVersion + 1;
+
+        B3Topic reportedTopic = topicBase.shadow().reported().build();
+        B3Topic desiredTopic = topicBase.shadow().reported().build();
+
         Function<Boolean, Integer> version = (Boolean next) -> {
             return next ? nextVersion : currentVersion;
         };
@@ -123,20 +150,30 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
+        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
-        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
         sut.bind(topicBase, faker.lorem().word());
-        sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
-        boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), secondMessage);
+
+        // the firstone is the initialization message
+        sut.handle(reportedTopic, firstMessage);
+
+        sut.handle(desiredTopic, secondMessage);
+        boolean result = sut.handle(reportedTopic, thirdMessage);
         verify(topic, times(1)).post(secondMessage);
+        verify(topic, times(1)).post(thirdMessage);
         assertTrue(result);
+        assertEquals(thirdMessage, sut.getLastSentMessage());
     }
 
     @Test
     public void incrementsVersionOnOutcomingMessage() throws Exception {
         final int currentVersion = faker.random().nextInt(1, 1000);
         final int nextVersion = currentVersion + 1;
+
+        B3Topic reportedTopic = topicBase.shadow().reported().build();
+        B3Topic desiredTopic = topicBase.shadow().reported().build();
+
         Function<Boolean, Integer> version = (Boolean next) -> {
             return next ? nextVersion : currentVersion;
         };
@@ -147,11 +184,17 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
+        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
-        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
+        doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
         sut.bind(topicBase, faker.lorem().word());
-        boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
-        verify(firstMessage, times(1)).setVersion(nextVersion);
+
+        // the firstone is the initialization message
+        sut.handle(reportedTopic, firstMessage);
+
+        sut.handle(desiredTopic, secondMessage);
+        boolean result = sut.handle(reportedTopic, secondMessage);
+        verify(secondMessage, times(1)).setVersion(nextVersion);
         assertTrue(result);
     }
 }
