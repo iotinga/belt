@@ -49,7 +49,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
 
     @Override
     public String getName() {
-        return this.getClass().getName();
+        return EdgeFirstShadowDesiredPolicy.class.getSimpleName();
     }
 
     @Override

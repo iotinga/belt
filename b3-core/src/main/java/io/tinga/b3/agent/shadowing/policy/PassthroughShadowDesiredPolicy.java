@@ -37,7 +37,7 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>>
 
     @Override
     public String getName() {
-        return this.getClass().getName();
+        return PassthroughShadowDesiredPolicy.class.getSimpleName();
     }
 
     @Override

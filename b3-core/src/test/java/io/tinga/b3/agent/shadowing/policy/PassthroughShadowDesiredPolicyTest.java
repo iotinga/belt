@@ -66,7 +66,7 @@ public class PassthroughShadowDesiredPolicyTest {
 
     @Test
     public void checkBasicGetters() {
-        assertEquals(sut.getClass().getName(), sut.getName());
+        assertEquals(sut.getClass().getSimpleName(), sut.getName());
     }
 
     @Test

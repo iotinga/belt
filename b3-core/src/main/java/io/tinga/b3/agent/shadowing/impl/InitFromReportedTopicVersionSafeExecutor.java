@@ -36,7 +36,7 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
 
     @Override
     public String getName() {
-        return InitFromReportedTopicVersionSafeExecutor.class.getName();
+        return InitFromReportedTopicVersionSafeExecutor.class.getSimpleName();
     }
 
     @Override

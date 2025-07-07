@@ -68,7 +68,7 @@ public class EdgeFirstShadowDesiredPolicyTest {
 
     @Test
     public void checkBasicGetters() {
-        assertEquals(sut.getClass().getName(), sut.getName());
+        assertEquals(sut.getClass().getSimpleName(), sut.getName());
         assertEquals(GenericB3Message.class, sut.getEventClass());
     }
 

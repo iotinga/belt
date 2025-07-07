@@ -52,7 +52,7 @@ public class FromTopicMessageProvider<M extends B3Message<?>> implements B3Messa
 
     @Override
     public String getName() {
-        return FromTopicMessageProvider.class.getName();
+        return FromTopicMessageProvider.class.getSimpleName();
     }
 
     @Override

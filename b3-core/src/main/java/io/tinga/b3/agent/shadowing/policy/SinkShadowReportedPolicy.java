@@ -24,7 +24,7 @@ public class SinkShadowReportedPolicy<M extends B3Message<?>> implements Agent.S
 
     @Override
     public String getName() {
-        return SinkShadowReportedPolicy.class.getName();
+        return SinkShadowReportedPolicy.class.getSimpleName();
     }
 
     @Override

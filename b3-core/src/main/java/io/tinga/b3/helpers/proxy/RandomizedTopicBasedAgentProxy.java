@@ -19,7 +19,7 @@ public class RandomizedTopicBasedAgentProxy<M extends B3Message<?>> extends Stat
 
     @Override
     public String getName() {
-        return String.format("%s-%s-%s", config.agentId(), AgentProxy.class.getName(), randomized(RANDOM_PART_SIZE));
+        return String.format("%s-%s-%s", config.agentId(), AgentProxy.class.getSimpleName(), randomized(RANDOM_PART_SIZE));
     }
 
     private static String randomized(int lunghezza) {

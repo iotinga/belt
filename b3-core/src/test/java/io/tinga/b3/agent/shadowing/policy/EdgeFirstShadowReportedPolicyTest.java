@@ -74,7 +74,7 @@ public class EdgeFirstShadowReportedPolicyTest {
         // doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class),
         // eq(true));
         sut.bind(topicBase, faker.lorem().word());
-        assertEquals(sut.getClass().getName(), sut.getName());
+        assertEquals(sut.getClass().getSimpleName(), sut.getName());
         assertEquals(null, sut.getTopic());
     }
 

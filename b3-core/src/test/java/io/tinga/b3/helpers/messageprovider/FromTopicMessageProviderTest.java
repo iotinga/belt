@@ -1,6 +1,8 @@
 package io.tinga.b3.helpers.messageprovider;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import io.tinga.b3.helpers.GenericB3Message;
@@ -49,7 +51,7 @@ public class FromTopicMessageProviderTest {
 
     @Test
     void getNameShouldReturnClassName() {
-        assertThat(sut.getName()).isEqualTo(FromTopicMessageProvider.class.getName());
+        assertThat(sut.getName()).isEqualTo(FromTopicMessageProvider.class.getSimpleName());
     }
 
     @Test

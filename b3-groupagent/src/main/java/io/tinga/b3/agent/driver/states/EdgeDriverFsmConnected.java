@@ -110,7 +110,7 @@ public class EdgeDriverFsmConnected
 
                     @Override
                     public String getName() {
-                        return fsmState.getClass().getName();
+                        return fsmState.getClass().getSimpleName();
                     }
 
                     @Override

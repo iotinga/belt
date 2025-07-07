@@ -48,7 +48,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
 
     @Override
     public String getName() {
-        return EdgeFirstShadowReportedPolicy.class.getName();
+        return EdgeFirstShadowReportedPolicy.class.getSimpleName();
     }
 
     @Override

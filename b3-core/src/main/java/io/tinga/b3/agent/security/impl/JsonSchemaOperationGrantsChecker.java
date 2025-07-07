@@ -75,7 +75,7 @@ public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends Json
 
     @Override
     public String getName() {
-        return JsonSchemaOperationGrantsChecker.class.getName();
+        return JsonSchemaOperationGrantsChecker.class.getSimpleName();
     }
 
     @Override

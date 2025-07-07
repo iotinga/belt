@@ -23,12 +23,12 @@ public class StaticTopicBasedAgentProxy<M extends B3Message<?>> extends AEventHa
     private String roleName;
     private Topic<M> desiredTopic;
     private Topic<M> reportedTopic;
-    private final List<B3EventHandler<M>> subscribers;
+    protected final List<B3EventHandler<M>> subscribers;
     private final B3ITopicFactoryProxy topicFactoryProxy;
     private final B3Topic.Factory topicFactory;
     protected final Agent.Config config;
 
-    private M lastShadowReported;
+    protected M lastShadowReported;
 
     public StaticTopicBasedAgentProxy(Agent.Config config,
             Class<M> messageClass, B3ITopicFactoryProxy topicFactoryProxy, B3Topic.Factory topicFactory) {
@@ -37,12 +37,11 @@ public class StaticTopicBasedAgentProxy<M extends B3Message<?>> extends AEventHa
         this.topicFactory = topicFactory;
         this.topicFactoryProxy = topicFactoryProxy;
         this.subscribers = new CopyOnWriteArrayList<>();
-        this.reportedTopic.addHandler(this);
     }
 
     @Override
     public String getName() {
-        return String.format("%s-%s", config.agentId(), AgentProxy.class.getName());
+        return String.format("%s-%s", config.agentId(), StaticTopicBasedAgentProxy.class.getSimpleName());
     }
 
     @Override
