@@ -48,7 +48,7 @@ public class SinkShadowReportedPolicyTest {
     public void subscribeToDriverOnBind() {
         sut.bindTo(topicBase, faker.lorem().word());
         verify(edgeDriver, times(1)).subscribe(sut);
-        assertEquals(edgeDriver.getClass().getName(), sut.getName());
+        assertEquals(SinkShadowReportedPolicy.class.getName(), sut.getName());
     }
 
     @Test
