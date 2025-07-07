@@ -15,8 +15,9 @@ import io.tinga.belt.helpers.AEventHandler;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class StaticAgentProxy<M extends B3Message<?>> extends AEventHandler<M> implements AgentProxy<M> {
-    private static final Logger log = LoggerFactory.getLogger(StaticAgentProxy.class);
+public class StaticTopicBasedAgentProxy<M extends B3Message<?>> extends AEventHandler<M>
+        implements B3EventHandler<M>, AgentProxy<M> {
+    private static final Logger log = LoggerFactory.getLogger(StaticTopicBasedAgentProxy.class);
 
     private B3Topic.Base topicBase;
     private String roleName;
@@ -29,7 +30,7 @@ public class StaticAgentProxy<M extends B3Message<?>> extends AEventHandler<M> i
 
     private M lastShadowReported;
 
-    public StaticAgentProxy(Agent.Config config,
+    public StaticTopicBasedAgentProxy(Agent.Config config,
             Class<M> messageClass, B3ITopicFactoryProxy topicFactoryProxy, B3Topic.Factory topicFactory) {
         super(messageClass);
         this.config = config;
