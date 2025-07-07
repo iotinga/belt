@@ -31,7 +31,7 @@ public class AgentProxyFactoryImpl implements AgentProxy.Factory {
         if (cacheItem == null) {
             cacheItem = this.injector.getInstance(Key.get(new TypeLiteral<AgentProxy<M>>() {
             }));
-            cacheItem.bindTo(topicBase, roleName);
+            cacheItem.bind(topicBase, roleName);
             this.cache.put(cacheKey, (AgentProxy<B3Message<?>>) cacheItem);
         }
 

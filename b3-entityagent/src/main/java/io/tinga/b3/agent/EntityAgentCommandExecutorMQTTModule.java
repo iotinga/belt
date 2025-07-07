@@ -6,7 +6,7 @@ import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.b3.agent.security.Operation;
-import io.tinga.b3.agent.security.impl.OperationJsonSchemaChecker;
+import io.tinga.b3.agent.security.impl.JsonSchemaOperationGrantsChecker;
 import io.tinga.b3.agent.shadowing.policy.EdgeFirstShadowDesiredPolicy;
 import io.tinga.b3.agent.shadowing.policy.EdgeFirstShadowReportedPolicy;
 import io.tinga.b3.helpers.GenericB3Message;
@@ -17,7 +17,7 @@ public class EntityAgentCommandExecutorMQTTModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(Operation.GrantsChecker.class).to(OperationJsonSchemaChecker.class);
+        bind(Operation.GrantsChecker.class).to(JsonSchemaOperationGrantsChecker.class);
         bind(JsonSchemaProvider.class).to(JsonSchemaResourcesProvider.class);
         // bind(B3MessageProvider.class).to(DummyB3MessageProvider.class);
         bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {

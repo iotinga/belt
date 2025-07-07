@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.javafaker.Faker;
 
 import io.tinga.b3.agent.Agent;
+import io.tinga.b3.agent.driver.AgentProxy;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.helpers.GenericB3Message;
@@ -45,6 +46,8 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     B3ITopicFactoryProxy factoryProxy;
     @Mock
     Topic<GenericB3Message> topic;
+    @Mock
+    AgentProxy.Factory agentProxyFactory;
 
     @Spy
     B3Topic.Base topicBase = TestB3TopicFactory.instance().agent(faker.lorem().word());
@@ -56,13 +59,14 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
         sut = new EdgeFirstShadowReportedPolicy<>(
                 executor,
                 driver,
+                agentProxyFactory,
                 factoryProxy);
     }
 
     @Test
     public void checkBasicGetters() {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
-        sut.bindTo(topicBase, faker.lorem().word());
+        sut.bind(topicBase, faker.lorem().word());
         assertEquals(sut.getClass().getName(), sut.getName());
         assertEquals(topic, sut.getTopic());
     }
@@ -70,14 +74,14 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
     @Test
     public void initTopicOnBind() {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
-        sut.bindTo(topicBase, faker.lorem().word());
+        sut.bind(topicBase, faker.lorem().word());
         verify(factoryProxy, times(1)).getTopic(any(B3Topic.class), eq(true));
     }
 
     @Test
     public void subscribesToDriverOnBind() {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
-        sut.bindTo(topicBase, faker.lorem().word());
+        sut.bind(topicBase, faker.lorem().word());
         verify(driver, times(1)).subscribe(sut);
     }
 
@@ -97,7 +101,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
 
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
-        sut.bindTo(topicBase, faker.lorem().word());
+        sut.bind(topicBase, faker.lorem().word());
         sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
         boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
         verify(topic, times(1)).post(firstMessage);
@@ -122,7 +126,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
-        sut.bindTo(topicBase, faker.lorem().word());
+        sut.bind(topicBase, faker.lorem().word());
         sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
         boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), secondMessage);
         verify(topic, times(1)).post(secondMessage);
@@ -145,7 +149,7 @@ public class AbstractEdgeFirstShadowReportedPolicyTest {
 
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(firstMessage).getVersion();
-        sut.bindTo(topicBase, faker.lorem().word());
+        sut.bind(topicBase, faker.lorem().word());
         boolean result = sut.handle(topicBase.shadow().desired(faker.lorem().word()).build(), firstMessage);
         verify(firstMessage, times(1)).setVersion(nextVersion);
         assertTrue(result);

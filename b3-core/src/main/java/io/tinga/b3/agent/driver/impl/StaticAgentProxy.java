@@ -15,8 +15,8 @@ import io.tinga.belt.helpers.AEventHandler;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> implements AgentProxy<M> {
-    private static final Logger log = LoggerFactory.getLogger(AgentProxyImpl.class);
+public class StaticAgentProxy<M extends B3Message<?>> extends AEventHandler<M> implements AgentProxy<M> {
+    private static final Logger log = LoggerFactory.getLogger(StaticAgentProxy.class);
 
     private B3Topic.Base topicBase;
     private String roleName;
@@ -25,12 +25,14 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     private final List<B3EventHandler<M>> subscribers;
     private final B3ITopicFactoryProxy topicFactoryProxy;
     private final B3Topic.Factory topicFactory;
+    protected final Agent.Config config;
 
     private M lastShadowReported;
 
-    public AgentProxyImpl(
+    public StaticAgentProxy(Agent.Config config,
             Class<M> messageClass, B3ITopicFactoryProxy topicFactoryProxy, B3Topic.Factory topicFactory) {
         super(messageClass);
+        this.config = config;
         this.topicFactory = topicFactory;
         this.topicFactoryProxy = topicFactoryProxy;
         this.subscribers = new CopyOnWriteArrayList<>();
@@ -39,11 +41,11 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
 
     @Override
     public String getName() {
-        return this.getClass().getName();
+        return String.format("%s-%s", config.agentId(), AgentProxy.class.getName());
     }
 
     @Override
-    public synchronized void bindTo(B3Topic.Base topicBase, String roleName) {
+    public synchronized void bind(B3Topic.Base topicBase, String roleName) {
         if (desiredTopic == null && this.reportedTopic == null) {
             this.topicBase = topicBase;
             this.roleName = roleName;
@@ -69,7 +71,7 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     }
 
     @Override
-    public B3Topic.Base getBoundTopicName() {
+    public B3Topic.Base getBoundTopicBase() {
         return this.topicBase;
     }
 
@@ -91,7 +93,7 @@ public class AgentProxyImpl<M extends B3Message<?>> extends AEventHandler<M> imp
     @Override
     public synchronized void write(M desiredMessage) {
         if (this.desiredTopic == null) {
-            log.error("Trying to write before bindTo: message ignored");
+            log.error("Trying to write before bind: message ignored");
             return;
         }
         Integer currentVersion = this.lastShadowReported == null ? Agent.VERSION_WILDCARD

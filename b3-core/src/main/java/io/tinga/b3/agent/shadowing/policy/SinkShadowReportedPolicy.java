@@ -34,7 +34,7 @@ public class SinkShadowReportedPolicy<M extends B3Message<?>> implements Agent.S
     }
 
     @Override
-    public void bindTo(B3Topic.Base topicBase, String roleName) {
+    public void bind(B3Topic.Base topicBase, String roleName) {
         this.edgeDriver.subscribe(this);
     }
     

@@ -10,11 +10,11 @@ public interface Agent<M extends B3Message<?>> {
     int VERSION_WILDCARD = 0;
 
     interface ShadowDesiredPolicy<M extends B3Message<?>> extends B3EventHandler<M> {
-        void bindTo(B3Topic.Base topicBase, String roleName);
+        void bind(B3Topic.Base topicBase, String roleName);
     }
 
     interface ShadowReportedPolicy<M extends B3Message<?>> extends B3EventHandler<M> {
-        void bindTo(B3Topic.Base topicBase, String roleName);
+        void bind(B3Topic.Base topicBase, String roleName);
     }
 
     interface Config {
@@ -41,9 +41,9 @@ public interface Agent<M extends B3Message<?>> {
         String getReportedStoreRef();
     }
 
-    void bindTo(B3Topic.Base topicBase, String roleName);
+    void bind(B3Topic.Base topicBase, String roleName);
 
-    B3Topic.Base getBoundTopicName();
+    B3Topic.Base getBoundTopicBase();
 
     String getBoundRoleName();
 }

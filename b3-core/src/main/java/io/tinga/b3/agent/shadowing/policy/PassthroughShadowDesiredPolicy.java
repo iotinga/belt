@@ -59,7 +59,7 @@ public class PassthroughShadowDesiredPolicy<M extends B3Message<?>>
     }
 
     @Override
-    public void bindTo(B3Topic.Base topicBase, String roleName) {
+    public void bind(B3Topic.Base topicBase, String roleName) {
         // NOTHING TO DO
     }
 

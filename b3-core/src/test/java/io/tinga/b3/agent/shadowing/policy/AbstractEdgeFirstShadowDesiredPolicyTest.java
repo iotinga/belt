@@ -75,7 +75,7 @@ public class AbstractEdgeFirstShadowDesiredPolicyTest {
     @Test
     public void addTopicHandlerOnBind() {
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(false));
-        sut.bindTo(topicBase, faker.lorem().word());
+        sut.bind(topicBase, faker.lorem().word());
         verify(factoryProxy, times(1)).getTopic(any(B3Topic.class), eq(false));
         verify(topic, times(1)).addHandler(sut);
     }

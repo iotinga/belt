@@ -14,15 +14,6 @@ public class OperationTopicBasedFactory implements Operation.Factory {
         this.topicFactory = topicFactory;
     }
 
-    // @Override
-    // public <M extends B3Message<?>> Operation<M> buildFrom(B3TopicRoot.Name topicName, M message)
-    //         throws InvalidOperationException {
-    //     if (topicName == null || message == null) {
-    //         throw new InvalidOperationException();
-    //     }
-    //     return new Operation<M>(topicName.build(), message);
-    // }
-
     @Override
     public <M extends B3Message<?>> Operation<M> buildFrom(String topicPath, M message)
             throws InvalidOperationException {

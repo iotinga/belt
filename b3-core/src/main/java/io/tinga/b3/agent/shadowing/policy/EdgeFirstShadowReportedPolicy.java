@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.b3.agent.Agent;
+import io.tinga.b3.agent.driver.AgentProxy;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
@@ -19,70 +20,61 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
 
     protected final VersionSafeExecutor executor;
     protected final Agent.EdgeDriver<M> edgeDriver;
-    protected final B3ITopicFactoryProxy topicFactory;
 
+    private final AgentProxy.Factory agentProxyFactory;
+    private final B3ITopicFactoryProxy topicFactory;
+    private AgentProxy<M> agentProxy;
+
+    private B3Topic.Base boundTopicBase;
     private Topic<M> topic;
 
     private M lastSentMessage;
 
     @Inject
     public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
-            B3ITopicFactoryProxy topicFactory) {
+            AgentProxy.Factory agentProxyFactory, B3ITopicFactoryProxy topicFactory) {
         this.executor = executor;
         this.edgeDriver = edgeDriver;
+        this.agentProxyFactory = agentProxyFactory;
         this.topicFactory = topicFactory;
     }
 
     @Override
-    public void bindTo(B3Topic.Base topicBase, String roleName) {
-        this.topic = this.topicFactory.getTopic(topicBase.shadow().reported().build(), true);
-        this.edgeDriver.subscribe(this);
+    public void bind(B3Topic.Base topicBase, String roleName) {
+        this.boundTopicBase = topicBase;
+        this.agentProxy = this.agentProxyFactory.getProxy(topicBase, roleName);
+        this.agentProxy.subscribe(this);
     }
 
     @Override
     public String getName() {
-        return this.getClass().getName();
+        return EdgeFirstShadowReportedPolicy.class.getName();
     }
 
     @Override
     public boolean handle(B3Topic topic, M event) throws Exception {
-        this.executor.safeExecute(version -> {
-            if (lastSentMessage == null || !lastSentMessage.equals(event)) {
-                int messageVersion = event.getVersion();
-                event.setVersion(version.apply(true));
-                this.topic.post(event);
-                lastSentMessage = event;
-                log.info(String.format("New reported published: wildcard(%d) messageVersion(%d) publishedVersion(%d)",
-                        Agent.VERSION_WILDCARD, messageVersion, event.getVersion()));
-            }
-            return null;
-        });
+        if (lastSentMessage == null) {
+            lastSentMessage = event;
+            this.agentProxy.unsubscribe(this);
+            this.topic = this.topicFactory.getTopic(this.boundTopicBase.shadow().reported().build(), true);
+            this.edgeDriver.subscribe(this);
+        } else {
+            this.executor.safeExecute(version -> {
+                if (!lastSentMessage.equals(event)) {
+                    int messageVersion = event.getVersion();
+                    event.setVersion(version.apply(true));
+                    this.topic.post(event);
+                    lastSentMessage = event;
+                    log.info(String.format(
+                            "New reported published: wildcard(%d) messageVersion(%d) publishedVersion(%d)",
+                            Agent.VERSION_WILDCARD, messageVersion, event.getVersion()));
+                }
+                return null;
+            });
+        }
 
         return true;
     }
-
-        // try {
-        //     Operation operation = operationFactory.buildFrom(topic, event);
-        //     boolean result = checker.isAllowed(operation);
-        //     if (result) {
-        //         out.put(String.format("[ ALLOW]: %s %s@%s -> %s", operation.message().getAction().name(),
-        //                 operation.role(),
-        //                 operation.desiredTopic(), operation.reportedTopic()));
-        //         this.topic.post(event);
-        //         return true;
-        //     } else {
-        //         out.put(String.format("[REJECT]: %s %s@%s -> %s", operation.message().getAction().name(),
-        //                 operation.role(),
-        //                 operation.desiredTopic(), operation.reportedTopic()));
-        //         return false;
-        //     }
-        // } catch (EdgeDriverException e) {
-        //     log.warn(e.getMessage());
-        //     return false;
-        // } catch (InvalidOperationException e) {
-        //     log.warn(e.getMessage());
-        //     return false;
-        // }
 
     protected Topic<M> getTopic() {
         return topic;

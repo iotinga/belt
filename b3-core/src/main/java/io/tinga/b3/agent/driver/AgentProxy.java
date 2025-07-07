@@ -9,6 +9,8 @@ import io.tinga.b3.protocol.B3Topic;
  * An Agent Proxy is
  */
 public interface AgentProxy<M extends B3Message<?>> extends B3EventHandler<M>, Agent<M> {
+
+
     interface Factory {
         <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName);
     }

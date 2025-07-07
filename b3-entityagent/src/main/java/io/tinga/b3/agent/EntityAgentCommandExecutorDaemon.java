@@ -6,22 +6,23 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.belt.output.Status;
+import io.tinga.b3.agent.driver.AgentProxy.Factory;
 import io.tinga.b3.agent.impl.AbstractAgentCommandExecutor;
+import io.tinga.b3.agent.security.Operation.GrantsChecker;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.helpers.GenericB3Message;
-import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.B3Topic.Base;
 
 public class EntityAgentCommandExecutorDaemon extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
-
     private static final Logger log = LoggerFactory.getLogger(EntityAgentCommandExecutorDaemon.class);
 
     @Inject
-    public EntityAgentCommandExecutorDaemon(B3Topic.Base topicBase, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
-            ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
-            Agent.EdgeDriver<GenericB3Message> driver) {
-        super(topicBase, reportedPolicy, desiredPolicy, executor, driver);
+    public EntityAgentCommandExecutorDaemon(Factory agentProxyFactory, Base topicBase,
+            ShadowReportedPolicy<GenericB3Message> reportedPolicy, ShadowDesiredPolicy<GenericB3Message> desiredPolicy,
+            VersionSafeExecutor executor, GrantsChecker<GenericB3Message> grantsChecker,
+            EdgeDriver<GenericB3Message> driver) {
+        super(agentProxyFactory, topicBase, reportedPolicy, desiredPolicy, executor, grantsChecker, driver);
     }
-
 
     @Override
     public Status execute(EntityAgentCommand command) {

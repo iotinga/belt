@@ -3,11 +3,10 @@ package io.tinga.b3.agent.shadowing.impl;
 import com.google.inject.Inject;
 
 import io.tinga.b3.agent.InitializationException;
-import io.tinga.b3.protocol.B3ITopicFactoryProxy;
+import io.tinga.b3.agent.driver.AgentProxy;
+import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
-import it.netgrid.bauer.EventHandler;
-import it.netgrid.bauer.Topic;
 
 /**
  * This VersionSafeExecutor requires always a fresh topic creation from the
@@ -15,25 +14,21 @@ import it.netgrid.bauer.Topic;
  * flag, as it doesn't need to write to the topic reported.
  */
 public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> extends AbstracVersionSafeExecutor
-        implements EventHandler<M> {
+        implements B3EventHandler<M> {
 
-    private final B3ITopicFactoryProxy topicFactory;
-    private final Class<M> eventClass;
-    private B3Topic.Base topicBase;
-    private Topic<M> reportedTopic;
+    private final AgentProxy.Factory agentProxyFactory;
+    private AgentProxy<M> agentProxy;
 
     @Inject
-    public InitFromReportedTopicVersionSafeExecutor(Class<M> eventClass, B3ITopicFactoryProxy topicFactory) {
-        this.topicFactory = topicFactory;
-        this.eventClass = eventClass;
+    public InitFromReportedTopicVersionSafeExecutor(AgentProxy.Factory agentProxyFactory) {
+        this.agentProxyFactory = agentProxyFactory;
     }
 
     @Override
-    public void initVersion(B3Topic.Base topicBase) throws InitializationException {
+    public void bind(B3Topic.Base topicBase, String roleName) throws InitializationException {
         try {
-            this.topicBase = topicBase;
-            this.reportedTopic = this.topicFactory.getTopic(this.topicBase.shadow().reported().build(), false);
-            this.reportedTopic.addHandler(this);
+            this.agentProxy = this.agentProxyFactory.getProxy(topicBase, roleName);
+            this.agentProxy.subscribe(this);
         } catch (Exception e) {
             throw new InitializationException(e.getMessage());
         }
@@ -41,17 +36,14 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
 
     @Override
     public String getName() {
-        return this.getClass().getName();
+        return InitFromReportedTopicVersionSafeExecutor.class.getName();
     }
 
     @Override
-    public Class<M> getEventClass() {
-        return this.eventClass;
-    }
-
-    @Override
-    public boolean handle(String topicBase, M event) throws Exception {
+    public boolean handle(B3Topic topic, M event) throws Exception {
         if (!this.isInitialized()) {
+            this.agentProxy.unsubscribe(this);
+            this.agentProxy = null;
             this.initCurrentReportedVersion(event.getVersion());
         }
         return true;

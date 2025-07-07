@@ -7,30 +7,37 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import io.tinga.b3.agent.driver.AgentProxy.Factory;
 import io.tinga.b3.agent.impl.AbstractAgentCommandExecutor;
+import io.tinga.b3.agent.security.Operation.GrantsChecker;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.helpers.B3MessageProvider;
 import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
+import io.tinga.b3.protocol.B3Topic.Base;
 
 public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {
 
     private static final Logger log = LoggerFactory.getLogger(EntityAgentCommandExecutorOnce.class);
 
-    @Inject
-    private B3MessageProvider<GenericB3Message> provider;
+    private final B3MessageProvider<GenericB3Message> desiredMessageProvider;
 
-    public EntityAgentCommandExecutorOnce(B3Topic.Base topicBase, ShadowReportedPolicy<GenericB3Message> reportedPolicy,
-            ShadowDesiredPolicy<GenericB3Message> desiredPolicy, VersionSafeExecutor executor,
-            Agent.EdgeDriver<GenericB3Message> driver) {
-        super(topicBase, reportedPolicy, desiredPolicy, executor, driver);
+    @Inject
+    public EntityAgentCommandExecutorOnce(
+            B3MessageProvider<GenericB3Message> desiredMessageProvider,
+            Factory agentProxyFactory, Base topicBase,
+            ShadowReportedPolicy<GenericB3Message> reportedPolicy, ShadowDesiredPolicy<GenericB3Message> desiredPolicy,
+            VersionSafeExecutor executor, GrantsChecker<GenericB3Message> grantsChecker,
+            EdgeDriver<GenericB3Message> driver) {
+        super(agentProxyFactory, topicBase, reportedPolicy, desiredPolicy, executor, grantsChecker, driver);
+        this.desiredMessageProvider = desiredMessageProvider;
     }
 
     @Override
     public Status execute(EntityAgentCommand command) {
-        GenericB3Message message = provider.load(command.desiredRef());
+        GenericB3Message message = desiredMessageProvider.load(command.desiredRef());
         try {
-            B3Topic topic = getBoundTopicName().shadow().desired(command.role()).build();
+            B3Topic topic = getBoundTopicBase().shadow().desired(command.role()).build();
             this.desiredPolicy.handle(topic, message);
             return Status.OK;
         } catch (Exception e) {
@@ -43,6 +50,5 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     protected boolean keepAlive() {
         return false;
     }
-
 
 }

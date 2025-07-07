@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.agent.Agent;
 import io.tinga.b3.agent.InitializationException;
+import io.tinga.b3.agent.driver.AgentProxy;
+import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
@@ -29,31 +31,49 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     protected final Agent.ShadowReportedPolicy<M> reportedPolicy;
     protected final Agent.ShadowDesiredPolicy<M> desiredPolicy;
     protected final Agent.EdgeDriver<M> driver;
+    protected final AgentProxy.Factory agentProxyFactory;
 
     protected final VersionSafeExecutor executor;
+    protected final Operation.GrantsChecker<M> grantsChecker;
 
-    private B3Topic.Base topicBase;
-    private String roleName;
+    private final B3Topic.Base boundTopicBase;
+    private String boundRoleName;
 
     @Inject
     public AbstractAgentCommandExecutor(
+            AgentProxy.Factory agentProxyFactory,
             B3Topic.Base topicBase,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
-            Agent.ShadowDesiredPolicy<M> desiredPolicy, VersionSafeExecutor executor,
+            Agent.ShadowDesiredPolicy<M> desiredPolicy, 
+            VersionSafeExecutor executor,
+            Operation.GrantsChecker<M> grantsChecker,
             Agent.EdgeDriver<M> driver) {
+        this.agentProxyFactory = agentProxyFactory;
+        this.boundTopicBase = topicBase;
         this.executor = executor;
         this.reportedPolicy = reportedPolicy;
         this.desiredPolicy = desiredPolicy;
         this.driver = driver;
+        this.grantsChecker = grantsChecker;
     }
 
     public abstract Status execute(C command);
 
     @Override
-    public synchronized void bindTo(B3Topic.Base topicBase, String roleName) {
-        this.topicBase = topicBase;
-        this.roleName = roleName;
-        this.executor.initVersion(topicBase);
+    public synchronized void bind(B3Topic.Base topicBase, String roleName) {
+
+        // Prepare all the components needing the first Reported Message
+        this.grantsChecker.bind(topicBase, roleName);
+        this.reportedPolicy.bind(topicBase, roleName);
+        this.executor.bind(topicBase, roleName);
+
+        // This starts the reported message retrieval:
+        // the message will be passed following the bind order defined in 
+        // the previous lines
+        this.agentProxyFactory.getProxy(topicBase, roleName).bind(topicBase, roleName);
+
+        // As the executor is the last to be initialized, after its initializazion
+        // we shall start to serve requests
         this.executor.safeExecute(version -> {
 
             Integer currentVersion = null;
@@ -75,10 +95,11 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
                 }
             }
 
+            // If the execution has not been interrupted,
+            // we shall start to serve requests
             if (keepGoing) {
-                this.reportedPolicy.bindTo(topicBase, roleName);
-                this.desiredPolicy.bindTo(topicBase, roleName);
                 this.driver.connect();
+                this.desiredPolicy.bind(topicBase, roleName);
             }
             return null;
 
@@ -93,7 +114,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
             public Status get() {
                 Status retval = Status.OK;
                 try {
-                    bindTo(topicBase, "#");
+                    bind(boundTopicBase, "#");
                     retval = execute(command);
                     while (keepAlive()) {
                         try {
@@ -118,21 +139,13 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     }
 
     @Override
-    public B3Topic.Base getBoundTopicName() {
-        return this.topicBase;
+    public B3Topic.Base getBoundTopicBase() {
+        return this.boundTopicBase;
     }
 
     @Override
     public String getBoundRoleName() {
-        return this.roleName;
-    }
-
-    protected B3Topic.Base getTopicName() {
-        return topicBase;
-    }
-
-    protected String getRoleName() {
-        return roleName;
+        return this.boundRoleName;
     }
 
     protected int getThreadSleepsMs() {

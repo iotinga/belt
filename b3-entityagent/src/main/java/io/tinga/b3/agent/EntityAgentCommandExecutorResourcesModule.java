@@ -6,7 +6,7 @@ import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.b3.agent.security.Operation;
-import io.tinga.b3.agent.security.impl.OperationJsonSchemaChecker;
+import io.tinga.b3.agent.security.impl.JsonSchemaOperationGrantsChecker;
 import io.tinga.b3.agent.shadowing.policy.SinkShadowReportedPolicy;
 import io.tinga.b3.helpers.B3MessageProvider;
 import io.tinga.b3.helpers.GenericB3Message;
@@ -26,7 +26,7 @@ public class EntityAgentCommandExecutorResourcesModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(EntityAgentCommand.class).toInstance(command);
-        bind(Operation.GrantsChecker.class).to(OperationJsonSchemaChecker.class);
+        bind(Operation.GrantsChecker.class).to(JsonSchemaOperationGrantsChecker.class);
         bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityAgentCommand>>() {
         })).to(EntityAgentCommandExecutorOnce.class);
         bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
