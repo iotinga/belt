@@ -3,7 +3,7 @@ package io.tinga.b3.agent.shadowing.impl;
 import com.google.inject.Inject;
 
 import io.tinga.b3.agent.InitializationException;
-import io.tinga.b3.agent.driver.AgentProxy;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;

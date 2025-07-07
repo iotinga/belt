@@ -2,11 +2,11 @@ package io.tinga.b3.agent;
 
 import com.google.inject.Inject;
 
-import io.tinga.b3.agent.driver.AgentProxy.Factory;
 import io.tinga.b3.agent.impl.AbstractAgentCommandExecutor;
 import io.tinga.b3.agent.security.Operation.GrantsChecker;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.helpers.GenericB3Message;
+import io.tinga.b3.helpers.AgentProxy.Factory;
 import io.tinga.b3.protocol.B3Topic.Base;
 import io.tinga.belt.output.Status;
 

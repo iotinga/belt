@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.driver.AgentProxy;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;

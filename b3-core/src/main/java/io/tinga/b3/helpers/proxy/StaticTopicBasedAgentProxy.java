@@ -1,11 +1,11 @@
-package io.tinga.b3.agent.driver.impl;
+package io.tinga.b3.helpers.proxy;
 
 import it.netgrid.bauer.Topic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.driver.AgentProxy;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;

@@ -20,9 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.javafaker.Faker;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.driver.AgentProxy;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor.CriticalSection;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.TestB3TopicFactory;

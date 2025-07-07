@@ -1,4 +1,4 @@
-package io.tinga.b3.agent.driver.impl;
+package io.tinga.b3.helpers.proxy;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -6,7 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.tinga.b3.agent.driver.AgentProxy;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.B3MessageProvider;
 import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;

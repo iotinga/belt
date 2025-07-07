@@ -1,6 +1,6 @@
-package io.tinga.b3.agent.driver.impl;
+package io.tinga.b3.helpers.proxy;
 
-import io.tinga.b3.agent.driver.AgentProxy;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Message;
 import java.util.Random;

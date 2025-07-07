@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.belt.output.Status;
-import io.tinga.b3.agent.driver.AgentProxy.Factory;
 import io.tinga.b3.agent.impl.AbstractAgentCommandExecutor;
 import io.tinga.b3.agent.security.Operation.GrantsChecker;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.helpers.GenericB3Message;
+import io.tinga.b3.helpers.AgentProxy.Factory;
 import io.tinga.b3.protocol.B3Topic.Base;
 
 public class EntityAgentCommandExecutorDaemon extends AbstractAgentCommandExecutor<GenericB3Message, EntityAgentCommand> {

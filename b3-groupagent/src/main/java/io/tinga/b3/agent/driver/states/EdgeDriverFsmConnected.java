@@ -13,13 +13,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import io.tinga.b3.agent.GroupAgentConfig;
-import io.tinga.b3.agent.driver.AgentProxy;
 import io.tinga.b3.agent.driver.ConnectionState;
 import io.tinga.b3.agent.driver.GroupAgentEdgeDriver;
 import io.tinga.b3.agent.driver.ShadowDesiredPreProcessor;
 import io.tinga.b3.agent.driver.ShadowReportedPostProcessor;
 import io.tinga.b3.agent.driver.impl.AbstractFsmEdgeDriver;
 import io.tinga.b3.agent.driver.impl.AbstractFsmEdgeDriver.Context;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Topic;

@@ -8,10 +8,10 @@ import com.google.inject.TypeLiteral;
 
 import io.tinga.b3.protocol.impl.B3TopicFactoryImpl;
 import io.tinga.b3.protocol.impl.PassthroughITopicFactoryProxy;
-import io.tinga.b3.agent.driver.AgentProxy;
-import io.tinga.b3.agent.driver.impl.AgentProxyFactoryImpl;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.agent.shadowing.impl.InitFromReportedTopicVersionSafeExecutor;
+import io.tinga.b3.helpers.AgentProxy;
+import io.tinga.b3.helpers.proxy.AgentProxyFactoryImpl;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.AbstractGadget;
