@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import com.github.javafaker.Faker;
 
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.B3TopicValidationException;
+import io.tinga.b3.protocol.B3InvalidTopicException;
 import io.tinga.b3.protocol.B3Topic.Category;
 
 public class B3TopicFactoryImplBuildTest {
@@ -27,7 +27,7 @@ public class B3TopicFactoryImplBuildTest {
     @BeforeEach
     void setUp() {
         defaultRoot = DEFAULT_ROOT;
-        factory = new B3TopicFactoryImpl();
+        factory = new StandardB3TopicFactory();
         fakeId = faker.lorem().word();
         customRoot = faker.lorem().word();
         roleString = faker.lorem().word();
@@ -74,7 +74,7 @@ public class B3TopicFactoryImplBuildTest {
 
     @Test
     public void customBuilderWithLastGlueWordTest() {
-        factory = new B3TopicFactoryImpl(customRoot + GLUE);
+        factory = new StandardB3TopicFactory(customRoot + GLUE);
         String expectedResult = customRoot + "/agent/" + fakeId + "/shadow/reported";
         B3Topic.Valid topic = factory.agent(fakeId).shadow().reported();
         String result = topic.build().toString();
@@ -111,7 +111,7 @@ public class B3TopicFactoryImplBuildTest {
         // 2 glue on stringRole
         String invalidRole = roleString + GLUE;
         // System.out.println(invalidRole);
-        assertThrows(B3TopicValidationException.class, () -> factory.agent(fakeId).shadow().desired(invalidRole));
+        assertThrows(B3InvalidTopicException.class, () -> factory.agent(fakeId).shadow().desired(invalidRole));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class B3TopicFactoryImplBuildTest {
         // 4 glue on stringRole
         String invalidRole = roleString + GLUE;
         // System.out.println(invalidRole);
-        assertThrows(B3TopicValidationException.class,
+        assertThrows(B3InvalidTopicException.class,
                 () -> factory.agent(fakeId).shadow().desired().batch(invalidRole));
     }
 
@@ -191,7 +191,7 @@ public class B3TopicFactoryImplBuildTest {
         // 7 glue on stringRole
         String invalidRole = roleString + GLUE;
         // System.out.println(invalidRole);
-        assertThrows(B3TopicValidationException.class, () -> factory.agent(fakeId).command(invalidRole));
+        assertThrows(B3InvalidTopicException.class, () -> factory.agent(fakeId).command(invalidRole));
     }
 
     @Test
@@ -225,7 +225,7 @@ public class B3TopicFactoryImplBuildTest {
     public void entityShadowDesiredRoleStringWithGlueWordTest() {
         // 2 glue on stringRole
         String invalidRole = roleString + GLUE;
-        assertThrows(B3TopicValidationException.class, () -> factory.entity(fakeId).shadow().desired(invalidRole));
+        assertThrows(B3InvalidTopicException.class, () -> factory.entity(fakeId).shadow().desired(invalidRole));
     }
 
     @Test
@@ -260,20 +260,20 @@ public class B3TopicFactoryImplBuildTest {
         // 4 glue on stringRole
         String invalidRole = roleString + GLUE;
         // System.out.println(invalidRole);
-        assertThrows(B3TopicValidationException.class, () -> factory.entity(fakeId).command(invalidRole));
+        assertThrows(B3InvalidTopicException.class, () -> factory.entity(fakeId).command(invalidRole));
     }
 
     @Test
     public void invalidAgentIdTest() {
         String invalidId = fakeId + GLUE + fakeId;
-        assertThrows(B3TopicValidationException.class, () -> factory.agent(invalidId));
+        assertThrows(B3InvalidTopicException.class, () -> factory.agent(invalidId));
 
     }
 
     @Test
     public void invalidEntityIdWithGlueTest() {
         String invalidId = fakeId + GLUE + fakeId;
-        assertThrows(B3TopicValidationException.class, () -> factory.entity(invalidId));
+        assertThrows(B3InvalidTopicException.class, () -> factory.entity(invalidId));
     }
 
 }

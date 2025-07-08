@@ -20,13 +20,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.github.javafaker.Faker;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.InvalidOperationException;
+import io.tinga.b3.agent.B3InvalidOperationException;
 import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
-import io.tinga.b3.protocol.B3TopicValidationException;
+import io.tinga.b3.protocol.B3InvalidTopicException;
 import io.tinga.b3.protocol.TestB3TopicFactory;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import it.netgrid.bauer.Topic;
@@ -106,7 +106,7 @@ public class EdgeFirstShadowDesiredPolicyTest {
     }
 
     @Test
-    public void writesAConflictFreeMessage() throws B3TopicValidationException, Exception {
+    public void writesAConflictFreeMessage() throws B3InvalidTopicException, Exception {
         int currentVersion = faker.random().nextInt(1, 1000);
 
         doAnswer(invocation -> true).when(checker).isAllowed(any());
@@ -124,7 +124,7 @@ public class EdgeFirstShadowDesiredPolicyTest {
     }
 
     @Test
-    public void doesntWriteANotAllowedOperation() throws B3TopicValidationException, Exception {
+    public void doesntWriteANotAllowedOperation() throws B3InvalidTopicException, Exception {
         int currentVersion = faker.random().nextInt(1, 1000);
 
         doAnswer(invocation -> false).when(checker).isAllowed(any());
@@ -142,7 +142,7 @@ public class EdgeFirstShadowDesiredPolicyTest {
     }
 
     @Test
-    public void doesntWriteAConflictingMessage() throws B3TopicValidationException, Exception {
+    public void doesntWriteAConflictingMessage() throws B3InvalidTopicException, Exception {
         int currentVersion = faker.random().nextInt(1, 1000);
         int messageVersion = faker.random().nextInt(1001, 2000);
 
@@ -159,11 +159,11 @@ public class EdgeFirstShadowDesiredPolicyTest {
     }
 
     @Test
-    public void doesNothingOnInvalidOperation() throws B3TopicValidationException, Exception {
+    public void doesNothingOnInvalidOperation() throws B3InvalidTopicException, Exception {
         int currentVersion = faker.random().nextInt(1, 1000);
         B3Topic testTopic = topicBase.shadow().desired(faker.lorem().word()).build();
 
-        doThrow(InvalidOperationException.class).when(operationFactory).buildFrom(eq(testTopic), any());
+        doThrow(B3InvalidOperationException.class).when(operationFactory).buildFrom(eq(testTopic), any());
 
         doAnswer(invocation -> {
             CriticalSection section = invocation.getArgument(0);

@@ -1,8 +1,8 @@
 package io.tinga.b3.protocol;
 
-import io.tinga.b3.protocol.impl.B3TopicFactoryImpl;
+import io.tinga.b3.protocol.impl.StandardB3TopicFactory;
 
-public class TestB3TopicFactory extends B3TopicFactoryImpl {
+public class TestB3TopicFactory extends StandardB3TopicFactory {
 
     private static final TestB3TopicFactory instance = new TestB3TopicFactory();
     

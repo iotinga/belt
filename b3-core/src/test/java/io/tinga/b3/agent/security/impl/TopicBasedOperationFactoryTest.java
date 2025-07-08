@@ -1,6 +1,6 @@
 package io.tinga.b3.agent.security.impl;
 
-import io.tinga.b3.agent.InvalidOperationException;
+import io.tinga.b3.agent.B3InvalidOperationException;
 import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
@@ -61,12 +61,12 @@ public class TopicBasedOperationFactoryTest {
     @Test
     void shouldThrowInvalidOperationExceptionWhenTopicIsNull() {
         assertThatThrownBy(() -> sut.buildFrom((B3Topic) null, message))
-                .isInstanceOf(InvalidOperationException.class);
+                .isInstanceOf(B3InvalidOperationException.class);
     }
 
     @Test
     void shouldThrowInvalidOperationExceptionWhenMessageIsNull() {
         assertThatThrownBy(() -> sut.buildFrom(topic.build(), null))
-                .isInstanceOf(InvalidOperationException.class);
+                .isInstanceOf(B3InvalidOperationException.class);
     }
 }

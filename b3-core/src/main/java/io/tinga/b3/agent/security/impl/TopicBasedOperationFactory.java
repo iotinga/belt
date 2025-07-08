@@ -1,7 +1,9 @@
 
 package io.tinga.b3.agent.security.impl;
 
-import io.tinga.b3.agent.InvalidOperationException;
+import com.google.inject.Inject;
+
+import io.tinga.b3.agent.B3InvalidOperationException;
 import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
@@ -10,21 +12,22 @@ public class TopicBasedOperationFactory implements Operation.Factory {
 
     private final B3Topic.Factory topicFactory;
 
+    @Inject
     public TopicBasedOperationFactory(B3Topic.Factory topicFactory) {
         this.topicFactory = topicFactory;
     }
 
     @Override
     public <M extends B3Message<?>> Operation<M> buildFrom(String topicPath, M message)
-            throws InvalidOperationException {
+            throws B3InvalidOperationException {
         B3Topic.Valid topic = this.topicFactory.parse(topicPath);
         return this.buildFrom(topic.build(), message);
     }
 
     @Override
-    public <M extends B3Message<?>> Operation<M> buildFrom(B3Topic topic, M message) throws InvalidOperationException {
+    public <M extends B3Message<?>> Operation<M> buildFrom(B3Topic topic, M message) throws B3InvalidOperationException {
         if (topic == null || message == null) {
-            throw new InvalidOperationException();
+            throw new B3InvalidOperationException();
         }
         return new Operation<M>(topic, message);
     }

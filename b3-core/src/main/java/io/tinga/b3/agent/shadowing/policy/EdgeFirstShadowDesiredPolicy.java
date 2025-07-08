@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import io.tinga.b3.agent.Agent;
-import io.tinga.b3.agent.InvalidOperationException;
+import io.tinga.b3.agent.B3InvalidOperationException;
 import io.tinga.b3.agent.driver.EdgeDriverException;
 import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
@@ -66,7 +66,7 @@ public class EdgeFirstShadowDesiredPolicy<M extends B3Message<?>>
                 if (grantsChecker.isAllowed(operation)) {
                     this.edgeDriver.write(event);
                 }
-            } catch (EdgeDriverException | InvalidOperationException e) {
+            } catch (EdgeDriverException | B3InvalidOperationException e) {
                 log.warn(e.getMessage());
             }
 

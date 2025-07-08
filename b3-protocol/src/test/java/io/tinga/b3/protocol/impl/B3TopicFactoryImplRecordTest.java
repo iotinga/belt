@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import io.tinga.b3.protocol.impl.B3TopicToken.Name;
 
 @ExtendWith(MockitoExtension.class)
-public class B3TopicFactoryImplRecordTest extends B3TopicFactoryImpl {
+public class B3TopicFactoryImplRecordTest extends StandardB3TopicFactory {
     @Test
     void testB3TopicRecordAddsRetainedOnTrue() {
         B3TopicToken token = B3TopicToken.from(Name.ROOT);
