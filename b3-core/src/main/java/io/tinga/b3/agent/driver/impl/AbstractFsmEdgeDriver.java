@@ -41,20 +41,22 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
 
     }
 
-    private final List<B3EventHandler<M>> subscribers;
-    private final B3Topic.Base topicBase;
-    private final B3Topic shadowReportedTopic;
+    protected final List<B3EventHandler<M>> subscribers;
+    protected final B3Topic.Base topicBase;
+    protected final B3Topic shadowReportedTopic;
 
     private Context<M> currentContext;
     private State<E, M> state;
 
-    public AbstractFsmEdgeDriver(B3Topic.Base topicBase) {
+    public AbstractFsmEdgeDriver(B3Topic.Base topicBase, State<E, M> initialState) {
         this.subscribers = new CopyOnWriteArrayList<>();
         this.topicBase = topicBase;
         this.shadowReportedTopic = this.topicBase.shadow().reported().build();
+        this.state = initialState;
+        this.currentContext = new Context<M>(null, this::emit);
+        this.state.enter(this.currentContext);
     }
 
-    protected abstract State<E, M> buildInitialState();
     protected abstract State<E, M> get(E state);
 
     /**
@@ -99,11 +101,11 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
         return null;
     }
 
-    private synchronized void onEvent(Function<Context<M>, E> delta, M desired, M reported) {
+    protected E getCurrentState() {
+        return this.state.current();
+    }
 
-        if (this.state == null) {
-            this.state = this.buildInitialState();
-        }
+    protected final synchronized void onEvent(Function<Context<M>, E> delta, M desired, M reported) {
 
         if(reported != null) {
             for (B3EventHandler<M> subscriber : this.subscribers) {
@@ -117,7 +119,7 @@ public abstract class AbstractFsmEdgeDriver<E, M extends B3Message<?>>
         }
 
         this.currentContext = new Context<M>(desired, this::emit);
-        E next = delta == null ? this.state.current() : delta.apply(this.currentContext);
+        E next = delta.apply(this.currentContext);
         
         if (this.state.current() != next) {
             this.currentContext = new Context<M>(null, this::emit);

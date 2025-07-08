@@ -11,6 +11,7 @@ import io.tinga.b3.protocol.impl.PassthroughITopicFactoryProxy;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
 import io.tinga.b3.agent.shadowing.impl.RetainedReportedVersionSafeExecutor;
 import io.tinga.b3.helpers.AgentProxy;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.helpers.proxy.CachedAgentProxyFactory;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Topic;
@@ -33,7 +34,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     public static final String NAME = "GROUPAGENT";
 
     public static GroupAgentConfig config;
-    
+
     protected void configure() {
         bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
 
@@ -43,16 +44,17 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
         bind(B3ITopicFactoryProxy.class).to(PassthroughITopicFactoryProxy.class).in(Singleton.class);
         // bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
         // })).to(GenericAgentProxy.class);
-        bind(Key.get(new TypeLiteral<AgentProxy.Factory>() {
-        })).to(CachedAgentProxyFactory.class);
+        bind(Key.get(new TypeLiteral<AgentProxy.Factory<GenericB3Message>>() {
+        })).to(Key.get(new TypeLiteral<CachedAgentProxyFactory<GenericB3Message>>() {
+        }));
         bind(B3Topic.Factory.class).to(B3TopicFactoryImpl.class);
 
         // bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {
         // })).to(GenericEdgeFirstShadowDesiredPolicy.class);
-        // bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
+        // bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>()
+        // {
         // })).to(GenericEdgeFirstShadowReportedPolicy.class);
     }
-
 
     @Provides
     public B3Topic.Base buildAgentTopic(B3Topic.Factory topicBaseFactory, GroupAgentConfig config) {
@@ -62,7 +64,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     @Provides
     @Singleton
     public GroupAgentConfig buildGadgetConfig(ConfigurationProvider provider) {
-        if(config == null) {
+        if (config == null) {
             config = provider.config(GroupAgentGadget.NAME.toUpperCase(), GroupAgentConfigImpl.class);
         }
         return config;
@@ -71,7 +73,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     @Provides
     @Singleton
     public Agent.Config buildAgentConfig(ConfigurationProvider provider) {
-        if(config == null) {
+        if (config == null) {
             config = provider.config(GroupAgentGadget.NAME.toUpperCase(), GroupAgentConfigImpl.class);
         }
         return config;
@@ -95,7 +97,7 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     @Override
     public com.google.inject.Module[] buildExecutorModules(Properties properties, GroupAgentCommand command) {
         log.debug("Building executor modules with properties {}", properties);
-        Module[] retval = {TopicFactory.getAsModule(properties), new GroupAgentCommandExecutorModule(command)};
+        Module[] retval = { TopicFactory.getAsModule(properties), new GroupAgentCommandExecutorModule(command) };
         return retval;
     }
 }

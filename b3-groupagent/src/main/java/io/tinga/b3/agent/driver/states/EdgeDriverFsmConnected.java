@@ -34,7 +34,7 @@ public class EdgeDriverFsmConnected
     private final ShadowDesiredPreProcessor<GenericB3Message> desiredPreProcessor;
     private final ShadowReportedPostProcessor<GenericB3Message> reportedPostProcessor;
     private final GroupAgentConfig config;
-    private final AgentProxy.Factory factory;
+    private final AgentProxy.Factory<GenericB3Message> factory;
     private final B3Topic.Factory topicFactory;
     private final ObjectNode currentShadowReported;
 
@@ -46,7 +46,7 @@ public class EdgeDriverFsmConnected
 
     @Inject
     public EdgeDriverFsmConnected(GroupAgentConfig config,
-            AgentProxy.Factory factory, B3Topic.Factory topicFactory, ObjectMapper om,
+            AgentProxy.Factory<GenericB3Message> factory, B3Topic.Factory topicFactory, ObjectMapper om,
             ShadowDesiredPreProcessor<GenericB3Message> desiredPreProc,
             ShadowReportedPostProcessor<GenericB3Message> reportedPostProc) {
         this.connectionState = ConnectionState.CONNECTING;

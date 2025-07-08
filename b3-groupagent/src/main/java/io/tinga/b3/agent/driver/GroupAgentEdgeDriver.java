@@ -19,16 +19,11 @@ public class GroupAgentEdgeDriver
     @Inject
     public GroupAgentEdgeDriver(GroupAgentConfig config, B3Topic.Factory topicFactory, EdgeDriverFsmConnected connected,
             EdgeDriverFsmDisconnected disconnected) {
-        super(topicFactory.agent(config.agentId()));
+        super(topicFactory.agent(config.agentId()), disconnected);
         this.stateMap = Map.of(
             EdgeDriverFsmState.CONNECTED, connected,
             EdgeDriverFsmState.DISCONNECTED, disconnected
         );
-    }
-
-    @Override
-    public State<EdgeDriverFsmState, GenericB3Message> buildInitialState() {
-        return this.stateMap.get(EdgeDriverFsmState.DISCONNECTED);
     }
 
     @Override

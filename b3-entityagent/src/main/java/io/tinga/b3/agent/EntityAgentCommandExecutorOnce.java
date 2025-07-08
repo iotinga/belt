@@ -24,7 +24,7 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     @Inject
     public EntityAgentCommandExecutorOnce(
             B3MessageProvider<GenericB3Message> desiredMessageProvider,
-            Factory agentProxyFactory, Base topicBase,
+            Factory<GenericB3Message> agentProxyFactory, Base topicBase,
             ShadowReportedPolicy<GenericB3Message> reportedPolicy, ShadowDesiredPolicy<GenericB3Message> desiredPolicy,
             VersionSafeExecutor executor, GrantsChecker<GenericB3Message> grantsChecker,
             EdgeDriver<GenericB3Message> driver) {

@@ -2,19 +2,19 @@ package io.tinga.b3.agent;
 
 import com.google.inject.Inject;
 
-import io.tinga.b3.agent.security.Operation.GrantsChecker;
+import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.GenericB3Message;
-import io.tinga.b3.helpers.AgentProxy.Factory;
-import io.tinga.b3.protocol.B3Topic.Base;
+import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.output.Status;
 
 public class GroupAgentCommandExecutor extends AbstractAgentCommandExecutor<GenericB3Message, GroupAgentCommand> {
 
     @Inject
-    public GroupAgentCommandExecutor(Factory agentProxyFactory, Base topicBase,
+    public GroupAgentCommandExecutor(AgentProxy.Factory<GenericB3Message> agentProxyFactory, B3Topic.Base topicBase,
             ShadowReportedPolicy<GenericB3Message> reportedPolicy, ShadowDesiredPolicy<GenericB3Message> desiredPolicy,
-            VersionSafeExecutor executor, GrantsChecker<GenericB3Message> grantsChecker,
+            VersionSafeExecutor executor, Operation.GrantsChecker<GenericB3Message> grantsChecker,
             EdgeDriver<GenericB3Message> driver) {
         super(agentProxyFactory, topicBase, reportedPolicy, desiredPolicy, executor, grantsChecker, driver);
     }

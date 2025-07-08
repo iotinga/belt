@@ -6,11 +6,11 @@ import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 
-public class OperationTopicBasedFactory implements Operation.Factory {
+public class TopicBasedOperationFactory implements Operation.Factory {
 
     private final B3Topic.Factory topicFactory;
 
-    public OperationTopicBasedFactory(B3Topic.Factory topicFactory) {
+    public TopicBasedOperationFactory(B3Topic.Factory topicFactory) {
         this.topicFactory = topicFactory;
     }
 

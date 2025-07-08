@@ -17,7 +17,6 @@ import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.helpers.JsonUtils;
-import io.tinga.belt.output.GadgetSink;
 
 public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends JsonNode>>
         implements Operation.GrantsChecker<M>, B3EventHandler<M> {
@@ -25,7 +24,6 @@ public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends Json
     private static final Logger log = LoggerFactory.getLogger(JsonSchemaOperationGrantsChecker.class);
 
     protected final JsonUtils json;
-    protected final GadgetSink out;
     protected final JsonSchemaProvider schemaProvider;
     private final AgentProxy.Factory<M> agentProxyFactory;
     private AgentProxy<M> agentProxy;
@@ -34,9 +32,8 @@ public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends Json
 
     @Inject
     public JsonSchemaOperationGrantsChecker(JsonSchemaProvider schemaProvider,
-            AgentProxy.Factory<M> agentProxyFactory, GadgetSink out, JsonUtils json) {
+            AgentProxy.Factory<M> agentProxyFactory, JsonUtils json) {
         this.json = json;
-        this.out = out;
         this.agentProxyFactory = agentProxyFactory;
         this.schemaProvider = schemaProvider;
     }
@@ -45,9 +42,9 @@ public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends Json
     public boolean isAllowed(Operation<M> operation) {
         M reported = this.currentReported;
 
-        JsonNode diff = json.diff(reported == null ? null : reported.getBody(),
-                operation.message() == null ? null : operation.message().getBody());
-        out.put(diff.toPrettyString());
+        JsonNode oldBody = reported == null ? null : reported.getBody();
+        JsonNode newBody = operation.message() == null ? null : operation.message().getBody();
+        JsonNode diff = json.subtract(oldBody,newBody);
         JsonSchema schema = this.schemaProvider.getSchemaFor(operation.sourceTopic());
 
         if (schema != null) {
@@ -80,7 +77,10 @@ public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends Json
 
     @Override
     public boolean handle(B3Topic topic, M event) throws Exception {
-        this.currentReported = event;
+        if (this.currentReported == null) {
+            this.currentReported = event;
+            this.agentProxy.unsubscribe(this);
+        }
         return true;
     }
 }

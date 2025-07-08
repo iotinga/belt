@@ -16,7 +16,7 @@ public class EntityAgentCommandExecutorDaemon extends AbstractAgentCommandExecut
     private static final Logger log = LoggerFactory.getLogger(EntityAgentCommandExecutorDaemon.class);
 
     @Inject
-    public EntityAgentCommandExecutorDaemon(Factory agentProxyFactory, Base topicBase,
+    public EntityAgentCommandExecutorDaemon(Factory<GenericB3Message> agentProxyFactory, Base topicBase,
             ShadowReportedPolicy<GenericB3Message> reportedPolicy, ShadowDesiredPolicy<GenericB3Message> desiredPolicy,
             VersionSafeExecutor executor, GrantsChecker<GenericB3Message> grantsChecker,
             EdgeDriver<GenericB3Message> driver) {
