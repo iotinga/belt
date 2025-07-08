@@ -20,4 +20,10 @@ public interface AgentProxy<M extends B3Message<?>> extends Agent<M> {
     void subscribe(B3EventHandler<M> reportedObserver);
 
     void unsubscribe(B3EventHandler<M> reportedObserver);
+
+    void bind(B3Topic.Base topicBase, String roleName);
+
+    B3Topic.Base getBoundTopicBase();
+
+    String getBoundRoleName();
 }

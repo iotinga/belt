@@ -41,9 +41,9 @@ public interface Agent<M extends B3Message<?>> {
         String getReportedStoreRef();
     }
 
-    void bind(B3Topic.Base topicBase, String roleName);
+    // void bind(B3Topic.Base topicBase, String roleName);
 
-    B3Topic.Base getBoundTopicBase();
+    // B3Topic.Base getBoundTopicBase();
 
-    String getBoundRoleName();
+    // String getBoundRoleName();
 }

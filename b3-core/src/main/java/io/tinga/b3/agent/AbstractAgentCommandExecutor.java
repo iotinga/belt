@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.agent.security.Operation;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
+import io.tinga.b3.agent.shadowing.VersionSafeExecutor.CriticalSection;
 import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
@@ -20,6 +21,8 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
         implements Agent<M>, GadgetCommandExecutor<C> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractAgentCommandExecutor.class);
+
+    protected static final String DEFAULT_BIND_ROLE_NAME = "#";
 
     protected static final int DEFAULT_THREAD_SLEEP_MS = 3000;
     protected static final int DEFAULT_INIT_SLEEP_MIN = 500;
@@ -42,7 +45,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
             AgentProxy.Factory<M> agentProxyFactory,
             B3Topic.Base topicBase,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
-            Agent.ShadowDesiredPolicy<M> desiredPolicy, 
+            Agent.ShadowDesiredPolicy<M> desiredPolicy,
             VersionSafeExecutor executor,
             Operation.GrantsChecker<M> grantsChecker,
             Agent.EdgeDriver<M> driver) {
@@ -57,8 +60,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
 
     public abstract Status execute(C command);
 
-    @Override
-    public synchronized void bind(B3Topic.Base topicBase, String roleName) {
+    protected synchronized void bind(B3Topic.Base topicBase, String roleName) {
 
         // Prepare all the components needing the first Reported Message
         this.grantsChecker.bind(topicBase, roleName);
@@ -66,16 +68,22 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
         this.executor.bind(topicBase, roleName);
 
         // This starts the reported message retrieval:
-        // the message will be passed following the bind order defined in 
+        // the message will be passed following the bind order defined in
         // the previous lines
         this.agentProxyFactory.getProxy(topicBase, roleName).bind(topicBase, roleName);
 
         // As the executor is the last to be initialized, after its initializazion
         // we shall start to serve requests
-        this.executor.safeExecute(version -> {
+        this.executor.safeExecute(this.bindCriticalSection(topicBase, roleName));
+
+        boundRoleName = roleName;
+    }
+
+    protected CriticalSection bindCriticalSection(B3Topic.Base topicBase, String roleName) {
+        return version -> {
 
             Integer currentVersion = null;
-            int sleepMillis = this.getInitSleepMin();
+            int sleepMillis = getInitSleepMin();
 
             boolean keepGoing = true;
 
@@ -85,8 +93,8 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
                     Thread.sleep(sleepMillis);
                     currentVersion = version.apply(false);
                 } catch (InitializationException exception) {
-                    sleepMillis += this.getInitSleepStep();
-                    sleepMillis = sleepMillis > this.getInitSleepMax() ? this.getInitSleepMax() : sleepMillis;
+                    sleepMillis += getInitSleepStep();
+                    sleepMillis = sleepMillis > getInitSleepMax() ? getInitSleepMax() : sleepMillis;
                     log.warn(exception.getMessage());
                 } catch (InterruptedException e) {
                     keepGoing = false;
@@ -96,12 +104,12 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
             // If the execution has not been interrupted,
             // we shall start to serve requests
             if (keepGoing) {
-                this.driver.connect();
-                this.desiredPolicy.bind(topicBase, roleName);
+                driver.connect();
+                desiredPolicy.bind(topicBase, roleName);
             }
             return null;
 
-        });
+        };
     }
 
     @Override
@@ -112,7 +120,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
             public Status get() {
                 Status retval = Status.OK;
                 try {
-                    bind(boundTopicBase, "#");
+                    bind(boundTopicBase, DEFAULT_BIND_ROLE_NAME);
                     retval = execute(command);
                     while (keepAlive()) {
                         try {
@@ -136,13 +144,11 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
         return !Thread.currentThread().isInterrupted();
     }
 
-    @Override
-    public B3Topic.Base getBoundTopicBase() {
+    protected B3Topic.Base getBoundTopicBase() {
         return this.boundTopicBase;
     }
 
-    @Override
-    public String getBoundRoleName() {
+    protected String getBoundRoleName() {
         return this.boundRoleName;
     }
 
