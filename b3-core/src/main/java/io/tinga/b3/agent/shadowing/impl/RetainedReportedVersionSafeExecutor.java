@@ -13,19 +13,21 @@ import io.tinga.b3.protocol.B3Topic;
  * ITopicFactory without the retain
  * flag, as it doesn't need to write to the topic reported.
  */
-public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> extends AbstracVersionSafeExecutor
+public class RetainedReportedVersionSafeExecutor<M extends B3Message<?>> extends AbstracVersionSafeExecutor
         implements B3EventHandler<M> {
 
-    private final AgentProxy.Factory agentProxyFactory;
+    private final AgentProxy.Factory<M> agentProxyFactory;
     private AgentProxy<M> agentProxy;
 
     @Inject
-    public InitFromReportedTopicVersionSafeExecutor(AgentProxy.Factory agentProxyFactory) {
+    public RetainedReportedVersionSafeExecutor(AgentProxy.Factory<M> agentProxyFactory) {
         this.agentProxyFactory = agentProxyFactory;
     }
 
     @Override
     public void bind(B3Topic.Base topicBase, String roleName) throws InitializationException {
+        if (this.agentProxy != null || this.isInitialized())
+            return;
         try {
             this.agentProxy = this.agentProxyFactory.getProxy(topicBase, roleName);
             this.agentProxy.subscribe(this);
@@ -36,7 +38,7 @@ public class InitFromReportedTopicVersionSafeExecutor<M extends B3Message<?>> ex
 
     @Override
     public String getName() {
-        return InitFromReportedTopicVersionSafeExecutor.class.getSimpleName();
+        return RetainedReportedVersionSafeExecutor.class.getSimpleName();
     }
 
     @Override

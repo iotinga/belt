@@ -50,7 +50,7 @@ public class EdgeFirstShadowReportedPolicyTest {
     @Mock
     Topic<GenericB3Message> topic;
     @Mock
-    AgentProxy.Factory agentProxyFactory;
+    AgentProxy.Factory<GenericB3Message> agentProxyFactory;
     @Mock
     AgentProxy<GenericB3Message> agentProxy;
 

@@ -9,9 +9,9 @@ import com.google.inject.TypeLiteral;
 import io.tinga.b3.protocol.impl.B3TopicFactoryImpl;
 import io.tinga.b3.protocol.impl.PassthroughITopicFactoryProxy;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
-import io.tinga.b3.agent.shadowing.impl.InitFromReportedTopicVersionSafeExecutor;
+import io.tinga.b3.agent.shadowing.impl.RetainedReportedVersionSafeExecutor;
 import io.tinga.b3.helpers.AgentProxy;
-import io.tinga.b3.helpers.proxy.AgentProxyFactoryImpl;
+import io.tinga.b3.helpers.proxy.CachedAgentProxyFactory;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.AbstractGadget;
@@ -37,14 +37,14 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     protected void configure() {
         bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
 
-        bind(VersionSafeExecutor.class).to(InitFromReportedTopicVersionSafeExecutor.class).in(Singleton.class);
+        bind(VersionSafeExecutor.class).to(RetainedReportedVersionSafeExecutor.class).in(Singleton.class);
 
         // FIELD PROXIES
         bind(B3ITopicFactoryProxy.class).to(PassthroughITopicFactoryProxy.class).in(Singleton.class);
         // bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
         // })).to(GenericAgentProxy.class);
         bind(Key.get(new TypeLiteral<AgentProxy.Factory>() {
-        })).to(AgentProxyFactoryImpl.class);
+        })).to(CachedAgentProxyFactory.class);
         bind(B3Topic.Factory.class).to(B3TopicFactoryImpl.class);
 
         // bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {

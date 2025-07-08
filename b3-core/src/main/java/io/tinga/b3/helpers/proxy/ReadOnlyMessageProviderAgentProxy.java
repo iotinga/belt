@@ -17,8 +17,8 @@ public class ReadOnlyMessageProviderAgentProxy<M extends B3Message<?>> implement
 
     private static final Logger log = LoggerFactory.getLogger(ReadOnlyMessageProviderAgentProxy.class);
 
-    private B3Topic.Base topicBase;
-    private String roleName;
+    protected B3Topic.Base topicBase;
+    protected String roleName;
     private final List<B3EventHandler<M>> subscribers;
     private final B3MessageProvider<M> provider;
 

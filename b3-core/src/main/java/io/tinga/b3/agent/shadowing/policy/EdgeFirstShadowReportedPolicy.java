@@ -21,7 +21,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
     protected final VersionSafeExecutor executor;
     protected final Agent.EdgeDriver<M> edgeDriver;
 
-    private final AgentProxy.Factory agentProxyFactory;
+    private final AgentProxy.Factory<M> agentProxyFactory;
     private final B3ITopicFactoryProxy topicFactory;
     private AgentProxy<M> agentProxy;
 
@@ -32,7 +32,7 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
 
     @Inject
     public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
-            AgentProxy.Factory agentProxyFactory, B3ITopicFactoryProxy topicFactory) {
+            AgentProxy.Factory<M> agentProxyFactory, B3ITopicFactoryProxy topicFactory) {
         this.executor = executor;
         this.edgeDriver = edgeDriver;
         this.agentProxyFactory = agentProxyFactory;

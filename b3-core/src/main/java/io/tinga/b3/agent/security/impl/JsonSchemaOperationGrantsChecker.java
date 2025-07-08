@@ -27,14 +27,14 @@ public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends Json
     protected final JsonUtils json;
     protected final GadgetSink out;
     protected final JsonSchemaProvider schemaProvider;
-    private final AgentProxy.Factory agentProxyFactory;
+    private final AgentProxy.Factory<M> agentProxyFactory;
     private AgentProxy<M> agentProxy;
 
     private M currentReported;
 
     @Inject
     public JsonSchemaOperationGrantsChecker(JsonSchemaProvider schemaProvider,
-            AgentProxy.Factory agentProxyFactory, GadgetSink out, JsonUtils json) {
+            AgentProxy.Factory<M> agentProxyFactory, GadgetSink out, JsonUtils json) {
         this.json = json;
         this.out = out;
         this.agentProxyFactory = agentProxyFactory;

@@ -11,8 +11,8 @@ import io.tinga.b3.protocol.B3Topic;
 public interface AgentProxy<M extends B3Message<?>> extends Agent<M> {
 
 
-    interface Factory {
-        <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName);
+    interface Factory <M extends B3Message<?>> {
+        AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName);
     }
 
     void write(M desiredMessage);

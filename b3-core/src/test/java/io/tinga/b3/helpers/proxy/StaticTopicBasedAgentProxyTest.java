@@ -59,7 +59,6 @@ public class StaticTopicBasedAgentProxyTest {
 
     @BeforeEach
     void setup() {
-        // when(config.agentId()).thenReturn(agentId);
         sut = new StaticTopicBasedAgentProxy<>(config, GenericB3Message.class, topicFactoryProxy, topicFactory);
     }
 

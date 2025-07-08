@@ -29,7 +29,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     protected final Agent.ShadowReportedPolicy<M> reportedPolicy;
     protected final Agent.ShadowDesiredPolicy<M> desiredPolicy;
     protected final Agent.EdgeDriver<M> driver;
-    protected final AgentProxy.Factory agentProxyFactory;
+    protected final AgentProxy.Factory<M> agentProxyFactory;
 
     protected final VersionSafeExecutor executor;
     protected final Operation.GrantsChecker<M> grantsChecker;
@@ -39,7 +39,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
 
     @Inject
     public AbstractAgentCommandExecutor(
-            AgentProxy.Factory agentProxyFactory,
+            AgentProxy.Factory<M> agentProxyFactory,
             B3Topic.Base topicBase,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
             Agent.ShadowDesiredPolicy<M> desiredPolicy, 
