@@ -64,11 +64,24 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
                     }));
             GadgetSink output = executorInjector.getInstance(GadgetSink.class);
             return new GadgetContext<C>(properties, null, executor, output);
-        } catch ( Exception e) {
-            log.debug(String.format("Cannot instantiate plugin %s: %s",
+        } catch (Exception e) {
+            log.error(String.format("Cannot instantiate gadget %s: %s",
                     gadget.getClass().getSimpleName(), e));
+
+            Throwable current = e;
+            StringBuffer traceMessageBuffer = new StringBuffer();
+            while (current != null && current.getStackTrace().length > 0) {
+                for (StackTraceElement element : current.getStackTrace()) {
+                    traceMessageBuffer.append(element.toString()).append("\n");
+                }
+                traceMessageBuffer.append("\n");
+                current = current.getCause();
+            }
+            String traceMessage = traceMessageBuffer.toString();
+            log.debug(traceMessage);
             throw new GadgetLifecycleException(new DummyGadgetCommandExecutor(), e);
         }
+
     }
 
     @Override

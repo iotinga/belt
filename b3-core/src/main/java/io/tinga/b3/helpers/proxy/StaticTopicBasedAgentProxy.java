@@ -4,6 +4,8 @@ import it.netgrid.bauer.Topic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import io.tinga.b3.agent.Agent;
 import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.protocol.B3EventHandler;
@@ -30,6 +32,7 @@ public class StaticTopicBasedAgentProxy<M extends B3Message<?>> extends AEventHa
 
     protected M lastShadowReported;
 
+    @Inject
     public StaticTopicBasedAgentProxy(Agent.Config config,
             Class<M> messageClass, B3ITopicFactoryProxy topicFactoryProxy, B3Topic.Factory topicFactory) {
         super(messageClass);

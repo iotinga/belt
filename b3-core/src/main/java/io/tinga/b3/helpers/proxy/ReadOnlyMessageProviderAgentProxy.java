@@ -6,6 +6,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+
 import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.B3MessageProvider;
 import io.tinga.b3.protocol.B3EventHandler;
@@ -22,6 +24,7 @@ public class ReadOnlyMessageProviderAgentProxy<M extends B3Message<?>> implement
     private final List<B3EventHandler<M>> subscribers;
     private final B3MessageProvider<M> provider;
 
+    @Inject
     public ReadOnlyMessageProviderAgentProxy(B3MessageProvider<M> provider) {
         this.subscribers = new CopyOnWriteArrayList<>();
         this.provider = provider;

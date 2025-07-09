@@ -33,7 +33,6 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
 
         bind(B3Topic.Factory.class).to(StandardB3TopicFactory.class);
 
-
     }
 
     @Provides

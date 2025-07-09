@@ -5,6 +5,8 @@ import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Message;
 import java.util.Random;
 
+import com.google.inject.Inject;
+
 public class RandomizedTopicBasedAgentProxy<M extends B3Message<?>> extends StaticTopicBasedAgentProxy<M> {
 
     public static final int RANDOM_PART_SIZE = 6;
@@ -12,6 +14,7 @@ public class RandomizedTopicBasedAgentProxy<M extends B3Message<?>> extends Stat
     private static final String RANDOM_GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int RANDOM_GLYPHS_COUNT = RANDOM_GLYPHS.length();
 
+    @Inject
     public RandomizedTopicBasedAgentProxy(Config config, Class<M> messageClass, B3ITopicFactoryProxy topicFactoryProxy,
             io.tinga.b3.protocol.B3Topic.Factory topicFactory) {
         super(config, messageClass, topicFactoryProxy, topicFactory);
