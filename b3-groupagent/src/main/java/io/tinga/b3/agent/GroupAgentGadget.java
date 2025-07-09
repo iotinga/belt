@@ -7,19 +7,11 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 
 import io.tinga.b3.protocol.impl.StandardB3TopicFactory;
-import io.tinga.b3.protocol.impl.PassthroughITopicFactoryProxy;
-import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
-import io.tinga.b3.agent.shadowing.impl.RetainedReportedVersionSafeExecutor;
-import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.GenericB3Message;
-import io.tinga.b3.helpers.proxy.CachedAgentProxyFactory;
-import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.belt.AbstractGadget;
 import io.tinga.belt.config.ConfigurationProvider;
 import io.tinga.belt.input.GadgetCommandOption;
-import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
-import io.tinga.belt.output.GadgetSink;
 import it.netgrid.bauer.TopicFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,18 +28,11 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     public static GroupAgentConfig config;
 
     protected void configure() {
+        bind(Key.get(new TypeLiteral<Class<GenericB3Message>>() {
+        })).toInstance(GenericB3Message.class);
+
         bind(B3Topic.Factory.class).to(StandardB3TopicFactory.class);
 
-
-        bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
-
-        bind(VersionSafeExecutor.class).to(RetainedReportedVersionSafeExecutor.class).in(Singleton.class);
-
-        // FIELD PROXIES
-        bind(B3ITopicFactoryProxy.class).to(PassthroughITopicFactoryProxy.class).in(Singleton.class);
-        bind(Key.get(new TypeLiteral<AgentProxy.Factory<GenericB3Message>>() {
-        })).to(Key.get(new TypeLiteral<CachedAgentProxyFactory<GenericB3Message>>() {
-        }));
 
     }
 
@@ -92,7 +77,12 @@ public class GroupAgentGadget extends AbstractGadget<GroupAgentCommand> {
     @Override
     public com.google.inject.Module[] buildExecutorModules(Properties properties, GroupAgentCommand command) {
         log.debug("Building executor modules with properties {}", properties);
-        Module[] retval = { TopicFactory.getAsModule(properties), new GroupAgentCommandExecutorModule(command) };
-        return retval;
+        switch (command.action()) {
+            default:
+            case MQTT:
+                Module[] mqttModules = { TopicFactory.getAsModule(properties),
+                        new GroupAgentCommandExecutorMQTTModule(command) };
+                return mqttModules;
+        }
     }
 }

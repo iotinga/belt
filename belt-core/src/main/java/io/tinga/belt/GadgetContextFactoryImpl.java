@@ -64,7 +64,7 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
                     }));
             GadgetSink output = executorInjector.getInstance(GadgetSink.class);
             return new GadgetContext<C>(properties, null, executor, output);
-        } catch (IllegalArgumentException | SecurityException e) {
+        } catch ( Exception e) {
             log.debug(String.format("Cannot instantiate plugin %s: %s",
                     gadget.getClass().getSimpleName(), e));
             throw new GadgetLifecycleException(new DummyGadgetCommandExecutor(), e);

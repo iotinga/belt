@@ -5,7 +5,7 @@ import io.tinga.belt.input.GadgetCommandOption;
 public enum GroupAgentCommandOption implements GadgetCommandOption {
 
     HELP(GroupAgentCommand.HELP, false, null, null, "Shows this guide"),
-    ACTION(GroupAgentCommand.ACTION, true,GroupAgentAction.class, GroupAgentAction.SERVICE.name(), String.format("Defines the action to be performed between [SERVICE]. Defaults to: SERVICE")),
+    ACTION(GroupAgentCommand.ACTION, true,GroupAgentAction.class, GroupAgentAction.MQTT.name(), String.format("Defines the action to be performed between [MQTT]. Defaults to: MQTT")),
     SHADOW_PATH(GroupAgentCommand.SHADOW_PATH, true, String.class, null,
             "Path to the shadow you want to use as input (or output) of the command. It can be in JSON or CBOR formats");
             

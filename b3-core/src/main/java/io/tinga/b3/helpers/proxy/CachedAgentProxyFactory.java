@@ -14,27 +14,26 @@ import io.tinga.b3.protocol.B3Topic;
 
 public class CachedAgentProxyFactory<M extends B3Message<?>> implements AgentProxy.Factory<M> {
 
-    private final Map<String, AgentProxy<M>> cache;
+    private final Map<String, AgentProxy<?>> cache;
     private final Injector injector;
-    private final TypeLiteral<AgentProxy<M>> proxyTypeLiteral;
 
     @Inject
-    public CachedAgentProxyFactory(Injector injector, TypeLiteral<AgentProxy<M>> proxyTypeLiteral) {
+    public CachedAgentProxyFactory(Injector injector) {
         this.injector = injector;
-        this.proxyTypeLiteral = proxyTypeLiteral;
         this.cache = new HashMap<>();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName) {
         String cacheKey = this.buildCacheEntryKey(topicBase, roleName);
-        AgentProxy<M> cacheItem = (AgentProxy<M>) this.cache.get(cacheKey);
+        AgentProxy<?> cacheItem = this.cache.get(cacheKey);
         if (cacheItem == null) {
-            cacheItem = this.injector.getInstance(Key.get(this.proxyTypeLiteral));
+            cacheItem = this.injector.getInstance(Key.get(new TypeLiteral<AgentProxy<?>>(){}));
             this.cache.put(cacheKey, cacheItem);
         }
 
-        return cacheItem;
+        return (AgentProxy<M>) cacheItem;
     }
 
     private String buildCacheEntryKey(B3Topic.Base topicBase, String desiredRole) {

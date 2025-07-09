@@ -21,7 +21,7 @@ import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
 import io.tinga.belt.output.GadgetSink;
 import io.tinga.b3.agent.security.Operation;
-import io.tinga.b3.agent.security.impl.TopicBasedOperationFactory;
+import io.tinga.b3.agent.security.impl.StandardOperationFactory;
 import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.impl.StandardB3TopicFactory;
@@ -43,7 +43,7 @@ public class EntityAgentGadget extends AbstractGadget<EntityAgentCommand> {
        
         bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
         bind(JsonSchemaFactory.class).toInstance(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7));
-        bind(Operation.Factory.class).to(TopicBasedOperationFactory.class);
+        bind(Operation.Factory.class).to(StandardOperationFactory.class);
         bind(B3Topic.Factory.class).to(StandardB3TopicFactory.class);
 
     }

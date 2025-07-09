@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TopicBasedOperationFactoryTest {
+public class StandardOperationFactoryTest {
 
     private static final Faker faker = new Faker();
     private static final String agentId = faker.lorem().word();
@@ -37,7 +37,7 @@ public class TopicBasedOperationFactoryTest {
     private GenericB3Message message;
 
     @InjectMocks
-    private TopicBasedOperationFactory sut;
+    private StandardOperationFactory sut;
 
     @Test
     void shouldBuildOperationFromTopicPath() throws Exception {

@@ -27,7 +27,6 @@ public class CachedAgentProxyFactoryTest {
     private static final String agentId = faker.lorem().word();
     private static final String roleName = faker.lorem().word();
     private static final B3Topic.Base topicBase = topicFactory.agent(agentId);
-    private static final TypeLiteral<AgentProxy<GenericB3Message>> typeLiteral = new TypeLiteral<>() {};
 
     @Mock
     Injector injector;
@@ -39,12 +38,13 @@ public class CachedAgentProxyFactoryTest {
 
     @BeforeEach
     void setUp() {
-        sut = new CachedAgentProxyFactory<GenericB3Message>(injector, typeLiteral);
+        sut = new CachedAgentProxyFactory<GenericB3Message>(injector);
     }
 
     @Test
     void testGetProxyCreatesAndCachesInstance() {
-        Key<AgentProxy<GenericB3Message>> key = Key.get(typeLiteral);
+        Key<AgentProxy<?>> key = Key.get(new TypeLiteral<AgentProxy<?>>() {
+        });
         doAnswer(invocation -> proxyInstance).when(injector).getInstance(key);
 
         AgentProxy<GenericB3Message> result = sut.getProxy(topicBase, roleName);
