@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
-        implements Agent<M>, GadgetCommandExecutor<C> {
+        implements Agent<M>, GadgetCommandExecutor {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractAgentCommandExecutor.class);
 
@@ -113,7 +113,9 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     }
 
     @Override
-    public CompletableFuture<Status> submit(C command) {
+    @SuppressWarnings("unchecked")
+    public CompletableFuture<Status> submit(Object rawCommand) {
+        C commandToExecute = (C) rawCommand;
         CompletableFuture<Status> retval = new CompletableFuture<>();
         retval.completeAsync(new Supplier<Status>() {
             @Override
@@ -121,7 +123,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
                 Status retval = Status.OK;
                 try {
                     bind(boundTopicBase, DEFAULT_BIND_ROLE_NAME);
-                    retval = execute(command);
+                    retval = execute(commandToExecute);
                     while (keepAlive()) {
                         try {
                             Thread.sleep(getThreadSleepsMs());

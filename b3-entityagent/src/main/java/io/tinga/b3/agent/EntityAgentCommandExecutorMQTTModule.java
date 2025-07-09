@@ -27,8 +27,7 @@ public class EntityAgentCommandExecutorMQTTModule extends AbstractModule {
         bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
         })).to(Key.get(new TypeLiteral<EdgeFirstShadowReportedPolicy<GenericB3Message>>() {
         }));
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityAgentCommand>>() {
-        })).to(EntityAgentCommandExecutorDaemon.class);
+        bind(GadgetCommandExecutor.class).to(EntityAgentCommandExecutorDaemon.class);
     }
 
 }

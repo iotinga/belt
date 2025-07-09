@@ -27,7 +27,7 @@ import io.tinga.belt.output.GadgetSink;
 class RuntimeCommandExecutorTest {
         private Faker faker;
         private HeadlessCommandExecutor instance;
-        private GadgetCommandExecutor<HeadlessCommand> testee;
+        private GadgetCommandExecutor testee;
 
         @Mock
         private ExecutorService executor;

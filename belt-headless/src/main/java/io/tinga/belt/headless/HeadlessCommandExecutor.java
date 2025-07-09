@@ -24,7 +24,7 @@ import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.output.GadgetSink;
 import io.tinga.belt.output.Status;
 
-public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCommand> {
+public class HeadlessCommandExecutor implements GadgetCommandExecutor {
 
     private static final Logger log = LoggerFactory.getLogger(HeadlessCommandExecutor.class);
     private static final int GRACEFUL_SHUTDOWN_TIMEOUT_SECONDS = 5;
@@ -44,7 +44,8 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor<HeadlessCo
     }
 
     @Override
-    public CompletableFuture<Status> submit(HeadlessCommand command) {
+    public CompletableFuture<Status> submit(Object rawCommand) {
+        HeadlessCommand command = (HeadlessCommand) rawCommand;
         CompletableFuture<Status> retval = new CompletableFuture<>();
 
         retval.completeAsync(new Supplier<Status>() {

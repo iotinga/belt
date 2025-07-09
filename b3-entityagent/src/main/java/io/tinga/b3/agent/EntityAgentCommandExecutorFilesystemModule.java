@@ -29,8 +29,7 @@ public class EntityAgentCommandExecutorFilesystemModule extends AbstractModule {
         bind(EntityAgentCommand.class).toInstance(command);
 
         bind(Operation.GrantsChecker.class).to(JsonSchemaOperationGrantsChecker.class);
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityAgentCommand>>() {
-        })).to(EntityAgentCommandExecutorOnce.class);
+        bind(GadgetCommandExecutor.class).to(EntityAgentCommandExecutorOnce.class);
 
         bind(JsonSchemaProvider.class).to(JsonSchemaFromFileProvider.class);
         bind(Key.get(new TypeLiteral<Agent.ShadowDesiredPolicy<GenericB3Message>>() {

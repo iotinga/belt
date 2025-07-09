@@ -27,8 +27,7 @@ public class EntityAgentCommandExecutorResourcesModule extends AbstractModule {
     protected void configure() {
         bind(EntityAgentCommand.class).toInstance(command);
         bind(Operation.GrantsChecker.class).to(JsonSchemaOperationGrantsChecker.class);
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<EntityAgentCommand>>() {
-        })).to(EntityAgentCommandExecutorOnce.class);
+        bind(GadgetCommandExecutor.class).to(EntityAgentCommandExecutorOnce.class);
         bind(Key.get(new TypeLiteral<Agent.ShadowReportedPolicy<GenericB3Message>>() {
         })).to(Key.get(new TypeLiteral<SinkShadowReportedPolicy<GenericB3Message>>() {
         }));

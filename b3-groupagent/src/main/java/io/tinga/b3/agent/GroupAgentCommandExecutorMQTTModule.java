@@ -46,8 +46,7 @@ public class GroupAgentCommandExecutorMQTTModule extends AbstractModule {
 
         // COMMAND EXECUTOR
         bind(GroupAgentCommand.class).toInstance(this.command);
-        bind(Key.get(new TypeLiteral<GadgetCommandExecutor<GroupAgentCommand>>() {
-        })).to(GroupAgentCommandExecutor.class);
+        bind(GadgetCommandExecutor.class).to(GroupAgentCommandExecutor.class);
 
         // DRIVER
         bind(Key.get(new TypeLiteral<ShadowDesiredPreProcessor<GenericB3Message>>() {
@@ -58,7 +57,8 @@ public class GroupAgentCommandExecutorMQTTModule extends AbstractModule {
         })).to(GroupAgentEdgeDriver.class).in(Singleton.class);
 
         // VERSION MANAGEMENT
-        bind(VersionSafeExecutor.class).to(RetainedReportedVersionSafeExecutor.class).in(Singleton.class);
+        bind(VersionSafeExecutor.class).to(Key.get(new TypeLiteral<RetainedReportedVersionSafeExecutor<GenericB3Message>>() {
+        })).in(Singleton.class);
 
         // SECURITY
         bind(Operation.Factory.class).to(StandardOperationFactory.class);

@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.Gadget.Command;
 import io.tinga.belt.config.PropertiesProvider;
@@ -59,9 +57,8 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
             Injector gadgetInjector = injector.createChildInjector(gadget);
             Injector executorInjector = gadgetInjector
                     .createChildInjector(gadget.buildExecutorModules(properties, command));
-            GadgetCommandExecutor<C> executor = executorInjector
-                    .getInstance(Key.get(new TypeLiteral<GadgetCommandExecutor<C>>() {
-                    }));
+            GadgetCommandExecutor executor = executorInjector
+                    .getInstance(GadgetCommandExecutor.class);
             GadgetSink output = executorInjector.getInstance(GadgetSink.class);
             return new GadgetContext<C>(properties, null, executor, output);
         } catch (Exception e) {
