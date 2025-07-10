@@ -9,9 +9,9 @@ import com.google.inject.Inject;
 
 import io.tinga.b3.agent.security.Operation.GrantsChecker;
 import io.tinga.b3.agent.shadowing.VersionSafeExecutor;
+import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.B3MessageProvider;
 import io.tinga.b3.helpers.GenericB3Message;
-import io.tinga.b3.helpers.AgentProxy.Factory;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.B3Topic.Base;
 
@@ -24,11 +24,11 @@ public class EntityAgentCommandExecutorOnce extends AbstractAgentCommandExecutor
     @Inject
     public EntityAgentCommandExecutorOnce(
             B3MessageProvider<GenericB3Message> desiredMessageProvider,
-            Factory<GenericB3Message> agentProxyFactory, Base topicBase,
+            AgentProxy<GenericB3Message> agentProxy, Base topicBase,
             ShadowReportedPolicy<GenericB3Message> reportedPolicy, ShadowDesiredPolicy<GenericB3Message> desiredPolicy,
             VersionSafeExecutor executor, GrantsChecker<GenericB3Message> grantsChecker,
             EdgeDriver<GenericB3Message> driver) {
-        super(agentProxyFactory, topicBase, reportedPolicy, desiredPolicy, executor, grantsChecker, driver);
+        super(agentProxy, topicBase, reportedPolicy, desiredPolicy, executor, grantsChecker, driver);
         this.desiredMessageProvider = desiredMessageProvider;
     }
 

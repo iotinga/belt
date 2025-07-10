@@ -1,6 +1,7 @@
 package io.tinga.b3.helpers;
 
-import io.tinga.b3.agent.Agent;
+import com.google.inject.Key;
+
 import io.tinga.b3.protocol.B3EventHandler;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
@@ -8,11 +9,11 @@ import io.tinga.b3.protocol.B3Topic;
 /**
  * An Agent Proxy is
  */
-public interface AgentProxy<M extends B3Message<?>> extends Agent<M> {
+public interface AgentProxy<M extends B3Message<?>> {
 
-
-    interface Factory <M extends B3Message<?>> {
-        AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName);
+    interface Factory {
+        <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName, Key<AgentProxy<M>> agentProxyKey);
+        AgentProxy<GenericB3Message> getProxy(B3Topic.Base topicBase, String roleName);
     }
 
     void write(M desiredMessage);

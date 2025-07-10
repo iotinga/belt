@@ -21,7 +21,7 @@ public interface Agent<M extends B3Message<?>> {
         String agentId();
     }
 
-    public interface EdgeDriver<M extends B3Message<?>> {
+    interface EdgeDriver<M extends B3Message<?>> {
 
         ConnectionState getConnectionState();
 

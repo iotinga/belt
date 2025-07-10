@@ -10,7 +10,7 @@ import io.tinga.b3.agent.Agent;
 import io.tinga.b3.agent.Agent.Config;
 import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.GenericB3Message;
-import io.tinga.b3.helpers.proxy.ProvaAgentProxyFactory;
+import io.tinga.b3.helpers.proxy.ReadOnlyMessageProviderAgentProxy;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Topic;
 import io.tinga.b3.protocol.impl.PassthroughITopicFactoryProxy;
@@ -27,12 +27,9 @@ public class ProvaModule extends AbstractModule {
         })).to(Key.get(new TypeLiteral<StandardB3TopicFactory>() {
         }));
 
-        bind(Key.get(new TypeLiteral<AgentProxy.Factory<GenericB3Message>>() {
-        })).to(Key.get(new TypeLiteral<ProvaAgentProxyFactory<GenericB3Message>>() {
+        bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
+        })).to(Key.get(new TypeLiteral<ReadOnlyMessageProviderAgentProxy<GenericB3Message>>() {
         }));
-        // bind(Key.get(new TypeLiteral<AgentProxy<?>>() {
-        // })).to(new TypeLiteral<StaticTopicBasedAgentProxy<?>>() {
-        // });
         bind(B3ITopicFactoryProxy.class).to(PassthroughITopicFactoryProxy.class).in(Singleton.class);
     }
 

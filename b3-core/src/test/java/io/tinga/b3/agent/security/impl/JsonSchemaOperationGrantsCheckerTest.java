@@ -38,9 +38,6 @@ public class JsonSchemaOperationGrantsCheckerTest {
     private JsonSchemaProvider schemaProvider;
 
     @Mock
-    private AgentProxy.Factory<GenericB3Message> agentProxyFactory;
-
-    @Mock
     private JsonUtils json;
 
     @Mock
@@ -73,7 +70,6 @@ public class JsonSchemaOperationGrantsCheckerTest {
 
     @Test
     void shouldAllowWhenSchemaValidationPasses() throws Exception {
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
         when(operation.sourceTopic()).thenReturn(topic);
         when(operation.message()).thenReturn(operationMsg);
         when(operationMsg.getBody()).thenReturn(operationMsgBody);
@@ -95,7 +91,6 @@ public class JsonSchemaOperationGrantsCheckerTest {
         when(validationMessage.getMessageKey()).thenReturn("key");
         when(validationMessage.getError()).thenReturn("some error");
 
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
         when(reportedMsg.getBody()).thenReturn(reportedMsgBody);
         when(operation.message()).thenReturn(operationMsg);
         when(operationMsg.getBody()).thenReturn(operationMsgBody);
@@ -113,7 +108,6 @@ public class JsonSchemaOperationGrantsCheckerTest {
 
     @Test
     void shouldBlockWhenNoSchemaIsFound() throws Exception {
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
         when(reportedMsg.getBody()).thenReturn(reportedMsgBody);
         when(operation.message()).thenReturn(operationMsg);
         when(operationMsg.getBody()).thenReturn(operationMsgBody);
@@ -130,8 +124,6 @@ public class JsonSchemaOperationGrantsCheckerTest {
 
     @Test
     void shouldSubscribeOnBind() {
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
-
         sut.bind(topicBase, roleName);
 
         verify(agentProxy).subscribe(sut);
@@ -144,7 +136,6 @@ public class JsonSchemaOperationGrantsCheckerTest {
 
     @Test
     void handleShouldUpdateCurrentReported() throws Exception {
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
         sut.bind(topicBase, roleName);
         boolean result = sut.handle(topic, reportedMsg);
         assertThat(result).isTrue();

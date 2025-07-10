@@ -35,37 +35,27 @@ public class RetainedReportedVersionSafeExecutorTest {
     @Mock
     GenericB3Message message;
 
-    @Mock
-    AgentProxy.Factory<GenericB3Message> agentProxyFactory;
-
     @InjectMocks
     RetainedReportedVersionSafeExecutor<GenericB3Message> sut;
 
         @Test
     void shouldBindSuccessfullyWhenNotInitialized() throws Exception {
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
 
         sut.bind(topicBase, roleName);
 
-        verify(agentProxyFactory).getProxy(topicBase, roleName);
         verify(agentProxy).subscribe(sut);
     }
 
     @Test
     void shouldNotBindIfAlreadyInitialized() throws Exception {
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
         sut.bind(topicBase, roleName);
         sut.bind(topicBase, roleName);
 
-        verify(agentProxyFactory, times(1)).getProxy(topicBase, roleName);
         verify(agentProxy, times(1)).subscribe(sut);
     }
 
     @Test
     void shouldThrowInitializationExceptionIfBindingFails() {
-        when(agentProxyFactory.getProxy(topicBase, roleName))
-                .thenThrow(new RuntimeException("failure"));
-
         assertThatThrownBy(() -> sut.bind(topicBase, roleName))
                 .isInstanceOf(InitializationException.class)
                 .hasMessageContaining("failure");
@@ -73,7 +63,6 @@ public class RetainedReportedVersionSafeExecutorTest {
 
     @Test
     void shouldHandleAndInitializeIfNotYetInitialized() throws Exception {
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
         when(message.getVersion()).thenReturn(42);
 
         sut.bind(topicBase, roleName);
@@ -85,7 +74,6 @@ public class RetainedReportedVersionSafeExecutorTest {
 
     @Test
     void shouldHandleAndNotReinitializeIfAlreadyInitialized() throws Exception {
-        when(agentProxyFactory.getProxy(topicBase, roleName)).thenReturn(agentProxy);
         when(message.getVersion()).thenReturn(7);
 
         sut.bind(topicBase, roleName);

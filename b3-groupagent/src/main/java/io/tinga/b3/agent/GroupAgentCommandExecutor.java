@@ -12,7 +12,7 @@ import io.tinga.belt.output.Status;
 public class GroupAgentCommandExecutor extends AbstractAgentCommandExecutor<GenericB3Message, GroupAgentCommand> {
 
     @Inject
-    public GroupAgentCommandExecutor(AgentProxy.Factory<GenericB3Message> agentProxyFactory, B3Topic.Base topicBase,
+    public GroupAgentCommandExecutor(AgentProxy<GenericB3Message> agentProxyFactory, B3Topic.Base topicBase,
             ShadowReportedPolicy<GenericB3Message> reportedPolicy, ShadowDesiredPolicy<GenericB3Message> desiredPolicy,
             VersionSafeExecutor executor, Operation.GrantsChecker<GenericB3Message> grantsChecker,
             EdgeDriver<GenericB3Message> driver) {

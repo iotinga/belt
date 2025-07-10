@@ -10,7 +10,6 @@ import com.google.inject.TypeLiteral;
 
 import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.GenericB3Message;
-import io.tinga.b3.protocol.B3Topic;
 import it.netgrid.bauer.TopicFactory;
 
 public class Prova {
@@ -18,9 +17,7 @@ public class Prova {
         Properties properties = new Properties();
         Injector i = Guice.createInjector(TopicFactory.getAsModule(properties), new ProvaModule());
 
-        B3Topic.Factory topicFactory = i.getInstance(B3Topic.Factory.class);
-        AgentProxy.Factory<GenericB3Message> factory = i.getInstance(Key.get(new TypeLiteral<>(){}));
-        AgentProxy<GenericB3Message> proxy = factory.getProxy(topicFactory.agent("prova"), "ciao");
+        AgentProxy<GenericB3Message> proxy = i.getInstance(Key.get(new TypeLiteral<>(){}));
         proxy.getClass().getSimpleName();
     }
 }

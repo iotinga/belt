@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class StaticTopicBasedAgentProxyTest {
+public class TopicBasedAgentProxyTest {
 
     private static final B3Topic.Factory topicFactory = TestB3TopicFactory.instance();
     private static final Faker faker = new Faker();

@@ -16,24 +16,17 @@ import io.tinga.b3.protocol.B3Topic;
 public class RetainedReportedVersionSafeExecutor<M extends B3Message<?>> extends AbstracVersionSafeExecutor
         implements B3EventHandler<M> {
 
-    private final AgentProxy.Factory<M> agentProxyFactory;
-    private AgentProxy<M> agentProxy;
+    private final AgentProxy<M> agentProxy;
 
     @Inject
-    public RetainedReportedVersionSafeExecutor(AgentProxy.Factory<M> agentProxyFactory) {
-        this.agentProxyFactory = agentProxyFactory;
+    public RetainedReportedVersionSafeExecutor(AgentProxy<M> agentProxy) {
+        this.agentProxy = agentProxy;
+        this.agentProxy.subscribe(this);
     }
 
     @Override
     public void bind(B3Topic.Base topicBase, String roleName) throws InitializationException {
-        if (this.agentProxy != null || this.isInitialized())
-            return;
-        try {
-            this.agentProxy = this.agentProxyFactory.getProxy(topicBase, roleName);
-            this.agentProxy.subscribe(this);
-        } catch (Exception e) {
-            throw new InitializationException(e.getMessage());
-        }
+        // NOTHING TO DO
     }
 
     @Override
@@ -45,7 +38,6 @@ public class RetainedReportedVersionSafeExecutor<M extends B3Message<?>> extends
     public boolean handle(B3Topic topic, M event) throws Exception {
         if (!this.isInitialized()) {
             this.agentProxy.unsubscribe(this);
-            this.agentProxy = null;
             this.initCurrentReportedVersion(event.getVersion());
         }
         return true;

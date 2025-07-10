@@ -41,10 +41,8 @@ public class GroupAgentCommandExecutorMQTTModule extends AbstractModule {
         bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
 
         // BAUER (MQTT)
-        bind(Key.get(new TypeLiteral<AgentProxy.Factory<GenericB3Message>>() {
-        })).to(Key.get(new TypeLiteral<CachedAgentProxyFactory<GenericB3Message>>() {
-        }));
-        bind(Key.get(new TypeLiteral<AgentProxy<?>>() {
+        bind(AgentProxy.Factory.class).to(CachedAgentProxyFactory.class);
+        bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
         })).to(new TypeLiteral<TopicBasedAgentProxy<GenericB3Message>>() {
         });
         bind(B3ITopicFactoryProxy.class).to(PassthroughITopicFactoryProxy.class).in(Singleton.class);

@@ -3,7 +3,6 @@ package io.tinga.b3.agent.shadowing.policy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
@@ -50,8 +49,6 @@ public class EdgeFirstShadowReportedPolicyTest {
     @Mock
     Topic<GenericB3Message> topic;
     @Mock
-    AgentProxy.Factory<GenericB3Message> agentProxyFactory;
-    @Mock
     AgentProxy<GenericB3Message> agentProxy;
 
     @Spy
@@ -64,15 +61,12 @@ public class EdgeFirstShadowReportedPolicyTest {
         sut = new EdgeFirstShadowReportedPolicy<>(
                 executor,
                 driver,
-                agentProxyFactory,
+                agentProxy,
                 factoryProxy);
     }
 
     @Test
     public void checkBasicGetters() {
-        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
-        // doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class),
-        // eq(true));
         sut.bind(topicBase, faker.lorem().word());
         assertEquals(sut.getClass().getSimpleName(), sut.getName());
         assertEquals(null, sut.getTopic());
@@ -80,18 +74,13 @@ public class EdgeFirstShadowReportedPolicyTest {
 
     @Test
     public void initProxyOnBind() {
-        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
-        // doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class),
-        // eq(true));
         sut.bind(topicBase, faker.lorem().word());
-        verify(agentProxyFactory, times(1)).getProxy(eq(topicBase), anyString());
         verify(agentProxy, times(1)).subscribe(sut);
     }
 
     @Test
     public void subscribesToDriverAfterInitialization() throws Exception {
         B3Topic reportedTopic = topicBase.shadow().reported().build();
-        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
         sut.bind(topicBase, faker.lorem().word());
         sut.handle(reportedTopic, firstMessage);
         verify(agentProxy, times(1)).unsubscribe(sut);
@@ -117,7 +106,6 @@ public class EdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
-        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
         sut.bind(topicBase, faker.lorem().word());
@@ -150,7 +138,6 @@ public class EdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
-        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
         sut.bind(topicBase, faker.lorem().word());
@@ -184,7 +171,6 @@ public class EdgeFirstShadowReportedPolicyTest {
             return null;
         }).when(executor).safeExecute(any());
 
-        doAnswer(invocation -> agentProxy).when(agentProxyFactory).getProxy(eq(topicBase), anyString());
         doAnswer(invocation -> topic).when(factoryProxy).getTopic(any(B3Topic.class), eq(true));
         doAnswer(invocation -> Integer.valueOf(currentVersion)).when(secondMessage).getVersion();
         sut.bind(topicBase, faker.lorem().word());

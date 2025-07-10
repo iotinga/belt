@@ -1,5 +1,6 @@
 package io.tinga.b3.helpers.proxy;
 
+import io.tinga.b3.agent.Agent;
 import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.B3Message;
@@ -15,7 +16,7 @@ public class RandomizedTopicBasedAgentProxy<M extends B3Message<?>> extends Topi
     private static final int RANDOM_GLYPHS_COUNT = RANDOM_GLYPHS.length();
 
     @Inject
-    public RandomizedTopicBasedAgentProxy(Config config, Class<M> messageClass, B3ITopicFactoryProxy topicFactoryProxy,
+    public RandomizedTopicBasedAgentProxy(Agent.Config config, Class<M> messageClass, B3ITopicFactoryProxy topicFactoryProxy,
             io.tinga.b3.protocol.B3Topic.Factory topicFactory) {
         super(config, messageClass, topicFactoryProxy, topicFactory);
     }

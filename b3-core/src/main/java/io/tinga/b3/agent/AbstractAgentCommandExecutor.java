@@ -32,7 +32,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
     protected final Agent.ShadowReportedPolicy<M> reportedPolicy;
     protected final Agent.ShadowDesiredPolicy<M> desiredPolicy;
     protected final Agent.EdgeDriver<M> driver;
-    protected final AgentProxy.Factory<M> agentProxyFactory;
+    protected final AgentProxy<M> agentProxy;
 
     protected final VersionSafeExecutor executor;
     protected final Operation.GrantsChecker<M> grantsChecker;
@@ -42,14 +42,14 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
 
     @Inject
     public AbstractAgentCommandExecutor(
-            AgentProxy.Factory<M> agentProxyFactory,
+            AgentProxy<M> agentProxy,
             B3Topic.Base topicBase,
             Agent.ShadowReportedPolicy<M> reportedPolicy,
             Agent.ShadowDesiredPolicy<M> desiredPolicy,
             VersionSafeExecutor executor,
             Operation.GrantsChecker<M> grantsChecker,
             Agent.EdgeDriver<M> driver) {
-        this.agentProxyFactory = agentProxyFactory;
+        this.agentProxy = agentProxy;
         this.boundTopicBase = topicBase;
         this.executor = executor;
         this.reportedPolicy = reportedPolicy;
@@ -70,7 +70,7 @@ public abstract class AbstractAgentCommandExecutor<M extends B3Message<?>, C>
         // This starts the reported message retrieval:
         // the message will be passed following the bind order defined in
         // the previous lines
-        this.agentProxyFactory.getProxy(topicBase, roleName).bind(topicBase, roleName);
+        this.agentProxy.bind(topicBase, roleName);
 
         // As the executor is the last to be initialized, after its initializazion
         // we shall start to serve requests

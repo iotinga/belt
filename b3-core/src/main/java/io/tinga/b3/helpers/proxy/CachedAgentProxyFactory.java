@@ -9,10 +9,11 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 
 import io.tinga.b3.helpers.AgentProxy;
+import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.protocol.B3Message;
 import io.tinga.b3.protocol.B3Topic;
 
-public class CachedAgentProxyFactory<M extends B3Message<?>> implements AgentProxy.Factory<M> {
+public class CachedAgentProxyFactory implements AgentProxy.Factory {
 
     private final Map<String, AgentProxy<?>> cache;
     private final Injector injector;
@@ -25,15 +26,28 @@ public class CachedAgentProxyFactory<M extends B3Message<?>> implements AgentPro
 
     @Override
     @SuppressWarnings("unchecked")
-    public AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName) {
+    public <M extends B3Message<?>> AgentProxy<M> getProxy(B3Topic.Base topicBase, String roleName, Key<AgentProxy<M>> agentProxyKey) {
         String cacheKey = this.buildCacheEntryKey(topicBase, roleName);
-        AgentProxy<?> cacheItem = this.cache.get(cacheKey);
+        AgentProxy<M> cacheItem = (AgentProxy<M>) this.cache.get(cacheKey);
         if (cacheItem == null) {
-            cacheItem = this.injector.getInstance(Key.get(new TypeLiteral<AgentProxy<?>>(){}));
+            cacheItem = this.injector.getInstance(agentProxyKey);
             this.cache.put(cacheKey, cacheItem);
         }
 
-        return (AgentProxy<M>) cacheItem;
+        return cacheItem;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public AgentProxy<GenericB3Message> getProxy(B3Topic.Base topicBase, String roleName) {
+        String cacheKey = this.buildCacheEntryKey(topicBase, roleName);
+        AgentProxy<GenericB3Message> cacheItem = (AgentProxy<GenericB3Message>) this.cache.get(cacheKey);
+        if (cacheItem == null) {
+            cacheItem = this.injector.getInstance(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>(){}));
+            this.cache.put(cacheKey, cacheItem);
+        }
+
+        return cacheItem;
     }
 
     private String buildCacheEntryKey(B3Topic.Base topicBase, String desiredRole) {

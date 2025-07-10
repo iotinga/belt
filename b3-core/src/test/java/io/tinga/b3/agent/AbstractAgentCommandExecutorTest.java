@@ -33,9 +33,6 @@ public class AbstractAgentCommandExecutorTest {
     private B3Topic.Base topicBase = topicFactory.agent(agentId);
 
     @Mock
-    private AgentProxy.Factory<B3Message<?>> agentProxyFactory;
-
-    @Mock
     private AgentProxy<B3Message<?>> agentProxy;
 
     @Mock
@@ -69,9 +66,6 @@ public class AbstractAgentCommandExecutorTest {
 
     @Test
     void shouldSubmitCommandAndReturnStatusOk() throws Exception {
-        when(agentProxyFactory.getProxy(topicBase, AbstractAgentCommandExecutor.DEFAULT_BIND_ROLE_NAME))
-                .thenReturn(agentProxy);
-
         CompletableFuture<Status> future = sut.submit("command");
 
         Status status = future.join();
@@ -80,7 +74,6 @@ public class AbstractAgentCommandExecutorTest {
         verify(grantsChecker, times(1)).bind(topicBase, AbstractAgentCommandExecutor.DEFAULT_BIND_ROLE_NAME);
         verify(reportedPolicy, times(1)).bind(topicBase, AbstractAgentCommandExecutor.DEFAULT_BIND_ROLE_NAME);
         verify(executor, times(1)).bind(topicBase, AbstractAgentCommandExecutor.DEFAULT_BIND_ROLE_NAME);
-        verify(agentProxyFactory, times(1)).getProxy(topicBase, AbstractAgentCommandExecutor.DEFAULT_BIND_ROLE_NAME);
         verify(agentProxy, times(1)).bind(topicBase, AbstractAgentCommandExecutor.DEFAULT_BIND_ROLE_NAME);   
         verify(sut, times(1)).bindCriticalSection(topicBase, AbstractAgentCommandExecutor.DEFAULT_BIND_ROLE_NAME);
     }
@@ -95,14 +88,14 @@ public class AbstractAgentCommandExecutorTest {
 
     static class DummyAgentCommandExecutor extends AbstractAgentCommandExecutor<B3Message<?>, String> {
 
-        public DummyAgentCommandExecutor(AgentProxy.Factory<B3Message<?>> agentProxyFactory,
+        public DummyAgentCommandExecutor(AgentProxy<B3Message<?>> agentProxy,
                 B3Topic.Base topicBase,
                 Agent.ShadowReportedPolicy<B3Message<?>> reportedPolicy,
                 Agent.ShadowDesiredPolicy<B3Message<?>> desiredPolicy,
                 VersionSafeExecutor executor,
                 Operation.GrantsChecker<B3Message<?>> grantsChecker,
                 Agent.EdgeDriver<B3Message<?>> driver) {
-            super(agentProxyFactory, topicBase, reportedPolicy, desiredPolicy, executor, grantsChecker, driver);
+            super(agentProxy, topicBase, reportedPolicy, desiredPolicy, executor, grantsChecker, driver);
         }
 
         @Override

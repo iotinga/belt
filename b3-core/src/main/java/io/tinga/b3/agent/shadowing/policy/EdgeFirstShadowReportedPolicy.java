@@ -21,9 +21,8 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
     protected final VersionSafeExecutor executor;
     protected final Agent.EdgeDriver<M> edgeDriver;
 
-    private final AgentProxy.Factory<M> agentProxyFactory;
     private final B3ITopicFactoryProxy topicFactory;
-    private AgentProxy<M> agentProxy;
+    private final AgentProxy<M> agentProxy;
 
     private B3Topic.Base boundTopicBase;
     private Topic<M> topic;
@@ -32,18 +31,17 @@ public class EdgeFirstShadowReportedPolicy<M extends B3Message<?>>
 
     @Inject
     public EdgeFirstShadowReportedPolicy(VersionSafeExecutor executor, Agent.EdgeDriver<M> edgeDriver,
-            AgentProxy.Factory<M> agentProxyFactory, B3ITopicFactoryProxy topicFactory) {
+            AgentProxy<M> agentProxy, B3ITopicFactoryProxy topicFactory) {
         this.executor = executor;
         this.edgeDriver = edgeDriver;
-        this.agentProxyFactory = agentProxyFactory;
+        this.agentProxy = agentProxy;
         this.topicFactory = topicFactory;
+        this.agentProxy.subscribe(this);
     }
 
     @Override
     public void bind(B3Topic.Base topicBase, String roleName) {
         this.boundTopicBase = topicBase;
-        this.agentProxy = this.agentProxyFactory.getProxy(topicBase, roleName);
-        this.agentProxy.subscribe(this);
     }
 
     @Override

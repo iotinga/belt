@@ -25,17 +25,17 @@ public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends Json
 
     protected final JsonUtils json;
     protected final JsonSchemaProvider schemaProvider;
-    private final AgentProxy.Factory<M> agentProxyFactory;
     private AgentProxy<M> agentProxy;
 
     private M currentReported;
 
     @Inject
     public JsonSchemaOperationGrantsChecker(JsonSchemaProvider schemaProvider,
-            AgentProxy.Factory<M> agentProxyFactory, JsonUtils json) {
+            AgentProxy<M> agentProxy, JsonUtils json) {
         this.json = json;
-        this.agentProxyFactory = agentProxyFactory;
+        this.agentProxy = agentProxy;
         this.schemaProvider = schemaProvider;
+        this.agentProxy.subscribe(this);
     }
 
     @Override
@@ -66,8 +66,7 @@ public class JsonSchemaOperationGrantsChecker<M extends B3Message<? extends Json
 
     @Override
     public void bind(B3Topic.Base topicBase, String roleName) {
-        this.agentProxy = this.agentProxyFactory.getProxy(topicBase, roleName);
-        this.agentProxy.subscribe(this);
+        // NOTHING TO DO
     }
 
     @Override

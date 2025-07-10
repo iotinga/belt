@@ -34,11 +34,11 @@ public class CachedAgentProxyFactoryTest {
     @Mock
     AgentProxy<GenericB3Message> proxyInstance;
 
-    CachedAgentProxyFactory<GenericB3Message> sut;
+    CachedAgentProxyFactory sut;
 
     @BeforeEach
     void setUp() {
-        sut = new CachedAgentProxyFactory<GenericB3Message>(injector);
+        sut = new CachedAgentProxyFactory(injector);
     }
 
     @Test
