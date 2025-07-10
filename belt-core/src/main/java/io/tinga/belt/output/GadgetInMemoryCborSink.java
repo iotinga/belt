@@ -34,12 +34,12 @@ public class GadgetInMemoryCborSink extends AbstractGadgetInMemorySink {
     }
 
     @Override
-    public byte[] serialize(Object payload) {
+    public byte[] serialize(Object output) {
         try {
-            byte[] cborData = payload == null ? EMPTY_MQTT_PAYLOAD : this.om.writeValueAsBytes(payload);
+            byte[] cborData = output == null ? EMPTY_MQTT_PAYLOAD : this.om.writeValueAsBytes(output);
             return cborData;
         } catch (JsonProcessingException e) {
-            log.error(String.format("%s: can not encode payload", payload));
+            log.error(String.format("%s: can not encode payload", output));
             return null;
         }   
     }

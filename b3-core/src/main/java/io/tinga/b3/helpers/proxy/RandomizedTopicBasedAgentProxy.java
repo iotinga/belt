@@ -7,7 +7,7 @@ import java.util.Random;
 
 import com.google.inject.Inject;
 
-public class RandomizedTopicBasedAgentProxy<M extends B3Message<?>> extends StaticTopicBasedAgentProxy<M> {
+public class RandomizedTopicBasedAgentProxy<M extends B3Message<?>> extends TopicBasedAgentProxy<M> {
 
     public static final int RANDOM_PART_SIZE = 6;
     private static final Random RANDOM_SEED = new Random();

@@ -55,17 +55,17 @@ public class StaticTopicBasedAgentProxyTest {
     @Mock
     B3EventHandler<GenericB3Message> handler2;
 
-    StaticTopicBasedAgentProxy<GenericB3Message> sut;
+    TopicBasedAgentProxy<GenericB3Message> sut;
 
     @BeforeEach
     void setup() {
-        sut = new StaticTopicBasedAgentProxy<>(config, GenericB3Message.class, topicFactoryProxy, topicFactory);
+        sut = new TopicBasedAgentProxy<>(config, GenericB3Message.class, topicFactoryProxy, topicFactory);
     }
 
     @Test
     void testGetName() {
         String name = sut.getName();
-        assertThat(name).isEqualTo(String.format("%s-%s", config.agentId(), StaticTopicBasedAgentProxy.class.getSimpleName()));
+        assertThat(name).isEqualTo(String.format("%s-%s", config.agentId(), TopicBasedAgentProxy.class.getSimpleName()));
     }
 
     @Test

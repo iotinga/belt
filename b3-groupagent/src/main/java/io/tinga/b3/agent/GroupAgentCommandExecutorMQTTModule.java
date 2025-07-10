@@ -20,10 +20,12 @@ import io.tinga.b3.agent.shadowing.policy.EdgeFirstShadowReportedPolicy;
 import io.tinga.b3.helpers.AgentProxy;
 import io.tinga.b3.helpers.GenericB3Message;
 import io.tinga.b3.helpers.proxy.CachedAgentProxyFactory;
-import io.tinga.b3.helpers.proxy.StaticTopicBasedAgentProxy;
+import io.tinga.b3.helpers.proxy.TopicBasedAgentProxy;
 import io.tinga.b3.protocol.B3ITopicFactoryProxy;
 import io.tinga.b3.protocol.impl.PassthroughITopicFactoryProxy;
 import io.tinga.belt.input.GadgetCommandExecutor;
+import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
+import io.tinga.belt.output.GadgetSink;
 
 public class GroupAgentCommandExecutorMQTTModule extends AbstractModule {
 
@@ -35,12 +37,15 @@ public class GroupAgentCommandExecutorMQTTModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        // SET RETURN TYPE FORMAT
+        bind(GadgetSink.class).to(GadgetInMemoryPlainTextSink.class);
+
         // BAUER (MQTT)
         bind(Key.get(new TypeLiteral<AgentProxy.Factory<GenericB3Message>>() {
         })).to(Key.get(new TypeLiteral<CachedAgentProxyFactory<GenericB3Message>>() {
         }));
-        bind(Key.get(new TypeLiteral<AgentProxy<GenericB3Message>>() {
-        })).to(new TypeLiteral<StaticTopicBasedAgentProxy<GenericB3Message>>() {
+        bind(Key.get(new TypeLiteral<AgentProxy<?>>() {
+        })).to(new TypeLiteral<TopicBasedAgentProxy<GenericB3Message>>() {
         });
         bind(B3ITopicFactoryProxy.class).to(PassthroughITopicFactoryProxy.class).in(Singleton.class);
 

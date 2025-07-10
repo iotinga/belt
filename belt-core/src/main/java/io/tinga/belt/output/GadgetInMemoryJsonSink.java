@@ -12,7 +12,7 @@ import io.tinga.belt.helpers.MimeType;
 
 public class GadgetInMemoryJsonSink extends AbstractGadgetInMemorySink {
 
-    private static final Logger log = LoggerFactory.getLogger(GadgetInMemoryJsonSink.class);
+    private static final Logger log = LoggerFactory.getLogger(GadgetInMemoryPlainTextSink.class);
 
     public static final byte[] EMPTY_MQTT_PAYLOAD = new byte[0];
 
