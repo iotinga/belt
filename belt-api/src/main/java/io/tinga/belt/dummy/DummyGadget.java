@@ -10,6 +10,7 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.AbstractGadget;
+import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetSink;
 
@@ -19,6 +20,7 @@ public class DummyGadget extends AbstractGadget<DummyGadgetCommand> {
 
     @Override
     protected void configure() {
+        bind(GadgetCommandExecutor.class).to(DummyGadgetCommandExecutor.class).in(Singleton.class);
         bind(Key.get(new TypeLiteral<GadgetSink>() {})).to(DummyGadgetSink.class).in(Singleton.class);
     }
 
