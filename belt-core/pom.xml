@@ -6,7 +6,7 @@
     <parent>
           <groupId>io.tinga.belt</groupId>
           <artifactId>belt</artifactId>
-          <version>1.0.0</version>
+          <version>1.0.1</version>
     </parent>
 
     <artifactId>belt-core</artifactId>
@@ -64,13 +64,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>iotinga-maven-releases</id>
-            <name>iotinga-maven-releases</name>
-            <url>https://nexus.tinga.io/repository/iotinga-maven-releases/</url>
-        </repository>
-    </repositories>
 
 </project>
