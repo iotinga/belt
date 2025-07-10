@@ -4,19 +4,20 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.tinga.belt.Gadget;
 import io.tinga.belt.input.GadgetCommandOption;
 
-public class HeadlessCommand {
+public class HeadlessCommand implements Gadget.Command<HeadlessAction> {
 
     public static final String NAME_OPT = "n";
     public static final String IGNORE_OPT = "i";
-    public static final String THREADING_OPT = "t";
+    public static final String ACTION_OPT = "a";
 
     @JsonProperty(NAME_OPT)
     String name;
 
-    @JsonProperty(THREADING_OPT)
-    HeadlessGadgetComposition threading;
+    @JsonProperty(ACTION_OPT)
+    HeadlessAction action;
 
     @JsonProperty(IGNORE_OPT)
     Boolean ignore;
@@ -26,9 +27,9 @@ public class HeadlessCommand {
 
     public HeadlessCommand() {}
 
-    public HeadlessCommand(String name, HeadlessGadgetComposition threading, Boolean ignore, List<String> gadgets) {
+    public HeadlessCommand(String name, HeadlessAction threading, Boolean ignore, List<String> gadgets) {
         this.name = name;
-        this.threading = threading;
+        this.action = threading;
         this.ignore = ignore;
         this.gadgets = gadgets;
     }
@@ -37,8 +38,8 @@ public class HeadlessCommand {
         return this.name;
     }
 
-    public HeadlessGadgetComposition threading() {
-        return this.threading;
+    public HeadlessAction action() {
+        return this.action;
     }
 
     public Boolean ignore() {

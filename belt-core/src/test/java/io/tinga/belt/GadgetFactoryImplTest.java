@@ -16,7 +16,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import io.tinga.belt.config.PropertiesProvider;
-import io.tinga.belt.helpers.DummyGadget;
+import io.tinga.belt.dummy.DummyGadget;
 import io.tinga.belt.output.GadgetDisplayFactory;
 import io.tinga.belt.output.Status;
 

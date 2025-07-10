@@ -37,18 +37,18 @@ public class HeadelessGadgetContextFactory extends GadgetContextFactoryImpl {
 
     @Override
     public Callable<Status> buildCallableFrom(String gadgetClassName) throws GadgetLifecycleException {
-        Gadget<?, ?> gadget = this.buildGadget(gadgetClassName);
+        Gadget<?> gadget = this.buildGadget(gadgetClassName);
         return this.buildCallableFrom(gadget);
     }
 
     @Override
-    public <C> Callable<Status> buildCallableFrom(Gadget<?, C> gadget) throws GadgetLifecycleException {
+    public <C extends Gadget.Command<?>> Callable<Status> buildCallableFrom(Gadget<C> gadget) throws GadgetLifecycleException {
         C command = this.buildCommand(gadget);
         GadgetContext<?> context = this.buildContextFrom(gadget, command);
         return this.buildCallableFrom(context);
     }
 
-    private <C> C buildCommand(Gadget<?, C> gadget) {
+    private <C extends Gadget.Command<?>> C buildCommand(Gadget<C> gadget) {
         Properties properties = this.pp.properties(gadget.name());
         String cmdLine = properties.getProperty(String.format(COMMAND_LINE_PROPERTY), null);
 

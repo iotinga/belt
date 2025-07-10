@@ -5,7 +5,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.TypeLiteral;
 
 import io.tinga.belt.input.GadgetCommandExecutor;
 
@@ -26,9 +25,9 @@ class HeadlessExecutorModule extends AbstractModule {
 
     public HeadlessExecutorModule(HeadlessCommand command) {
         this.command = command;
-        this.service = switch (command.threading()) {
-            case HeadlessGadgetComposition.SEQUENTIAL -> Executors.newSingleThreadExecutor();
-            case HeadlessGadgetComposition.CONCURRENT -> Executors.newThreadPerTaskExecutor(THREAD_FACTORY);
+        this.service = switch (command.action()) {
+            case HeadlessAction.SEQUENTIAL -> Executors.newSingleThreadExecutor();
+            case HeadlessAction.CONCURRENT -> Executors.newThreadPerTaskExecutor(THREAD_FACTORY);
         };
     }
 
@@ -36,7 +35,6 @@ class HeadlessExecutorModule extends AbstractModule {
     protected void configure() {
         bind(ExecutorService.class).toInstance(service);
         bind(HeadlessCommand.class).toInstance(command);
-        bind(new TypeLiteral<GadgetCommandExecutor<HeadlessCommand>>() {
-        }).to(HeadlessCommandExecutor.class);
+        bind(GadgetCommandExecutor.class).to(HeadlessCommandExecutor.class);
     }
 }

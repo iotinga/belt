@@ -1,6 +1,6 @@
 package io.tinga.belt.headless;
 
-public enum HeadlessGadgetComposition {
+public enum HeadlessAction {
     SEQUENTIAL,
     CONCURRENT
 }

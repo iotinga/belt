@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class JsonUtils {
 
-    public JsonNode diff(JsonNode a, JsonNode b) throws UnsupportedOperationException {
+    public JsonNode subtract(JsonNode a, JsonNode b) throws UnsupportedOperationException {
         if (a == null || b == null)
             return NullNode.instance;
 

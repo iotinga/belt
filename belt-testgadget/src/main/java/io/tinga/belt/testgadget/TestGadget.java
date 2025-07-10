@@ -11,7 +11,7 @@ import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetSink;
 
-public class TestGadget extends AbstractGadget<TestGadgetExecutor, TestGadgetCommand> {
+public class TestGadget extends AbstractGadget<TestGadgetCommand> {
     @Override
     protected void configure() {
         bind(GadgetCommandExecutor.class).to(TestGadgetExecutor.class);
@@ -31,11 +31,6 @@ public class TestGadget extends AbstractGadget<TestGadgetExecutor, TestGadgetCom
     @Override
     public List<GadgetCommandOption> commandOptions() {
         return Arrays.asList(TestGadgetCommandOption.values());
-    }
-
-    @Override
-    public Class<TestGadgetExecutor> executorClass() {
-        return TestGadgetExecutor.class;
     }
 
     @Override

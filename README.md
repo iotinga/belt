@@ -6,13 +6,20 @@ Reuse is not intented only at software-level between projects, but at use-case l
 
 # Basic Concepts
 
-Belt's architecture is based on a few concepts: decoupling, composability, distribution. All of them are part of the basic Belt building-brick, the Gadget. Writing software in Gadgets allows the developer to inherit Belt's features and properties.
+Belt's architecture is based on a few concepts: decoupling, composability, distribution. All of them are part of the basic Belt building-brick, the Gadget. Writing software in Gadgets allows the developer to inherit Belt's features and properties. A `Gadget` executes a single or a sequence of `Command`(s). Each one is evaluated an its corresponding `Action` will be performed in a dedicated environment. Before the first `Command` execution, the `Gadget` loads its `Properties`.
 
 > Belt is not a framework. This means that creating a good architecture is still a Developer's duty.
 
 ## What is a Gadget
 
-A Belt's Gadget is, like a Batman's belt gadget, a specific-purpose tool that can be used into multiple belts, even combined with other gadgets. De-facto, a Gadget is a Dependency Injection `Module` (we use Google's Guice as framework) with some additional attributes, like a name, which provides an implementation for the `GadgetCommandExecutor` interface. The `GadgetCommandExecutor`'s `public CompletableFuture<Integer> submit(C command)` method has to be considered as the `public static void main(String[] args);` method in a classic Java software.
+A Belt's Gadget is, like a Batman's belt gadget, a specific-purpose tool that can be used into multiple belts, even combined with other gadgets. De-facto, a Gadget is a Dependency Injection `Module` (we use Google's Guice as framework) with some additional attributes, like a name, which provides an implementation for the `GadgetCommandExecutor` interface. The `GadgetCommandExecutor`'s `public CompletableFuture<Integer> submit(C command)` method has to be considered as the `public static void main(String[] args);` method in a classic Java software. 
+
+### Gadget output handling
+To produce output is required to use `GadgetSink` instead of `System.out` because as in the same runtime can be attached multiple gadgets we cannot simply redirect the whole `System.out`. To ensure third party messages are not lost, each belt type must redirect `stdout` and `stderr` to the most convenient handler:
+* `belt-cli`: keeps original `stdout` and `stderr`.
+* `belt-headless`: redirects `stdout` and `stderr` to `io.tinga.belt.headless.CliMain` logger.
+
+The logging features is handled through a specific slf4j belt endpoint, but the use of a `GadgetSink` endpoint instead of `System.out` is on developers duty. 
 
 ## What is a Belt
 

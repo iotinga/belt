@@ -5,15 +5,17 @@ import java.util.Properties;
 
 import com.google.inject.Module;
 
-import io.tinga.belt.input.GadgetCommandExecutor;
 import io.tinga.belt.input.GadgetCommandOption;
 
-public interface Gadget<E extends GadgetCommandExecutor<C>, C> extends Module {
+public interface Gadget<C extends Gadget.Command<?>> extends Module {
+
+    public interface Command<A> {
+        A action();
+    }
+
     public String name();
 
     public Class<C> commandClass();
-
-    public Class<E> executorClass();
 
     public List<GadgetCommandOption> commandOptions();
 

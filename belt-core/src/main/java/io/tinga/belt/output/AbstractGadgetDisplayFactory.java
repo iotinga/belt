@@ -29,7 +29,7 @@ public abstract class AbstractGadgetDisplayFactory implements GadgetDisplayFacto
 
     @Override
     public <C> Future<?> buildDisplay(GadgetContext<C> context) {
-        return this.displayExecutor.submit(new GadgetSlf4jDisplay(context.output()));
+        return this.displayExecutor.submit(this.buildDisplayInstance(context));
     }
     
     public abstract <C> GadgetDisplay buildDisplayInstance(GadgetContext<C> context);

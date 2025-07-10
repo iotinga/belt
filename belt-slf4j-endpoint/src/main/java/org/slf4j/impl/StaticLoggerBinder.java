@@ -13,7 +13,7 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
     // to avoid constant folding by the compiler, this field must *not* be final
     public static String REQUESTED_API_VERSION = "1.6"; // !final
 
-    private static final String LOGGER_FACTORY_CLASS_STR = BeltLoggerFactory.class.getName();
+    private static final String LOGGER_FACTORY_CLASS_STR = BeltLoggerFactory.class.getSimpleName();
 
     /**
      * The unique instance of this class.

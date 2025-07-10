@@ -19,6 +19,13 @@
 
     <dependencies>
 
+        <!-- Bauer API -->
+        <dependency>
+            <groupId>it.netgrid</groupId>
+            <artifactId>bauer-api</artifactId>
+            <version>${version.bauer}</version>
+        </dependency>
+
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>

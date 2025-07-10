@@ -12,7 +12,7 @@ import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetInMemoryPlainTextSink;
 import io.tinga.belt.output.GadgetSink;
 
-public class HeadlessGadget extends AbstractGadget<HeadlessCommandExecutor, HeadlessCommand> {
+public class HeadlessGadget extends AbstractGadget<HeadlessCommand> {
 
     public static final String NAME = "RUNTIME";
 
@@ -29,11 +29,6 @@ public class HeadlessGadget extends AbstractGadget<HeadlessCommandExecutor, Head
     @Override
     public Class<HeadlessCommand> commandClass() {
         return HeadlessCommand.class;
-    }
-
-    @Override
-    public Class<HeadlessCommandExecutor> executorClass() {
-        return HeadlessCommandExecutor.class;
     }
 
     @Override

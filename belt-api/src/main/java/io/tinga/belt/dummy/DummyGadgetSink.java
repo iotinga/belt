@@ -1,6 +1,8 @@
-package io.tinga.belt.helpers;
+package io.tinga.belt.dummy;
 
 
+import io.tinga.belt.helpers.Encoding;
+import io.tinga.belt.helpers.MimeType;
 import io.tinga.belt.output.AbstractGadgetInMemorySink;
 
 public class DummyGadgetSink extends AbstractGadgetInMemorySink {

@@ -31,14 +31,14 @@ public abstract class AbstractGadgetInMemorySink implements GadgetSink {
     }
 
     @Override
-    public void put(Object payload) {
-        byte[] data = serialize(payload);
+    public void put(Object output) {
+        byte[] data = serialize(output);
         if (data != null)
             try {
                 this.output.write(data);
                 this.output.flush();
             } catch (IOException e) {
-                log.warn(String.format("%s", payload.toString()));
+                log.warn(String.format("%s", output.toString()));
             }
     }
 

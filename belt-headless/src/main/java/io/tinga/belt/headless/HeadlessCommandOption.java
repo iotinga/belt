@@ -8,10 +8,10 @@ public enum HeadlessCommandOption implements GadgetCommandOption {
 
     IGNORE("i", true, Boolean.class, "false",
             "If true and a module initialization fails it ignores the error continuing loading other modules"),
-    THREADING("t", true, HeadlessGadgetComposition.class, HeadlessGadgetComposition.CONCURRENT.name(),
+    THREADING("t", true, HeadlessAction.class, HeadlessAction.CONCURRENT.name(),
             String.format("Chooses the threading model for modules execution (%s, %s)",
-                    HeadlessGadgetComposition.CONCURRENT,
-                    HeadlessGadgetComposition.SEQUENTIAL)),
+                    HeadlessAction.CONCURRENT,
+                    HeadlessAction.SEQUENTIAL)),
     NAME("n", true, String.class, "BRAID",
             "The name of the runtime. It will be used in logs end as section for .env root configuration parameters"),
     HELP("h", false, null, null, "Shows this guide"),

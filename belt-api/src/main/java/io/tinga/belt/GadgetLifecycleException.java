@@ -7,14 +7,14 @@ public class GadgetLifecycleException extends Exception {
     private final static Exception DEFAULT_REASON =  new Exception("No reason provided");
 
     public final Exception reason;
-    public final GadgetCommandExecutor<?> gadget;
+    public final GadgetCommandExecutor gadget;
 
-    public GadgetLifecycleException(GadgetCommandExecutor<?> gadget) {
+    public GadgetLifecycleException(GadgetCommandExecutor gadget) {
         this.gadget = gadget;
         this.reason = DEFAULT_REASON;
     }
 
-    public GadgetLifecycleException(GadgetCommandExecutor<?> gadget, Exception reason) {
+    public GadgetLifecycleException(GadgetCommandExecutor gadget, Exception reason) {
         this.gadget = gadget;
         this.reason = reason == null ? DEFAULT_REASON : reason;
     }
