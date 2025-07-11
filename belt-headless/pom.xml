@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>belt-headless</artifactId>
+    <name>Belt Headless</name>
 
     <properties>
         <maven.compiler.source>${version.java}</maven.compiler.source>

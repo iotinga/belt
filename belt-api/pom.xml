@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>belt-api</artifactId>
+    <name>Belt API</name>
 
     <properties>
         <maven.compiler.source>${version.java}</maven.compiler.source>

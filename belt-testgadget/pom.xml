@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>belt-testgadget</artifactId>
+    <name>Belt TestGadget</name>
 
 
     <properties>

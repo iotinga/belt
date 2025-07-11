@@ -13,4 +13,4 @@ release:
 	git pull 
 	git commit -am "bump version to $(VERSION)" || true
 	git push
-	./mvnw deploy -e -X -DskipTests 
+	./mvnw deploy -DskipTests 

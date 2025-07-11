@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>belt-slf4j-endpoint</artifactId>
+    <name>Belt SLF4J endpoint</name>
 
     <properties>
         <maven.compiler.source>${version.java}</maven.compiler.source>
