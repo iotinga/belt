@@ -49,7 +49,7 @@ public class HeadelessGadgetContextFactory extends GadgetContextFactoryImpl {
     }
 
     private <C extends Gadget.Command<?>> C buildCommand(Gadget<C> gadget) {
-        Properties properties = this.pp.properties(gadget.name());
+        Properties properties = this.pp.properties(gadget.instanceName());
         String cmdLine = properties.getProperty(String.format(COMMAND_LINE_PROPERTY), null);
 
         try {

@@ -16,7 +16,9 @@ import io.tinga.belt.output.GadgetSink;
 
 public class DummyGadget extends AbstractGadget<DummyGadgetCommand> {
 
-    public static final String NAME = "DUMMY";
+    public static final String STANDARD_NAME = "DUMMY";
+
+    private String instanceName = STANDARD_NAME;
 
     @Override
     protected void configure() {
@@ -25,8 +27,8 @@ public class DummyGadget extends AbstractGadget<DummyGadgetCommand> {
     }
 
     @Override
-    public String name() {
-        return DummyGadget.NAME;
+    public String instanceName() {
+        return this.instanceName;
     }
 
     @Override
@@ -43,6 +45,11 @@ public class DummyGadget extends AbstractGadget<DummyGadgetCommand> {
     public Module[] buildExecutorModules(Properties properties, DummyGadgetCommand command) {
         Module[] retval = {};
         return retval;
+    }
+
+    @Override
+    public void setInstanceName(String name) {
+        this.instanceName = name == null ? STANDARD_NAME : name;
     }
 
 }

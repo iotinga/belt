@@ -13,7 +13,9 @@ public interface Gadget<C extends Gadget.Command<?>> extends Module {
         A action();
     }
 
-    public String name();
+    public void setInstanceName(String name);
+
+    public String instanceName();
 
     public Class<C> commandClass();
 

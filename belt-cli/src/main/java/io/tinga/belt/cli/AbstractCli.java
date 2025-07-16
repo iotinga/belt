@@ -97,7 +97,7 @@ public abstract class AbstractCli<C extends Gadget.Command<?>> implements Runnab
     }
 
     public String name() {
-        return String.format("%s-cli", this.gadget.name().toLowerCase());
+        return String.format("%s-cli", this.gadget.instanceName().toLowerCase());
     }
 
     public abstract Module[] buildRootModules();

@@ -14,7 +14,9 @@ import io.tinga.belt.output.GadgetSink;
 
 public class HeadlessGadget extends AbstractGadget<HeadlessCommand> {
 
-    public static final String NAME = "RUNTIME";
+    public static final String STANDARD_NAME = "HEADLESS";
+
+    private String instanceName = STANDARD_NAME;
 
     @Override
     protected void configure() {
@@ -22,8 +24,8 @@ public class HeadlessGadget extends AbstractGadget<HeadlessCommand> {
     }
 
     @Override
-    public String name() {
-        return HeadlessGadget.NAME;
+    public String instanceName() {
+        return this.instanceName;
     }
 
     @Override
@@ -40,6 +42,11 @@ public class HeadlessGadget extends AbstractGadget<HeadlessCommand> {
     public Module[] buildExecutorModules(Properties properties, HeadlessCommand command) {
         Module[] retval = { new HeadlessExecutorModule(command) };
         return retval;
+    }
+
+    @Override
+    public void setInstanceName(String name) {
+        this.instanceName = name == null ? STANDARD_NAME : name;
     }
 
 }

@@ -22,6 +22,8 @@ import io.tinga.belt.output.GadgetSink;
 
 public class GadgetContextFactoryImpl implements GadgetContextFactory {
 
+    public static final String GADGET_NAME_GLUE = "@";
+
     private static final Logger log = LoggerFactory.getLogger(GadgetContextFactoryImpl.class);
 
     protected final Injector injector;
@@ -53,7 +55,7 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
     public <C extends Command<?>> GadgetContext<C> buildContextFrom(Gadget<C> gadget, C command)
             throws GadgetLifecycleException {
         try {
-            Properties properties = this.pp.properties(gadget.name());
+            Properties properties = this.pp.properties(gadget.instanceName());
             Injector gadgetInjector = injector.createChildInjector(gadget);
             Injector executorInjector = gadgetInjector
                     .createChildInjector(gadget.buildExecutorModules(properties, command));
@@ -92,8 +94,15 @@ public class GadgetContextFactoryImpl implements GadgetContextFactory {
     protected final <C extends Gadget.Command<?>> Gadget<C> buildGadget(String gadgetClassName)
             throws GadgetLifecycleException {
         try {
-            Class<Gadget<C>> gadgetModuleClazz = (Class<Gadget<C>>) Class.forName(gadgetClassName);
-            return (Gadget<C>) gadgetModuleClazz.getDeclaredConstructor().newInstance();
+            String[] gadgetParts = gadgetClassName.split(GADGET_NAME_GLUE);
+            String className = gadgetParts[gadgetParts.length-1];
+            String instanceName = gadgetParts[0];
+            Class<Gadget<C>> gadgetModuleClazz = (Class<Gadget<C>>) Class.forName(className);
+            Gadget<C> gadget = gadgetModuleClazz.getDeclaredConstructor().newInstance();
+            if(gadgetParts.length > 1) {
+                gadget.setInstanceName(instanceName);
+            }
+            return gadget;
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
                 | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
             log.debug(String.format("Cannot instantiate plugin %s: %s", gadgetClassName, e));

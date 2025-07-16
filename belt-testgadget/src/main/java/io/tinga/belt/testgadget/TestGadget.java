@@ -12,6 +12,12 @@ import io.tinga.belt.input.GadgetCommandOption;
 import io.tinga.belt.output.GadgetSink;
 
 public class TestGadget extends AbstractGadget<TestGadgetCommand> {
+
+
+    public static final String STANDARD_NAME = "TEST";
+
+    private String instanceName = STANDARD_NAME;
+
     @Override
     protected void configure() {
         bind(GadgetCommandExecutor.class).to(TestGadgetExecutor.class);
@@ -19,8 +25,8 @@ public class TestGadget extends AbstractGadget<TestGadgetCommand> {
     }
 
     @Override
-    public String name() {
-        return "TEST";
+    public String instanceName() {
+        return this.instanceName;
     }
 
     @Override
@@ -37,5 +43,10 @@ public class TestGadget extends AbstractGadget<TestGadgetCommand> {
     public Module[] buildExecutorModules(Properties properties, TestGadgetCommand command) {
         Module[] retval = {};
         return retval;
+    }
+
+    @Override
+    public void setInstanceName(String name) {
+        this.instanceName = name == null ? STANDARD_NAME : name;
     }
 }
