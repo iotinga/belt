@@ -22,7 +22,7 @@ public class CliMain extends AbstractCli<HeadlessCommand> {
         return retval;
     }
 
-    public static void main(String[] args) {        
+    public static void main(String[] args) {
         System.setErr(new WriterPrintStream(line -> {
             log.error(line);
             return null;

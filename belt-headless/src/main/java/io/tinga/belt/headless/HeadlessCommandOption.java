@@ -8,7 +8,7 @@ public enum HeadlessCommandOption implements GadgetCommandOption {
 
     IGNORE("i", true, Boolean.class, "false",
             "If true and a module initialization fails it ignores the error continuing loading other modules"),
-    THREADING("t", true, HeadlessAction.class, HeadlessAction.CONCURRENT.name(),
+    ACTION("a", true, HeadlessAction.class, HeadlessAction.CONCURRENT.name(),
             String.format("Chooses the threading model for modules execution (%s, %s)",
                     HeadlessAction.CONCURRENT,
                     HeadlessAction.SEQUENTIAL)),

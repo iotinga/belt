@@ -63,31 +63,67 @@ public abstract class AbstractCli<C extends Gadget.Command<?>> implements Runnab
     public void run() {
         Status status = Status.INTERNAL_SERVER_ERROR;
         GadgetContext<C> context = null;
+        int exitCode = 1;
+        Throwable cause = null;
+
         try {
+            log.info("Initializing CLI for gadget: {}", gadget.instanceName());
+            log.debug("CLI arguments: {}", (Object) args);
+
             this.init();
+            log.info("Injector and factories initialized.");
+
             C command = this.parseCommand(args);
+            log.info("Parsed command: {}", command.getClass().getSimpleName());
+
             context = this.contextFactory.buildContextFrom(gadget, command);
+            log.info("Context created.");
+
             this.displayExecutor.submit(new GadgetSystemDisplay(context.output()));
+            log.debug("Display executor submitted.");
+
             CompletableFuture<Status> commandRun = context.executor().submit(command);
+            log.info("Command execution started...");
             status = commandRun.get();
+            log.info("Command completed with status: {}", status);
         } catch (GadgetFatalException e) {
-            log.debug("Exit({})", e.exitCode);
-            System.out.println(e.getMessage());
-            System.exit(e.exitCode);
+            log.error("Fatal error: {}", e.getMessage(), e);
+            exitCode = e.exitCode;
+            cause = e;
         } catch (GadgetLifecycleException e) {
-            log.error("Exit({})", e.reason.getMessage());
-            System.exit(1);
+            log.error("Lifecycle error: {}", e.reason.getMessage(), e);
+            exitCode = 1;
+            cause = e;
         } catch (InterruptedException | ExecutionException e) {
-            log.info("Exit({}): {}", status.getCode(), e.getMessage());
+            log.error("Execution error. Exit({}): {}", status.getCode(), e.getMessage(), e);
+            exitCode = 1;
+            cause = e;
+        } catch (Exception e) {
+            log.error("Unexpected error. Exit({}): {}", status.getCode(), e.getMessage(), e);
+            exitCode = 1;
+            cause = e;
         } finally {
-            if (context != null) {
-                context.output().close();
+            try {
+                if (context != null) {
+                    log.debug("Closing output stream...");
+                    context.output().close();
+                }
+            } catch (Exception e) {
+                log.warn("Failed to close output stream: {}", e.getMessage(), e);
             }
-            this.displayExecutor.shutdown();
 
-            int exitCode = status.getCategory() == Status.Category.SUCCESS ? 0 : 1;
+            try {
+                log.debug("Shutting down display executor...");
+                this.displayExecutor.shutdown();
+            } catch (Exception e) {
+                log.warn("Failed to shut down executor: {}", e.getMessage(), e);
+            }
 
-            log.info("Exiting with status {}", exitCode);
+            if (status.getCategory() == Status.Category.SUCCESS && cause == null) {
+                exitCode = 0;
+            }
+
+            log.info("Exiting CLI with code {}", exitCode);
             System.exit(exitCode);
         }
     }
