@@ -4,9 +4,9 @@ import io.tinga.belt.input.GadgetCommandExecutor;
 
 public class GadgetLifecycleException extends Exception {
 
-    private final static Exception DEFAULT_REASON =  new Exception("No reason provided");
+    private final static Exception DEFAULT_REASON = new Exception("No reason provided");
 
-    public final Exception reason;
+    public final Throwable reason;
     public final GadgetCommandExecutor gadget;
 
     public GadgetLifecycleException(GadgetCommandExecutor gadget) {
@@ -14,7 +14,7 @@ public class GadgetLifecycleException extends Exception {
         this.reason = DEFAULT_REASON;
     }
 
-    public GadgetLifecycleException(GadgetCommandExecutor gadget, Exception reason) {
+    public GadgetLifecycleException(GadgetCommandExecutor gadget, Throwable reason) {
         this.gadget = gadget;
         this.reason = reason == null ? DEFAULT_REASON : reason;
     }

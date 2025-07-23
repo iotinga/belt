@@ -1,5 +1,6 @@
 package io.tinga.belt.headless;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
@@ -16,6 +17,7 @@ import io.tinga.belt.GadgetFatalException;
 import io.tinga.belt.GadgetLifecycleException;
 import io.tinga.belt.cli.CliCommandFactory;
 import io.tinga.belt.config.PropertiesProvider;
+import io.tinga.belt.dummy.DummyGadgetCommandExecutor;
 import io.tinga.belt.output.GadgetDisplayFactory;
 import io.tinga.belt.output.Status;
 
@@ -42,20 +44,33 @@ public class HeadelessGadgetContextFactory extends GadgetContextFactoryImpl {
     }
 
     @Override
-    public <C extends Gadget.Command<?>> Callable<Status> buildCallableFrom(Gadget<C> gadget) throws GadgetLifecycleException {
+    public <C extends Gadget.Command<?>> Callable<Status> buildCallableFrom(Gadget<C> gadget)
+            throws GadgetLifecycleException {
         C command = this.buildCommand(gadget);
         GadgetContext<?> context = this.buildContextFrom(gadget, command);
         return this.buildCallableFrom(context);
     }
 
-    private <C extends Gadget.Command<?>> C buildCommand(Gadget<C> gadget) {
+    private <C extends Gadget.Command<?>> C buildCommand(Gadget<C> gadget) throws GadgetLifecycleException {
         Properties properties = this.pp.properties(gadget.instanceName());
+        C defaultCommand;
+
+        try {
+            defaultCommand = gadget.commandClass().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
+            log.error("A default constructor is required for command class {}", gadget.commandClass());
+            throw new GadgetLifecycleException(new DummyGadgetCommandExecutor(), e);
+        }
+
         String cmdLine = properties.getProperty(String.format(COMMAND_LINE_PROPERTY), null);
 
         try {
             if (cmdLine != null) {
                 String[] args = cmdLine.trim().split(COMMAND_LINE_GLUE);
                 return this.commandFactory.parseArgs(gadget, args);
+            } else {
+                return defaultCommand;
             }
         } catch (GadgetFatalException e) {
             log.error("Unable to convert %s to command: %s\n%s", COMMAND_LINE_PROPERTY, cmdLine, e.getMessage());
