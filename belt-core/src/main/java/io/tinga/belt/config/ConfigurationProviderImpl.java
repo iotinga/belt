@@ -21,5 +21,5 @@ public class ConfigurationProviderImpl implements ConfigurationProvider {
         Map<String, String> section = this.provider.getSection(sectionName);
         return this.om.convertValue(section, clazz);
     }
-    
+
 }

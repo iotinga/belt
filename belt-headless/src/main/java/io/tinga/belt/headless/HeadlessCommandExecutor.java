@@ -14,7 +14,6 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
@@ -34,9 +33,11 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor {
     private final GadgetSink out;
 
     private final List<Future<Status>> gadgetsResults;
+    private final Injector rootInjector;
 
     @Inject
-    public HeadlessCommandExecutor(ExecutorService executor, GadgetSink output) {
+    public HeadlessCommandExecutor(Injector rootInjector, ExecutorService executor, GadgetSink output) {
+        this.rootInjector = rootInjector;
         this.out = output;
         this.executor = executor;
         this.completionService = new ExecutorCompletionService<>(executor);
@@ -61,14 +62,8 @@ public class HeadlessCommandExecutor implements GadgetCommandExecutor {
                         break;
                     }
                     try {
-                        /**
-                         * Creating a new injector for each gadget so clashes of
-                         * dependencies do not happen.
-                         * Strangely enough, the method createChildInjector propagates
-                         * dependencies to ancestor injectors and we don't want that.
-                         */
-                        Injector gadgetInjector = Guice.createInjector(new CliCustomRootModule());
-                        GadgetContextFactory gadgetContextFactory = gadgetInjector
+                        GadgetContextFactory gadgetContextFactory = rootInjector
+                                .createChildInjector()
                                 .getInstance(GadgetContextFactory.class);
                         Callable<Status> plugin = gadgetContextFactory.buildCallableFrom(className);
                         gadgetsResults.add(completionService.submit(plugin));
