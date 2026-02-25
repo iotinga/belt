@@ -6,7 +6,7 @@
 
     <groupId>io.tinga.belt</groupId>
     <artifactId>belt</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
     <name>Belt</name>
     <description>Library for microservices systems written in Java</description>
